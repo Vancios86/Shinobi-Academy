@@ -1,13 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 /* ----------------- */
 /*  RESET            */
 /* ----------------- */
+
 /* Box sizing */
 *,
 *::before,
 *::after {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* Margins */
@@ -27,7 +27,15 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   font-family: 'Anton', sans-serif;
+  //   , , ,
+  //   ;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
 }
+// code {
+//   font-family: source-code-pro, Menlo,  Consolas,,
+//     monospace;
+// }
 
 /* Reset image format */
 img,
@@ -49,38 +57,29 @@ select {
   *,
   *::before,
   *::after {
-    -webkit-animation-duration: 0.01ms !important;
-            animation-duration: 0.01ms !important;
-    -webkit-animation-iteration-count: 1 !important;
-            animation-iteration-count: 1 !important;
-    -webkit-transition-duration: 0.01ms !important;
-            transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
 
 /* Utility classes */
 .flex {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: var(--gap, 1rem);
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {
-  display: -ms-grid;
   display: grid;
   gap: var(--gap, 1rem);
 }
 
 .container {
   max-width: 80rem;
+  // margin-inline: 2rem;
   padding-inline: auto;
 }
 
@@ -92,8 +91,7 @@ select {
   margin: -1px;
   overflow: hidden;
   clip: react(0, 0, 0, 0);
-  white-space: nowrap;
-  /* added line */
+  white-space: nowrap; /* added line */
   border: 0;
 }
-/*# sourceMappingURL=index.css.map */
+

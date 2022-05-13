@@ -1,65 +1,36 @@
-.Main {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.main {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
-.logo {
-  width:321px;
-  height:432px;
-  border-radius:51%;
-  background:rgb(230, 26, 26);
-  position:relative;
-  margin:100px;
-  border: 1px solid black;
+.main .logo {
+  max-width: 600px;
 }
 
-.circle {
-  display:block;
-  position:absolute;
-  top:51%;
-  left:51%;
-  width:100px;
-  height:100px;
-  margin:-51px;
-  background:rgba(94, 118, 101, 0.777);
-  border-radius:51%;
-  text-align:center;
+.main .title {
   font-weight: bold;
-  line-height:100px;
-  border: 1px solid black;
-  transition: scale 0.6s ease-in-out;
 }
 
-.circle:hover {
-  background: rgba(94, 118, 101, 1);
-  scale: 1.06;
+.main .content {
+  border: 1px solid red;
+  font-weight: lighter;
 }
 
-.deg-0 {
-  transform: translate(251px);
+.main .content .media {
+  border: 1px solid grey;
+  width: 100%;
+  height: 30rem;
+  background-color: rgba(239, 177, 177, 0.5);
 }
 
-.deg-45 {
-  transform:rotate(46deg) translate(251px) rotate(-46deg);
+.main .content .enter-button {
+  position: absolute;
+  width: 12rem;
+  height: 6rem;
+  border-radius: 50%;
+  border-color: red;
+  background-color: lightgray;
 }
-
-.deg-135 {
-  transform:rotate(136deg) translate(251px) rotate(-136deg);
-}
-
-.deg-180 {
-  transform:rotate(181deg) translate(251px) rotate(-181deg);
-}
-
-.deg-225 {
-  transform:rotate(226deg) translate(251px) rotate(-226deg);
-}
-
-.deg-270 {
-  transform:rotate(316deg) translate(251px) rotate(-316deg);
-}
+/*# sourceMappingURL=Main.css.map */
