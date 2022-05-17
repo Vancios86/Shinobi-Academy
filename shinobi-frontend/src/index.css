@@ -121,12 +121,29 @@ select {
   gap: var(--gap, 1rem);
 }
 
+.flow > *:where(:not(:first-child)) {
+  margin-top: var(--flow-space, 1rem);
+  outline: 1px solid red;
+}
+
 .container {
   max-width: 80rem;
   /* margin-inline: 2rem; */
   padding-inline: auto;
 }
 
+.container-grid {
+  display: grid;
+  grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(2rem, 1fr) ;
+}
+
+.container-grid > *:first-child {
+  grid-column: 2;
+}
+
+.container-grid > *:last-child {
+  grid-column: 3;
+}
 /* when using this class the elements are visualy gone but still in the DOM */
 .sr-only {
   position: absolute;
@@ -176,4 +193,51 @@ select {
 .fs-700,
 .fs-600 {
   line-height: 1.1;
+}
+
+/* ----------------- */
+/* Components        */
+/* ----------------- */
+
+.button-large {
+  display: grid;
+  position: relative;
+  place-items: center;
+  padding: 0 1.2em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  text-decoration: none;
+  z-index: 1;
+}
+
+.button-large::after {
+  content: '';
+  position: absolute;
+  background-color: hsl( var(--clr-red) / .33);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 500ms linear, transform 750ms ease-in-out;
+}
+
+.button-large:hover::after,
+.button-large:focus::after {
+  transform: scale(1.5);
+  opacity: 1;
+}
+
+.underline-indicators > * {
+  padding: var(--underline-gap, 1rem) 0;
+  border-bottom: .2em solid hsl( var(--clr-red) / 0);
+}
+
+.underline-indicators > *:hover,
+.underline-indicators > *:focus {
+  border-color: hsl(var(--clr-red) / .50);
+} 
+
+.underline-indicators > .active {
+  border-bottom: .2em solid hsl( var(--clr-red) / 1);
 }

@@ -1,8 +1,8 @@
-import "./Welcome.css";
+import './Welcome.css';
 
 const Welcome = () => {
   return (
-    <div className='content'>
+    <div className='welcome-content'>
       <div className='text-content text-dark flex'>
         <p>
           &quot;Cum explicabo dolore sequi molestias fugit ratione debitis
@@ -12,10 +12,16 @@ const Welcome = () => {
       </div>
 
       <div className='container flex'>
-        <h3 className='content media flex'>fallback</h3>
-        <button className='button enter-button bg-red text-silver'>
-          ENTER
-        </button>
+        <video className='media-content flex'>fallback</video>
+
+        <div className='access-button flex'>
+          <a
+            href='#'
+            className='button-large uppercase text-light bg-red fs-600'
+          >
+            Enter
+          </a>
+        </div>
       </div>
     </div>
   );
