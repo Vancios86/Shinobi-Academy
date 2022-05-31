@@ -18,16 +18,17 @@
   opacity: 0;
   cursor: pointer;
   width: 100px;
+  border: 2px solid hsl(var(--clr-dark));
 }
 
 .menu-toggler-label {
   transition: box-shadow 0.5s;
+  border: 2px solid hsl(var(--clr-dark));
 }
 
 .menu-toggler:hover + label,
 .menu-toggler:focus + label {
-  background: hsl(var(--clr-red) / 1);
-  box-shadow: 0 0 0 1rem hsl(var(--clr-red) / 0.33);
+  box-shadow: 0 0 0 0.33rem hsl(var(--clr-red) / 0.99);
 }
 .menu-toggler:checked + label {
   background: transparent;
@@ -36,8 +37,6 @@
 .menu-toggler:checked + label:after {
   top: 0;
   transition: box-shadow 0.5s;
-  /* width: 40px; */
-  /* transform-origin: 15% 85%; */
 }
 .menu-toggler:checked + label:before {
   transform: rotate(45deg) translateY(-15px) translateX(-15px);
@@ -79,7 +78,7 @@
   z-index: 1;
   border-radius: 50%;
   text-align: center;
-  background: hsl(var(--clr-red) / 0.33);
+  background: hsl(var(--clr-white));
   transition: transform 0.5s top 0.5s;
   top: 0;
   bottom: 0;
@@ -141,8 +140,9 @@
   width: inherit;
   height: inherit;
   line-height: 4.5rem;
-  color: hsl(var(--clr-red) / 1);
-  background: hsl(var(--clr-red) / 0.33);
+  color: hsl(var(--clr-red));
+  border: 2px solid hsl(var(--clr-dark));
+  background: hsl(var(--clr-white));
   border-radius: 50%;
   text-align: center;
   text-decoration: none;
@@ -151,7 +151,57 @@
   transition: 0.2s;
 }
 .menu-item a:hover {
-  box-shadow: 0 0 0 0.67rem hsl(var(--clr-red) / 0.33);
-  color: white;
-  background: hsl(var(--clr-red) / 1);
+  box-shadow: 0 0 0 0.22rem hsl(var(--clr-red) / 0.99);
+}
+
+/* styling hamb ICON */
+.mainNav-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mainNav-icon,
+.mainNav-icon::before,
+.mainNav-icon::after {
+  width: 3rem;
+  height: 2px;
+  background-color: hsl(var(--clr-red));
+  display: inline-block;
+}
+
+.mainNav-icon::before,
+.mainNav-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  transition: all 0.5s;
+}
+
+.mainNav-icon::before {
+  top: -0.8rem;
+}
+.mainNav-icon::after {
+  top: 0.8rem;
+}
+
+.menu-toggler:hover icon:before {
+  top: -1rem;
+}
+.menu-toggler:hover icon::after {
+  top: 1rem;
+}
+
+.menu-toggler:checked + .menu-toggler-label .mainNav-icon {
+  background-color: transparent;
+}
+
+.menu-toggler:checked + .menu-toggler-label .mainNav-icon::before {
+  top: 0;
+  transform: rotate(135deg);
+}
+.menu-toggler:checked + .menu-toggler-label .mainNav-icon::after {
+  top: 0;
+  transform: rotate(-135deg);
 }

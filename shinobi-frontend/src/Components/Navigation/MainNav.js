@@ -5,11 +5,8 @@ const MainNav = () => {
   return (
     <nav className='menu'>
       <input className='menu-toggler' type='checkbox' />
-      <label
-        htmlFor='menu-toggler'
-        className='menu-toggler-label uppercase text-light fs-600'
-      >
-        MENU
+      <label htmlFor='menu-toggler' className='menu-toggler-label'>
+        <span className='mainNav-icon'>&nbsp;</span>
       </label>
       <ul>
         <li className='menu-item'>
