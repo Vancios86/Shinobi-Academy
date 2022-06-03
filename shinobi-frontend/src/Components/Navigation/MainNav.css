@@ -17,7 +17,6 @@
   z-index: 2;
   opacity: 0;
   cursor: pointer;
-  width: 100px;
   border: 2px solid hsl(var(--clr-dark));
 }
 

@@ -1,4 +1,4 @@
-import logo from './logoB.jpeg';
+import logo from './SHINOBI.png';
 import './Logo.css';
 
 const Logo = () => {

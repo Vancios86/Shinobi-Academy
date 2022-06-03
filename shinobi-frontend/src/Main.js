@@ -1,19 +1,20 @@
 import './Main.css';
-import Logo from './Components/Logo/Logo';
+
 import Footer from './Components/Footer/Footer';
 import Welcome from './Components/WelcomePage/Welcome';
+import About from './Components/Pages/About/About';
+import { Routes, Route } from 'react-router-dom';
 
 const Main = () => {
   return (
-    <>
-      <div className='main flex'>
-        <Logo />
+    <div className='main grid'>
+      <Routes>
+        <Route path='/' element={<Welcome />} />
+        <Route path='/About' element={<About />} />
+      </Routes>
 
-        <Welcome />
-
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 
