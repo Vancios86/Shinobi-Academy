@@ -13,7 +13,7 @@ const MainNav = () => {
           <Link to='/Camps'>Camps</Link>
         </li>
         <li className='menu-item'>
-          <Link to='/About'>About</Link>
+          <a href='/#about-page'>About</a>
         </li>
         <li className='menu-item'>
           <Link to='/Classes'>Classes</Link>

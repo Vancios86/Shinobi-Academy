@@ -1,18 +1,21 @@
 import './Main.css';
 
 import Footer from './Components/Footer/Footer';
-import Welcome from './Components/WelcomePage/Welcome';
-import About from './Components/Pages/About/About';
+import WelcomePage from './Components/WelcomePage/WelcomePage';
+import AboutPage from './Components/AboutPage/AboutPage';
+import ClassesPage from './Components/ClassesPage/ClassesPage';
 import { Routes, Route } from 'react-router-dom';
 
 const Main = () => {
   return (
     <div className='main grid'>
-      <Routes>
-        <Route path='/' element={<Welcome />} />
-        <Route path='/About' element={<About />} />
-      </Routes>
-
+      {/* <Routes>
+        <Route path='/' element={<WelcomePage />} />
+        <Route path='/#about-page' element={<AboutPage />} />
+      </Routes> */}
+      <WelcomePage />
+      <AboutPage />
+      <ClassesPage />
       <Footer />
     </div>
   );

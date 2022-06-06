@@ -1,0 +1,49 @@
+/* .about-page-content {
+  display: ;
+
+} */
+.team-member {
+  height: 6.1rem;
+}
+.team-photo {
+  background-size: contain;
+  background-position: 30%;
+  width: 6rem;
+  height: 6rem;
+  border: 0.2rem solid hsl(var(--clr-red));
+  border-radius: 50%;
+  margin: 0.1rem;
+}
+.photo-colin {
+  content: '';
+  float: left;
+  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+  background-size: contain;
+  background-position: 30%;
+  width: 7rem;
+  height: 7rem;
+  border: 0.2rem solid hsl(var(--clr-red));
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.photo-kieran {
+  content: '';
+  float: right;
+  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+}
+.photo-josh {
+  content: '';
+  float: left;
+  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+}
+.photo-bryne {
+  content: '';
+  float: right;
+  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+}
+.photo-souza {
+  content: '';
+  float: left;
+  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+}

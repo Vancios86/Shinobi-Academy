@@ -1,17 +1,17 @@
-import './Welcome.css';
+import './WelcomePage.css';
 import MainNav from '../Navigation/MainNav';
 import Logo from '../Logo/Logo';
 
-const Welcome = () => {
+const WelcomePage = () => {
   return (
-    <>
+    <div className='welcome-page'>
       <div className='welcome-content'>
         <div className='welcome-logo flex'>
           <Logo />
         </div>
 
-        <div className='text-content text-dark container flex'>
-          <p className='fs-400'>Welcome to Shinobi Academy Lagos</p>
+        <div className='page-title'>
+          <h3>Welcome to Shinobi Academy</h3>
         </div>
 
         <div className='flex nav-container'>
@@ -19,8 +19,8 @@ const Welcome = () => {
           <MainNav />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Welcome;
+export default WelcomePage;

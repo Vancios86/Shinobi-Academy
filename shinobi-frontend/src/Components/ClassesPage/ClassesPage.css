@@ -1,0 +1,35 @@
+.classes-page {
+  width: 100%;
+}
+.classes {
+  width: 100%;
+  height: 9rem;
+  margin-bottom: 1rem;
+  display: flex;
+  background-size: cover;
+  background-repeat: no-repeat;
+  align-items: center;
+  padding: 1rem;
+}
+.class-jj {
+  background-image: url('https://source.unsplash.com/7MRajrPiTqw');
+  background-position: left;
+  background-size: 88%;
+}
+.class-s {
+  background-image: url('https://source.unsplash.com/FH6JcaCrYJ0');
+  justify-content: flex-end;
+  background-position: right;
+  background-size: 88%;
+}
+.class-w {
+  background-image: url('https://source.unsplash.com/MS_RP-Lba0U');
+  background-position: left;
+  background-size: 88%;
+}
+.class-spar {
+  background-image: url('https://source.unsplash.com/misTB4pmevc');
+  justify-content: flex-end;
+  background-position: right;
+  background-size: 88%;
+}
