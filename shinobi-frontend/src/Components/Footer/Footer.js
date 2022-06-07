@@ -2,10 +2,15 @@ import './Footer.css';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { SiInstagram, SiTwitter, SiYoutube } from 'react-icons/si';
 import { IconContext } from 'react-icons';
+import vector from '../Logo/vector.jpeg';
+import Tilt from 'react-parallax-tilt';
 
 const Footer = () => {
   return (
     <div className='footer container flex bg-light text-dark fs300'>
+      <div className='page-title' id='contact-page'>
+        <h3>Contact</h3>
+      </div>
       <IconContext.Provider
         value={{ color: 'hsl(var(--clr-red))', className: 'global-class-name' }}
       >
@@ -27,12 +32,18 @@ const Footer = () => {
         </div>
       </IconContext.Provider>
 
-      <div className='contact-form flex'>
+      <div className='logo-footer'>
+        <Tilt>
+          <img src={vector} alt='vector-logo' />
+        </Tilt>
+      </div>
+
+      <div className='contact-form'>
         <form action=''>
           <input type='text' name='name' id='name' placeholder='your name' />
           <br />
           <input type='text' name='email' id='email' placeholder='email' />
-          <br />
+
           <input
             type='button'
             name='send-message'

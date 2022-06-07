@@ -1,14 +1,23 @@
 .footer {
   width: 100%;
   height: auto;
-  border-top: 0.15rem solid hsl(var(--clr-dark));
+  /* border-top: 0.15rem solid hsl(var(--clr-dark)); */
   justify-content: space-between;
   flex-direction: column;
+  position: relative;
 }
-
+.logo-footer {
+  width: 5rem;
+  aspect-ratio: 1;
+  align-self: flex-end;
+  border-radius: 50%;
+  position: absolute;
+  top: 36%;
+  right: 6%;
+}
 .footer .contact {
   flex-direction: column;
-  justify-content: center;
+  align-self: flex-start;
 }
 
 .footer ul {
@@ -25,15 +34,24 @@
 }
 .contact-form {
   width: 100%;
+  position: relative;
+  margin-inline-start: 1rem;
+  width: 100%;
 }
 .contact-form > form > input {
   margin-bottom: 0.5rem;
+  width: 67%;
   border: 0.15rem solid hsl(var(--clr-dark));
-  width: 100%;
+  border-radius: 0.33rem;
+  max-width: 40rem;
 }
 #send-message {
   background-color: hsl(var(--clr-light));
-  width: 50%;
-  border-radius: 9px;
+  width: 4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
   border: 0.15rem solid hsl(var(--clr-dark));
+  position: absolute;
+  right: 10%;
+  top: 10%;
 }

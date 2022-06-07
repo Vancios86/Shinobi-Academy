@@ -6,7 +6,7 @@ const ClassesPage = () => {
       <div className='classes-page-content'>
         <section className='container flow'>
           <div className='page-title' id='classes-page'>
-            <h3>Our Classes</h3>
+            <h3>Classes</h3>
           </div>
           <div className='grid fs-600 text-silver'>
             <div className='classes class-jj'>

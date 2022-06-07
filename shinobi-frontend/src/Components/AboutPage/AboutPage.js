@@ -1,6 +1,5 @@
-// import Header from '../Header/Header';
-
 import './AboutPage.css';
+import Tilt from 'react-parallax-tilt';
 
 const AboutPage = () => {
   return (
@@ -10,7 +9,7 @@ const AboutPage = () => {
           <div className='page-title' id='about-page'>
             <h3>About us</h3>
           </div>
-          <div className='photo-colin'></div>
+          <div className='photo-colin border-red'></div>
           <p className='fs-200 text-dark about-text'>
             This is Colin Byrne, the founder of Shinobi Academy. Labore
             consequuntur officia adipisci, dolorum et dolorem neque explicabo
@@ -32,35 +31,69 @@ const AboutPage = () => {
 
         <section className='container flow'>
           <div className='page-title'>
-            <h3>Our team</h3>
+            <h3>Our coaches</h3>
           </div>
-          <div className='team-member'>
-            <div className='team-photo photo-kieran'></div>
-            <p className='fs-200 text-dark about-text'>
-              Kieran - pro fighter. Labore consequuntur officia adipisci,
-              dolorum et dolorem neque explicabo aut nostrum rem atque.
-            </p>
-          </div>
-          <div className='team-member'>
-            <div className='team-photo photo-josh'></div>
-            <p className='fs-200 text-dark about-text'>
-              Josh - JiuJitsu black-belt. Labore consequuntur officia adipisci,
-              dolorum et dolorem neque explicabo aut nostrum rem atque.
-            </p>
-          </div>
-          <div className='team-member'>
-            <div className='team-photo photo-bryne'></div>
-            <p className='fs-200 text-dark about-text'>
-              Bryne - pro MMA fighter. Labore consequuntur officia adipisci,
-              dolorum et dolorem neque explicabo aut nostrum rem atque.
-            </p>
-          </div>
-          <div className='team-member'>
-            <div className='team-photo photo-souza'></div>
-            <p className='fs-200 text-dark about-text'>
-              Souza - pro MMA fighter. Labore consequuntur officia adipisci,
-              dolorum et dolorem neque explicabo aut nostrum rem atque.
-            </p>
+          <div className='coaches-wrapper container grid'>
+            <Tilt
+              className='parallax-effect-glare-scale'
+              perspective={500}
+              glareEnable={true}
+              glareMaxOpacity={0.5}
+              scale={1.02}
+            >
+              <div className='coach-member'>
+                <div className='coach-photo photo-souza'></div>
+                <p className='coach-description'>
+                  Name: Colin <br /> Experience: 20+years <br />
+                  Skills: pro fighter, BJJ, Ninjutsu BlackBelt
+                </p>
+              </div>
+            </Tilt>
+            <Tilt
+              className='parallax-effect-glare-scale'
+              perspective={500}
+              glareEnable={true}
+              glareMaxOpacity={0.5}
+              scale={1.02}
+            >
+              <div className='coach-member'>
+                <div className='coach-photo photo-kieran'></div>
+                <p className='coach-description'>
+                  Name: Kieran <br /> Experience: 10years <br />
+                  Skills: pro MMA fighter, BJJ purple belt
+                </p>
+              </div>
+            </Tilt>
+            <Tilt
+              className='parallax-effect-glare-scale'
+              perspective={500}
+              glareEnable={true}
+              glareMaxOpacity={0.5}
+              scale={1.02}
+            >
+              <div className='coach-member'>
+                <div className='coach-photo photo-josh'></div>
+                <p className='coach-description'>
+                  Name: Josh <br /> Experience: 20years <br /> Skills: BJJ black
+                  belt, multiple European podium finisher
+                </p>
+              </div>
+            </Tilt>
+            <Tilt
+              className='parallax-effect-glare-scale'
+              perspective={500}
+              glareEnable={true}
+              glareMaxOpacity={0.5}
+              scale={1.02}
+            >
+              <div className='coach-member'>
+                <div className='coach-photo photo-bryne'></div>
+                <p className='coach-description'>
+                  Name: Bryne <br /> Experience: 20years <br /> Skills: pro
+                  fighter, wrestling, boxing
+                </p>
+              </div>
+            </Tilt>
           </div>
         </section>
       </div>
