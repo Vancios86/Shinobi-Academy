@@ -73,7 +73,7 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 5.4rem;
+  width: 4.5rem;
   aspect-ratio: 1;
   z-index: 1;
   border-radius: 50%;
@@ -85,6 +85,11 @@
   left: 0;
   right: 0;
   margin: auto;
+}
+@media screen and (min-width: 600px) {
+  .menu-toggler + label {
+    width: 5.4rem;
+  }
 }
 .menu-toggler + label:before,
 .menu-toggler + label:after {

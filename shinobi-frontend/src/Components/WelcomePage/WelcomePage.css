@@ -8,7 +8,7 @@
   height: 33rem;
 }
 
-.welcome-content > .nav-container > .media-content {
+.media-content {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -20,8 +20,13 @@
   background-position: center;
 }
 
-/* @media screen and (min-width: 1000px) {
-  .welcome-content > .nav-container > .media-content {
-    
+@media screen and (min-width: 600px) {
+  .page-title {
+    font-size: var(--fs-600);
+    padding: 6rem 0.3rem;
   }
-} */
+  .media-content {
+    background-image: url('https://source.unsplash.com/x_V62hOwnDk');
+    width: 100vw;
+  }
+}

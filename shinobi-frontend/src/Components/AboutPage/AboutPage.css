@@ -1,26 +1,29 @@
-/* .about-page-content {
-  display: ;
-
-} */
 .photo-colin {
   content: '';
   float: left;
-  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+  /* background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
   background-size: contain;
-  background-position: 30%;
+  background-position: 30%; */
   width: 7rem;
-  height: 7rem;
+  aspect-ratio: 1;
   border-radius: 50%;
   margin-right: 0.5rem;
 }
-
+.photo-colin img {
+  border-radius: 0.33rem;
+  border: 0.15rem solid hsl(var(--clr-red));
+}
+#about-text {
+  font-size: var(--fs-200);
+}
 .coaches-wrapper {
   grid-template-columns: 1fr 1fr;
   justify-content: center;
 }
 .coach-member {
   height: 12.2rem;
-  border: 0.2rem solid hsl(var(--clr-red));
+  max-width: 10.1rem;
+  border: 0.15rem solid hsl(var(--clr-red));
   border-radius: 0.25rem;
   position: relative;
   margin-bottom: 1rem;
@@ -76,8 +79,20 @@
   float: right;
   background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
 }
-.photo-souza {
+.photo-colin-coach {
   content: '';
   float: left;
   background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
+}
+
+@media screen and (min-width: 600px) {
+  #about-text {
+    font-size: var(--fs-300);
+  }
+  .photo-colin {
+    width: 8.4rem;
+  }
+  .coaches-wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }

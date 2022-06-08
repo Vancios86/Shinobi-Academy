@@ -9,8 +9,20 @@ const AboutPage = () => {
           <div className='page-title' id='about-page'>
             <h3>About us</h3>
           </div>
-          <div className='photo-colin border-red'></div>
-          <p className='fs-200 text-dark about-text'>
+
+          <div className='photo-colin'>
+            <Tilt
+              className='parallax-effect-glare-scale'
+              perspective={500}
+              glareEnable={true}
+              glareMaxOpacity={0.5}
+              scale={1.01}
+            >
+              <img src='https://source.unsplash.com/cVLOqm8sSXc' alt='' />
+            </Tilt>
+          </div>
+
+          <p className='text-dark' id='about-text'>
             This is Colin Byrne, the founder of Shinobi Academy. Labore
             consequuntur officia adipisci, dolorum et dolorem neque explicabo
             aut nostrum rem atque. Doloremque maxime quibusdam, recusandae
@@ -42,7 +54,7 @@ const AboutPage = () => {
               scale={1.02}
             >
               <div className='coach-member'>
-                <div className='coach-photo photo-souza'></div>
+                <div className='coach-photo photo-colin-coach'></div>
                 <p className='coach-description'>
                   Name: Colin <br /> Experience: 20+years <br />
                   Skills: pro fighter, BJJ, Ninjutsu BlackBelt

@@ -26,7 +26,7 @@
   --fs-600: 2rem;
   --fs-500: 1.45rem;
   --fs-400: 1.125rem;
-  --fs-300: 1rem;
+  --fs-300: 0.95rem;
   --fs-200: 0.875rem;
 }
 
@@ -256,10 +256,20 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem 0.3rem;
+  padding: 4rem 0.1rem;
   color: hsl(var(--clr-white));
   text-shadow: 0 0 0.25rem hsl(var(--clr-dark));
   width: 100%;
+  text-transform: uppercase;
+}
+
+/* Media Querries */
+
+@media screen and (min-width: 600px) {
+  .page-title {
+    font-size: var(--fs-600);
+    padding: 6rem 0.3rem;
+  }
 }
 /* ----------------- */
 /* Components        */

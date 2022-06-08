@@ -14,7 +14,7 @@ const WelcomePage = () => {
           <h3>Welcome to Shinobi Academy</h3>
         </div>
 
-        <div className='flex nav-container border-red'>
+        <div className='flex nav-container'>
           <video className='media-content flex'>fallback</video>
           <MainNav />
         </div>

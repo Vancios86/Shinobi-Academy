@@ -1,9 +1,11 @@
 .classes-page {
   width: 100%;
+  min-height: 100vh;
+  border: 1px solid green;
 }
 .classes {
   width: 100%;
-  height: 9rem;
+  height: 9.9rem;
   margin-bottom: 1rem;
   display: flex;
   background-size: cover;
@@ -32,4 +34,10 @@
   justify-content: flex-end;
   background-position: right;
   background-size: 88%;
+}
+
+@media screen and (min-width: 800px) {
+  .classes {
+    height: 77vh;
+  }
 }
