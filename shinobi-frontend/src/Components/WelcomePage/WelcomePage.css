@@ -1,6 +1,10 @@
-.welcome-content .text-content {
-  padding: 3rem 0.3rem;
+.welcome-logo {
+  padding-inline: 0.33rem;
 }
+
+/* #welcome-text {
+  padding: 9rem 0 4.5rem 0;
+} */
 
 .welcome-content > .nav-container {
   position: relative;
@@ -20,11 +24,13 @@
   background-position: center;
 }
 
-@media screen and (min-width: 600px) {
-  .page-title {
-    font-size: var(--fs-600);
-    padding: 6rem 0.3rem;
+@media screen and (max-width: 320px) {
+  .welcome-logo,
+  #welcome-text {
+    scale: 81%;
   }
+}
+@media screen and (min-width: 600px) {
   .media-content {
     background-image: url('https://source.unsplash.com/x_V62hOwnDk');
     width: 100vw;

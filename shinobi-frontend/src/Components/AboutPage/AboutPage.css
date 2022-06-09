@@ -1,3 +1,8 @@
+.coaches-wrapper {
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+}
+
 .photo-colin {
   content: '';
   float: left;
@@ -13,21 +18,16 @@
   border-radius: 0.33rem;
   border: 0.15rem solid hsl(var(--clr-red));
 }
-#about-text {
-  font-size: var(--fs-200);
-}
-.coaches-wrapper {
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
-}
+
 .coach-member {
   height: 12.2rem;
-  max-width: 10.1rem;
+  min-width: 8rem;
+  max-width: 10.5rem;
   border: 0.15rem solid hsl(var(--clr-red));
   border-radius: 0.25rem;
   position: relative;
   margin-bottom: 1rem;
-  /* transform-style: preserve-3d; */
+  transform-style: preserve-3d;
 }
 
 .coach-member::after {
@@ -86,13 +86,19 @@
 }
 
 @media screen and (min-width: 600px) {
-  #about-text {
-    font-size: var(--fs-300);
-  }
   .photo-colin {
     width: 8.4rem;
   }
   .coaches-wrapper {
     grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .coaches-wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  .coach-member {
+    min-width: 9rem;
   }
 }

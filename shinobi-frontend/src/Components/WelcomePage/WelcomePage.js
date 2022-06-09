@@ -10,7 +10,7 @@ const WelcomePage = () => {
           <Logo />
         </div>
 
-        <div className='page-title'>
+        <div className='page-title' id='welcome-text'>
           <h3>Welcome to Shinobi Academy</h3>
         </div>
 
