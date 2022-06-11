@@ -2,9 +2,9 @@
   padding-inline: 0.33rem;
 }
 
-/* #welcome-text {
-  padding: 9rem 0 4.5rem 0;
-} */
+#welcome-text {
+  height: 88vh;
+}
 
 .welcome-content > .nav-container {
   position: relative;

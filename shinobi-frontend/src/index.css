@@ -20,14 +20,19 @@
   --ff-hand: 'Shadows Into Light', cursive;
 
   /* Font-sizes */
-  --fs-900: 9.375rem;
-  --fs-800: 6.25rem;
+  --fs-800: 3.3rem;
   --fs-700: 2.5rem;
   --fs-600: 2rem;
   --fs-500: 1.45rem;
   --fs-400: 1.125rem;
   --fs-300: 0.95rem;
-  --fs-200: 0.875rem;
+  --fs-200: 0.8rem;
+  --fs-100: 0.725rem;
+
+  /* Letter spacing */
+  --ls-1: 0.12rem;
+  --ls-2: 0.18rem;
+  --ls-3: 0.24rem;
 }
 
 /* ----------------- */
@@ -207,9 +212,6 @@ select {
   font-family: var(--ff-hand);
 }
 
-.fs-900 {
-  font-size: var(--fs-900);
-}
 .fs-800 {
   font-size: var(--fs-800);
 }
@@ -231,22 +233,14 @@ select {
 .fs-200 {
   font-size: var(--fs-200);
 }
-
-.letter-spacing-1 {
-  letter-spacing: 4.74px;
-}
-.letter-spacing-2 {
-  letter-spacing: 2.7px;
-}
-.letter-spacing-3 {
-  letter-spacing: 2.35px;
+.fs-100 {
+  font-size: var(--fs-100);
 }
 
 .uppercase {
   text-transform: uppercase;
 }
 
-.fs-900,
 .fs-800,
 .fs-700,
 .fs-600 {
@@ -258,7 +252,7 @@ select {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5rem 0.1rem;
+  padding: 50% 0.3rem;
   color: hsl(var(--clr-white));
   text-shadow: 0 0 0.25rem hsl(var(--clr-dark));
   width: 100%;
@@ -269,17 +263,22 @@ select {
   font-size: var(--fs-200);
 }
 /* Media Querries */
+
 @media screen and (max-width: 320px) {
   .page-title {
     font-size: var(--fs-500);
-    padding: 6rem 0.3rem;
+    /* padding: 80% 0.3rem; */
+  }
+  .text-content {
+    font-size: var(--fs-100);
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 500px) {
   .page-title {
     font-size: var(--fs-600);
-    padding: 7rem 0.3rem;
+    letter-spacing: var(--ls-1);
+    padding: 50% 0.3rem 39% 0.3rem;
   }
   .text-content {
     font-size: var(--fs-300);
@@ -289,10 +288,22 @@ select {
 @media screen and (min-width: 800px) {
   .page-title {
     font-size: var(--fs-700);
-    padding: 8rem 0.3rem;
+    padding: 20rem 0.6rem;
+    letter-spacing: var(--ls-2);
   }
   .text-content {
-    font-size: var(--fs-400);
+    font-size: var(--fs-300);
+    /* letter-spacing: 0.5px; */
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .page-title {
+    font-size: var(--fs-800);
+    padding: 20rem 0.6rem;
+  }
+  .text-content {
+    font-size: var(--fs-300);
   }
 }
 /* ----------------- */

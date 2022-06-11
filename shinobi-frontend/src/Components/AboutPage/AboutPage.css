@@ -15,7 +15,8 @@
   margin-right: 0.5rem;
 }
 .photo-colin img {
-  border-radius: 0.33rem;
+  border-radius: 50%;
+  box-shadow: 0 0.05rem 0.15rem 0.15rem hsl(var(--clr-red));
   border: 0.15rem solid hsl(var(--clr-red));
 }
 
@@ -23,8 +24,8 @@
   height: 12.2rem;
   min-width: 8rem;
   max-width: 10.5rem;
-  border: 0.15rem solid hsl(var(--clr-red));
   border-radius: 0.25rem;
+  box-shadow: 0 0.05rem 0.15rem 0.15rem hsl(var(--clr-red));
   position: relative;
   margin-bottom: 1rem;
   transform-style: preserve-3d;
