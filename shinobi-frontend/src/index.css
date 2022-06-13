@@ -255,7 +255,6 @@ select {
   padding: 50% 0.3rem;
   color: hsl(var(--clr-white));
   text-shadow: 0 0 0.25rem hsl(var(--clr-dark));
-  width: 100%;
   text-transform: uppercase;
 }
 
@@ -278,7 +277,7 @@ select {
   .page-title {
     font-size: var(--fs-600);
     letter-spacing: var(--ls-1);
-    padding: 50% 0.3rem 39% 0.3rem;
+    padding: 33% 0.3rem 33% 0.3rem;
   }
   .text-content {
     font-size: var(--fs-300);
@@ -288,12 +287,11 @@ select {
 @media screen and (min-width: 800px) {
   .page-title {
     font-size: var(--fs-700);
-    padding: 20rem 0.6rem;
+    padding: 50% 0.3rem 30% 0.3rem;
     letter-spacing: var(--ls-2);
   }
   .text-content {
     font-size: var(--fs-300);
-    /* letter-spacing: 0.5px; */
   }
 }
 
