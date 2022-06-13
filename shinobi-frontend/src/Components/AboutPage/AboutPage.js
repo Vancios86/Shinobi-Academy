@@ -50,11 +50,10 @@ const AboutPage = () => {
           </section>
 
           <section className='container flow'>
-            <Parallax speed={-16} opacity={[1, 0]}>
-              <div className='page-title'>
-                <h3>Our coaches</h3>
-              </div>
-            </Parallax>
+            <div className='team-title'>
+              <h3>MEET OUR TEAM</h3>
+            </div>
+
             <div className='coaches-wrapper container grid'>
               <Tilt
                 className='parallax-effect-glare-scale'
@@ -63,7 +62,7 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.02}
               >
-                <div className='coach-member'>
+                <div className='team-member'>
                   <div className='coach-photo photo-colin-coach'></div>
                   <p className='coach-description'>
                     Name: Colin <br /> Experience: 20+years <br />
@@ -78,7 +77,7 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.02}
               >
-                <div className='coach-member'>
+                <div className='team-member'>
                   <div className='coach-photo photo-kieran'></div>
                   <p className='coach-description'>
                     Name: Kieran <br /> Experience: 10years <br />
@@ -93,7 +92,7 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.02}
               >
-                <div className='coach-member'>
+                <div className='team-member'>
                   <div className='coach-photo photo-josh'></div>
                   <p className='coach-description'>
                     Name: Josh <br /> Experience: 20years <br /> Skills: BJJ
@@ -108,7 +107,7 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.02}
               >
-                <div className='coach-member'>
+                <div className='team-member'>
                   <div className='coach-photo photo-bryne'></div>
                   <p className='coach-description'>
                     Name: Bryne <br /> Experience: 20years <br /> Skills: pro
