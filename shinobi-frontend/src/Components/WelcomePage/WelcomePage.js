@@ -2,6 +2,7 @@ import './WelcomePage.css';
 import MainNav from '../Navigation/MainNav';
 import Logo from '../Logo/Logo';
 import { Parallax, ParallaxProvider } from 'react-scroll-parallax';
+import ShinobiVideo from './SHINOBI.mp4';
 
 const WelcomePage = () => {
   return (
@@ -11,15 +12,19 @@ const WelcomePage = () => {
           <div className='welcome-logo flex'>
             <Logo />
           </div>
-          <Parallax speed={-30} opacity={[1, 0]}>
+          <Parallax speed={-30} opacity={[1]}>
             <div className='page-title' id='welcome-text'>
               <h3>Welcome to Shinobi Academy</h3>
             </div>
           </Parallax>
-          <div className='flex nav-container'>
-            <video className='media-content flex'>fallback</video>
-            <MainNav />
-          </div>
+          <Parallax speed={30} opacity={[1]}>
+            <div className='nav-container'>
+              <video width={'100%'} autoPlay={'on'} loop={'on'} muted>
+                <source src={ShinobiVideo} type='video/mp4' />
+              </video>
+              <MainNav />
+            </div>
+          </Parallax>
         </div>
       </div>
     </ParallaxProvider>
