@@ -8,11 +8,9 @@ const AboutPage = () => {
       <div className='about-page grid'>
         <div className='about-page-content'>
           <section className='container flow'>
-            <Parallax speed={-16} opacity={[1, 0]}>
-              <div className='page-title' id='about-page'>
-                <h3>About us</h3>
-              </div>
-            </Parallax>
+            <div className='page-title' id='about-page'>
+              <h3>About us</h3>
+            </div>
 
             <div className='container'>
               <div className='photo-colin'>
@@ -48,75 +46,76 @@ const AboutPage = () => {
               </p>
             </div>
           </section>
+          <Parallax speed={16} opacity={[1]}>
+            <section className='container flow'>
+              <div className='team-title'>
+                <h3>MEET OUR TEAM</h3>
+              </div>
 
-          <section className='container flow'>
-            <div className='team-title'>
-              <h3>MEET OUR TEAM</h3>
-            </div>
-
-            <div className='coaches-wrapper container grid'>
-              <Tilt
-                className='parallax-effect-glare-scale'
-                perspective={500}
-                glareEnable={true}
-                glareMaxOpacity={0.5}
-                scale={1.02}
-              >
-                <div className='team-member'>
-                  <div className='coach-photo photo-colin-coach'></div>
-                  <p className='coach-description'>
-                    Name: Colin <br /> Experience: 20+years <br />
-                    Skills: pro fighter, BJJ, Ninjutsu BlackBelt
-                  </p>
-                </div>
-              </Tilt>
-              <Tilt
-                className='parallax-effect-glare-scale'
-                perspective={500}
-                glareEnable={true}
-                glareMaxOpacity={0.5}
-                scale={1.02}
-              >
-                <div className='team-member'>
-                  <div className='coach-photo photo-kieran'></div>
-                  <p className='coach-description'>
-                    Name: Kieran <br /> Experience: 10years <br />
-                    Skills: pro MMA fighter, BJJ purple belt
-                  </p>
-                </div>
-              </Tilt>
-              <Tilt
-                className='parallax-effect-glare-scale'
-                perspective={500}
-                glareEnable={true}
-                glareMaxOpacity={0.5}
-                scale={1.02}
-              >
-                <div className='team-member'>
-                  <div className='coach-photo photo-josh'></div>
-                  <p className='coach-description'>
-                    Name: Josh <br /> Experience: 20years <br /> Skills: BJJ
-                    black belt, multiple European podium finisher
-                  </p>
-                </div>
-              </Tilt>
-              <Tilt
-                className='parallax-effect-glare-scale'
-                perspective={500}
-                glareEnable={true}
-                glareMaxOpacity={0.5}
-                scale={1.02}
-              >
-                <div className='team-member'>
-                  <div className='coach-photo photo-bryne'></div>
-                  <p className='coach-description'>
-                    Name: Bryne <br /> Experience: 20years <br /> Skills: pro
-                    fighter, wrestling, boxing
-                  </p>
-                </div>
-              </Tilt>
-            </div>
-          </section>
+              <div className='coaches-wrapper container grid'>
+                <Tilt
+                  className='parallax-effect-glare-scale'
+                  perspective={500}
+                  glareEnable={true}
+                  glareMaxOpacity={0.5}
+                  scale={1.02}
+                >
+                  <div className='team-member'>
+                    <div className='coach-photo photo-colin-coach'></div>
+                    <p className='coach-description'>
+                      Name: Colin <br /> Experience: 20+years <br />
+                      Skills: pro fighter, BJJ, Ninjutsu BlackBelt
+                    </p>
+                  </div>
+                </Tilt>
+                <Tilt
+                  className='parallax-effect-glare-scale'
+                  perspective={500}
+                  glareEnable={true}
+                  glareMaxOpacity={0.5}
+                  scale={1.02}
+                >
+                  <div className='team-member'>
+                    <div className='coach-photo photo-kieran'></div>
+                    <p className='coach-description'>
+                      Name: Kieran <br /> Experience: 10years <br />
+                      Skills: pro MMA fighter, BJJ purple belt
+                    </p>
+                  </div>
+                </Tilt>
+                <Tilt
+                  className='parallax-effect-glare-scale'
+                  perspective={500}
+                  glareEnable={true}
+                  glareMaxOpacity={0.5}
+                  scale={1.02}
+                >
+                  <div className='team-member'>
+                    <div className='coach-photo photo-josh'></div>
+                    <p className='coach-description'>
+                      Name: Josh <br /> Experience: 20years <br /> Skills: BJJ
+                      black belt, multiple European podium finisher
+                    </p>
+                  </div>
+                </Tilt>
+                <Tilt
+                  className='parallax-effect-glare-scale'
+                  perspective={500}
+                  glareEnable={true}
+                  glareMaxOpacity={0.5}
+                  scale={1.02}
+                >
+                  <div className='team-member'>
+                    <div className='coach-photo photo-bryne'></div>
+                    <p className='coach-description'>
+                      Name: Bryne <br /> Experience: 20years <br /> Skills: pro
+                      fighter, wrestling, boxing
+                    </p>
+                  </div>
+                </Tilt>
+              </div>
+            </section>
+          </Parallax>
         </div>
       </div>
     </ParallaxProvider>
