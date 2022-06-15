@@ -64,7 +64,7 @@
 
 @media screen and (min-width: 600px) {
   .classes {
-    height: 44vh;
+    height: 39vh;
   }
   .classes-name {
     font-size: var(--fs-800);
@@ -83,18 +83,28 @@
   .classes {
     height: 44vh;
   }
+  .classes-text-right {
+    font-size: var(--fs-400);
+  }
+  .classes-text-left {
+    font-size: var(--fs-400);
+  }
 }
+
 @media screen and (min-width: 1000px) {
+  .classes {
+    height: 50vh;
+  }
   .classes-name {
     font-size: var(--fs-900);
     padding: 0 5% 0 0;
   }
   .classes-text-right {
-    font-size: var(--fs-400);
+    font-size: var(--fs-500);
     padding: 1rem;
   }
   .classes-text-left {
-    font-size: var(--fs-400);
+    font-size: var(--fs-500);
     padding: 1rem;
   }
 }

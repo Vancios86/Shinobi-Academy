@@ -7,13 +7,13 @@ const ClassesPage = () => {
       <div className='classes-page grid'>
         <div className='classes-page-content'>
           <section className='container flow'>
-            <Parallax speed={-18} opacity={[1, 0]}>
-              <div className='page-title' id='classes-page'>
-                <h3>Classes</h3>
-              </div>
-            </Parallax>
+            {/* <Parallax speed={-16} opacity={[1, 0]}> */}
+            <div className='page-title' id='classes-page'>
+              <h3>Classes</h3>
+            </div>
+            {/* </Parallax> */}
 
-            <div className='grid fs-600 text-silver'>
+            <div className='grid text-silver'>
               <Parallax speed={5} opacity={[1, 0.77]}>
                 <div className='classes class-jj'>
                   <div className='classes-name'>
