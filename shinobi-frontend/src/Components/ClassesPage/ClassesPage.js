@@ -9,7 +9,7 @@ const ClassesPage = () => {
           <section className='container flow'>
             {/* <Parallax speed={-16} opacity={[1, 0]}> */}
             <div className='page-title' id='classes-page'>
-              <h3>Classes</h3>
+              <h3 id='classes-page'>Classes</h3>
             </div>
             {/* </Parallax> */}
 
@@ -75,6 +75,9 @@ const ClassesPage = () => {
                   </Parallax>
                 </div>
               </Parallax>
+              <div className='schedule-button'>
+                <button className='button-large'>View Schedule</button>
+              </div>
             </div>
           </section>
         </div>
