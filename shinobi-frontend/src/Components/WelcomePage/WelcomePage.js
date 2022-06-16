@@ -12,9 +12,11 @@ const WelcomePage = () => {
           <div className='welcome-logo flex'>
             <Logo />
           </div>
-          <Parallax speed={-30} opacity={[1]}>
+          <Parallax speed={-30}>
             <div className='page-title' id='welcome-text'>
-              <h3>Welcome to Shinobi Academy</h3>
+              <h3 data-text='Welcome to Shinobi Academy'>
+                Welcome to <span>Shinobi Academy</span>
+              </h3>
             </div>
           </Parallax>
           <Parallax speed={30} opacity={[1]}>
