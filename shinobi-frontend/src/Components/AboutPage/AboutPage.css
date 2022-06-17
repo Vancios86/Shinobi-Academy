@@ -10,10 +10,11 @@
   aspect-ratio: 1;
   border-radius: 50%;
   margin-right: 0.5rem;
+  transform-style: preserve-3d;
 }
 .photo-colin img {
   border-radius: 50%;
-  box-shadow: 0 0.05rem 0.15rem 0.15rem hsl(var(--clr-red));
+  box-shadow: 0 0 0.33rem 0.1rem hsl(var(--clr-red));
   border: 0.15rem solid hsl(var(--clr-red));
 }
 .team-title {
@@ -29,8 +30,8 @@
   height: 10rem;
   min-width: 8rem;
   max-width: 10.5rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 0.05rem 0.15rem 0.15rem hsl(var(--clr-red));
+  border-radius: 0.33rem;
+  box-shadow: 0 0 0.25rem 0.15rem hsl(var(--clr-red));
   position: relative;
   margin-bottom: 1rem;
   transform-style: preserve-3d;
@@ -65,6 +66,7 @@
 .team-member > .coach-photo {
   position: absolute;
   background-size: cover;
+  border-radius: 0.33rem;
   top: 0;
   bottom: 0;
   right: 0;
