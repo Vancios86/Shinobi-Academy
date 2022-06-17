@@ -15,7 +15,7 @@ const WelcomePage = () => {
           <Parallax speed={-30}>
             <div className='page-title' id='welcome-text'>
               <h3 data-text='Welcome to Shinobi Academy'>
-                Welcome to <span>Shinobi Academy</span>
+                Welcome to <span>Shinobi</span> Academy
               </h3>
             </div>
           </Parallax>

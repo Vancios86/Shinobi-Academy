@@ -2,6 +2,7 @@
 
 .welcome-logo {
   padding-inline: 0.33rem;
+  height: auto;
 }
 
 #welcome-text {
@@ -26,9 +27,10 @@
   width: 0%;
   animation: animate 12s ease-in-out;
   animation-fill-mode: forwards;
-  animation-delay: 2s;
+  animation-delay: 1.5s;
 }
 
+/* Text animation */
 @keyframes animate {
   0% {
     width: 0;
@@ -70,17 +72,4 @@
 .nav-container video {
   box-shadow: 0.33rem 0 0.33rem hsl(var(--clr-dark));
   border-radius: 1rem;
-}
-
-@media screen and (max-width: 320px) {
-  .welcome-logo,
-  #welcome-text {
-    transform: scale(81%);
-  }
-}
-@media screen and (min-width: 600px) {
-  /* .media-content {
-    background-image: url('https://source.unsplash.com/x_V62hOwnDk');
-    width: 100vw;
-  } */
 }
