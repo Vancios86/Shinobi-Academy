@@ -1,27 +1,40 @@
 .footer {
   width: 100%;
   height: auto;
-  /* border-top: 0.15rem solid hsl(var(--clr-dark)); */
-  justify-content: space-between;
-  flex-direction: column;
+  border: 0.15rem solid hsl(var(--clr-dark));
+  grid-template-rows: auto auto;
+  gap: 0;
+  border-radius: 0.33rem;
+  box-shadow: 0 0 0.33rem 0.15rem hsl(var(--clr-dark));
+}
+.footer-top {
   position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
 }
 .logo-footer {
-  width: 5rem;
-  aspect-ratio: 1;
-  align-self: flex-end;
-  border-radius: 50%;
-  position: absolute;
-  top: 36%;
-  right: 6%;
+  width: 20%;
+  max-width: 100px;
+  display: flex;
+  align-items: center;
+  margin: 0.33rem;
 }
 .footer .contact {
   flex-direction: column;
   align-self: flex-start;
+  margin: 0 0.33rem;
+  width: auto;
 }
 
 .footer ul {
   list-style: none;
+  padding-left: 2rem;
+}
+
+.footer ul li {
+  word-break: break-all;
 }
 
 .social-media {
@@ -32,26 +45,46 @@
   justify-content: space-evenly;
   padding: 0;
 }
-.contact-form {
-  width: 100%;
+
+.social-media ul li svg {
+  transition: transform ease-in-out 0.33s;
+}
+.social-media ul li svg:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+@media screen and (max-width: 330px) {
+  /* .footer {
+    transform: scale(81%);
+  } */
+}
+/* .contact-form {
+  width: 80%;
   position: relative;
-  margin-inline-start: 1rem;
+  margin-inline: 1rem;
+  max-width: 35rem;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.contact-form form {
   width: 100%;
 }
-.contact-form > form > input {
+
+.contact-form form > input,
+textarea {
   margin-bottom: 0.5rem;
-  width: 67%;
-  border: 0.15rem solid hsl(var(--clr-dark));
+  width: 100%;
+  border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
-  max-width: 40rem;
 }
 #send-message {
   background-color: hsl(var(--clr-light));
-  width: 4rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
+  width: 50%;
+
   border: 0.15rem solid hsl(var(--clr-dark));
-  position: absolute;
-  right: 10%;
-  top: 10%;
-}
+  position: relative;
+} */
