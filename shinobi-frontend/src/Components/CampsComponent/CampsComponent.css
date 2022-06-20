@@ -1,5 +1,9 @@
+.camps-component {
+  overflow: hidden;
+  margin-top: 4.5rem;
+}
 #camps-component-text {
-  text-shadow: 0 1px 1px black;
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 .camps-background {
   position: absolute;
@@ -8,7 +12,7 @@
   right: 0;
   left: 0;
   border-radius: 0.33rem;
-  background-image: url('https://source.unsplash.com/DA_tplYgTow');
+  background-image: url('https://source.unsplash.com/i5Kx0P8A0d4');
   background-position: center;
   background-size: cover;
   z-index: -1;
@@ -17,26 +21,5 @@
 }
 .camps-component:hover .camps-background {
   filter: blur(0);
-}
-@media screen and (max-width: 335px) {
-  .component-title {
-    font-size: var(--fs-500);
-  }
-}
-@media screen and (min-width: 500px) {
-  .component-title {
-    font-size: var(--fs-700);
-    letter-spacing: var(--ls-1);
-  }
-}
-@media screen and (min-width: 600px) {
-  .component-title {
-    font-size: var(--fs-800);
-    letter-spacing: var(--ls-2);
-  }
-}
-@media screen and (min-width: 1000px) {
-  .component-title {
-    font-size: var(--fs-900);
-  }
+  scale: 110%;
 }

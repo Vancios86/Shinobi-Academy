@@ -5,7 +5,7 @@ const CampsComponent = () => {
   return (
     <ParallaxProvider>
       <Parallax speed={16}>
-        <div className='preview-component container flow'>
+        <div className='camps-component preview-component container flow'>
           <div className='component-title'>
             <h3 id='camps-component-title'>Camps</h3>
           </div>
@@ -18,7 +18,7 @@ const CampsComponent = () => {
               inventore!
             </p>
           </div>
-          <div className='container-button flex'>
+          <div className='component-button flex'>
             <button className='button-large'>view details</button>
           </div>
           <div className='camps-background'></div>
