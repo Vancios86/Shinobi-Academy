@@ -1,0 +1,39 @@
+.contact-component {
+  overflow: hidden;
+  margin-top: 0;
+  margin-bottom: 4.5rem;
+}
+.contact-items-list > ul {
+  list-style: none;
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
+}
+
+.contact-items-list > ul li {
+  word-break: break-all;
+}
+
+.contact-background {
+  position: absolute;
+  top: -1rem;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-radius: 0.33rem;
+  background-image: url('https://source.unsplash.com/DA_tplYgTow');
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+  filter: blur(0.15rem);
+  transition: all 1s ease-in-out;
+}
+.contact-component:hover .contact-background {
+  filter: blur(0);
+  scale: 110%;
+}
+
+@media screen and (min-width: 1000px) {
+  .contact-component {
+    min-width: 25rem;
+    margin-top: 4.5rem;
+  }
+}
