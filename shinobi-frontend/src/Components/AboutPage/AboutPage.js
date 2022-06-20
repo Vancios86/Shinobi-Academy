@@ -6,47 +6,47 @@ const AboutPage = () => {
   return (
     <ParallaxProvider>
       <div className='about-page grid'>
-        <div className='about-page-content'>
-          <section className='container flow'>
-            <div className='page-title' id='about-page'>
-              <h3>About us</h3>
-            </div>
+        <div className='page-title' id='about-page'>
+          <h3>About us</h3>
+        </div>
+        <Parallax speed={16} opacity={[1]}>
+          <div className='about-page-content'>
+            <section className='container flow'>
+              <div className='container'>
+                <div className='photo-colin'>
+                  <Tilt
+                    className='parallax-effect-glare-scale'
+                    perspective={500}
+                    glareEnable={true}
+                    glareMaxOpacity={0.5}
+                    scale={1.01}
+                  >
+                    <img src='https://source.unsplash.com/cVLOqm8sSXc' alt='' />
+                  </Tilt>
+                </div>
 
-            <div className='container'>
-              <div className='photo-colin'>
-                <Tilt
-                  className='parallax-effect-glare-scale'
-                  perspective={500}
-                  glareEnable={true}
-                  glareMaxOpacity={0.5}
-                  scale={1.01}
-                >
-                  <img src='https://source.unsplash.com/cVLOqm8sSXc' alt='' />
-                </Tilt>
+                <p className='text-dark text-content' id='about-text'>
+                  This is Colin Byrne, the founder of Shinobi Academy. Labore
+                  consequuntur officia adipisci, dolorum et dolorem neque
+                  explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
+                  recusandae voluptatem error quisquam ducimus obcaecati. Lorem
+                  ipsum dolor sit amet consectetur adipisicing elit. Labore
+                  consequuntur officia adipisci, dolorum et dolorem neque
+                  explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
+                  recusandae voluptatem error quisquam ducimus obcaecati. Lorem
+                  ipsum dolor sit amet consectetur adipisicing elit. Labore
+                  consequuntur officia adipisci, dolorum et dolorem neque
+                  explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
+                  recusandae voluptatem error quisquam ducimus obcaecati.
+                  Doloremque maxime quibusdam, recusandae voluptatem error
+                  quisquam ducimus obcaecati.Doloremque maxime quibusdam,
+                  recusandae voluptatem error quisquam ducimus
+                  obcaecati.Doloremque maxime quibusdam, recusandae voluptatem
+                  error quisquam ducimus obcaecati.
+                </p>
               </div>
+            </section>
 
-              <p className='text-dark text-content' id='about-text'>
-                This is Colin Byrne, the founder of Shinobi Academy. Labore
-                consequuntur officia adipisci, dolorum et dolorem neque
-                explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
-                recusandae voluptatem error quisquam ducimus obcaecati. Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Labore
-                consequuntur officia adipisci, dolorum et dolorem neque
-                explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
-                recusandae voluptatem error quisquam ducimus obcaecati. Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Labore
-                consequuntur officia adipisci, dolorum et dolorem neque
-                explicabo aut nostrum rem atque. Doloremque maxime quibusdam,
-                recusandae voluptatem error quisquam ducimus obcaecati.
-                Doloremque maxime quibusdam, recusandae voluptatem error
-                quisquam ducimus obcaecati.Doloremque maxime quibusdam,
-                recusandae voluptatem error quisquam ducimus
-                obcaecati.Doloremque maxime quibusdam, recusandae voluptatem
-                error quisquam ducimus obcaecati.
-              </p>
-            </div>
-          </section>
-          <Parallax speed={16} opacity={[1]}>
             <section className='container flow'>
               <div className='team-title'>
                 <h3>MEET OUR TEAM</h3>
@@ -115,8 +115,8 @@ const AboutPage = () => {
                 </Tilt>
               </div>
             </section>
-          </Parallax>
-        </div>
+          </div>
+        </Parallax>
       </div>
     </ParallaxProvider>
   );
