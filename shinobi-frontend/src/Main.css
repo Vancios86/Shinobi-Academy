@@ -2,3 +2,16 @@
   justify-items: center;
   overflow: hidden;
 }
+
+.components-section {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 1000px) {
+  .components-section {
+    flex-direction: row;
+    gap: 1rem;
+    columns: 1fr 1fr;
+  }
+}
