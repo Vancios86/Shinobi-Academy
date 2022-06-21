@@ -1,14 +1,14 @@
 import './Footer.css';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { SiTwitter, SiYoutube } from 'react-icons/si';
+import { AiFillInstagram } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
 import vector from '../Logo/vector.jpeg';
 import Tilt from 'react-parallax-tilt';
-import { AiFillInstagram } from 'react-icons/ai';
 
 const Footer = () => {
   return (
-    <div className='footer container grid bg-light text-dark'>
+    <div className='footer container grid bg-light text-dark shadowed-box'>
       <div className='section footer-top'>
         <div className='logo-footer'>
           <Tilt>
@@ -40,35 +40,11 @@ const Footer = () => {
           </div>
         </IconContext.Provider>
       </div>
-      {/* <div className='map'></div> */}
-
-      {/* <div className='contact-form'>
-        <div className='contact-form-title'>Send us a message</div>
-        <form action=''>
-          <input type='text' name='name' id='name' placeholder='your name' />
-          <br />
-          <input type='email' name='email' id='email' placeholder='email' />
-          <br />
-          <textarea
-            type='text'
-            name='message'
-            id='message'
-            placeholder='your message'
-          />
-          <br />
-          <input
-            type='button'
-            name='send-message'
-            id='send-message'
-            value='send'
-          />
-        </form>
-      </div> */}
 
       <IconContext.Provider
         value={{
           color: 'hsl(var(--clr-red))',
-          size: '2em',
+          size: '2.25em',
           className: 'social-media-icons',
         }}
       >
