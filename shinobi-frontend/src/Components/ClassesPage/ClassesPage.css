@@ -16,6 +16,8 @@
 .classes-name {
   font-size: var(--fs-500);
   padding: 0 5% 0 0;
+  -webkit-text-stroke: 0.5px hsl(var(--clr-dark));
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 .classes-text-right {
   font-size: var(--fs-100);
@@ -24,7 +26,7 @@
   padding: 0.25rem;
   border-left: 0.125rem solid hsl(var(--clr-red));
   max-width: 36rem;
-  backdrop-filter: blur(10px);
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 
 .classes-text-left {
@@ -36,6 +38,7 @@
   border-right: 0.125rem solid hsl(var(--clr-red));
   text-align: end;
   max-width: 36rem;
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 .class-jj {
   background-image: url('https://source.unsplash.com/7MRajrPiTqw');
