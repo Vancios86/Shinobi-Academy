@@ -1,0 +1,29 @@
+.gallery-component {
+  overflow: hidden;
+}
+#gallery-component-text {
+  text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
+}
+.gallery-background {
+  position: absolute;
+  top: -1rem;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-radius: 0.33rem;
+  background-image: url('https://source.unsplash.com/TPhZnl2NEws');
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+  filter: blur(0.15rem);
+  transition: all 1s ease-in;
+}
+.gallery-component:hover .gallery-background {
+  filter: blur(0);
+  scale: 110%;
+}
+@media screen and (min-width: 1000px) {
+  .gallery-component {
+    margin-top: 4.5rem;
+  }
+}
