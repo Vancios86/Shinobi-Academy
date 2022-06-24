@@ -3,13 +3,13 @@
   overflow: hidden;
 }
 
-.components-section {
+.inline-components-section {
   display: flex;
   flex-direction: column;
 }
 
 @media screen and (min-width: 1000px) {
-  .components-section {
+  .inline-components-section {
     flex-direction: row;
     gap: 1rem;
     columns: 1fr 1fr;
