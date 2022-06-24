@@ -1,0 +1,28 @@
+{
+  "teamMembers": [
+    {
+      "id": 1,
+      "name": "Colin",
+      "xp": "25 years",
+      "skills": "ex pro fighter, BJJ and Ninjutsu Black Belt"
+    },
+    {
+      "id": 2,
+      "name": "Bryne",
+      "xp": "23 years",
+      "skills": "pro MMA fighter, boxer, wrestler"
+    },
+    {
+      "id": 3,
+      "name": "Josh",
+      "xp": "20 years",
+      "skills": "BJJ Black Belt, multiple podium finishes"
+    },
+    {
+      "id": 4,
+      "name": "Kieran",
+      "xp": "10 years",
+      "skills": "pro MMA fighter, BJJ purple belt"
+    }
+  ]
+}
