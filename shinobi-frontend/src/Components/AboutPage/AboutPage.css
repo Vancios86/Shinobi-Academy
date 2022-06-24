@@ -20,10 +20,10 @@
 .team-title {
   font-size: var(--fs-300);
   color: hsl(var(--clr-white));
-  text-shadow: 0 0 0.25rem hsl(var(--clr-dark));
+  text-shadow: 0.1rem 0.1rem 0.1rem hsl(var(--clr-dark));
   text-transform: uppercase;
   padding: 5rem 0 3.3rem 5rem;
-  -webkit-text-stroke: 0.33px hsl(var(--clr-dark));
+  -webkit-text-stroke: 0.5px hsl(var(--clr-dark));
   -webkit-font-smoothing: subpixel-antialiased;
 }
 .team-member {
