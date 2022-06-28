@@ -5,12 +5,10 @@ const ClassesPage = () => {
   return (
     <div className='classes-page grid'>
       <div className='classes-page-content'>
-        <section className='container flow'>
-          {/* <Parallax speed={-16} opacity={[1, 0]}> */}
+        <div className='container flow'>
           <div className='page-title' id='classes-page'>
             <h3 id='classes-page'>Classes</h3>
           </div>
-          {/* </Parallax> */}
 
           <div className='grid text-silver'>
             <Parallax speed={5} opacity={[1, 0.77]}>
@@ -28,6 +26,7 @@ const ClassesPage = () => {
                 </Parallax>
               </div>
             </Parallax>
+
             <Parallax speed={0} opacity={[1, 0.77]}>
               <div className='classes class-s'>
                 <div className='classes-name'>
@@ -74,7 +73,7 @@ const ClassesPage = () => {
               <button className='button-large'>View Schedule</button>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );

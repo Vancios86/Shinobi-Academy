@@ -1,69 +1,34 @@
 import './Navigation.css';
-import { Link } from 'react-router-dom';
-// import MainNav from './MainNav';
+// import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   return (
-    <div className='pages-navigation'>
-      {/* hamburger */}
-      <input type='checkbox' id='navi-toggle' className='checkbox' />
-      <label htmlFor='navi-toggle' className='button'>
-        <span className='icon'>&nbsp;</span>
+    <nav className='menu'>
+      <input className='menu-toggler' type='checkbox' />
+      <label htmlFor='menu-toggler' className='menu-toggler-label'>
+        <span className='Navigation-icon'>&nbsp;</span>
       </label>
-      <div className='background'>&nbsp;</div>
-
-      <nav className='page-menu'>
-        <input className='page-menu-toggler' type='checkbox' />
-        <label htmlFor='page-menu-toggler' className='page-menu-toggler-label'>
-          <span className='mainNav-icon'>&nbsp;</span>
-        </label>
-        <ul>
-          <li className='menu-item'>
-            <Link to='/Camps'>Camps</Link>
-          </li>
-          <li className='menu-item'>
-            <Link to='/About'>About</Link>
-          </li>
-          <li className='menu-item'>
-            <Link to='/Classes'>Classes</Link>
-          </li>
-          <li className='menu-item'>
-            <Link to='/Schedule'>Schedule</Link>
-          </li>
-          <li className='menu-item'>
-            <Link to='/Gallery'>Gallery</Link>
-          </li>
-          <li className='menu-item'>
-            <Link to='/Blog'>Blog</Link>
-          </li>
-        </ul>
-      </nav>
-
-      {/* <MainNav /> */}
-      {/* nav */}
-      {/* <nav className='pages-nav'>
-        <ul className='pages-menu-items-list grid'>
-          <li className='pages-menu-item'>
-            <Link to='/Camps'>Camps</Link>
-          </li>
-          <li className='pages-menu-item'>
-            <Link to='/About'>About</Link>
-          </li>
-          <li className='pages-menu-item'>
-            <Link to='/Classes'>Classes</Link>
-          </li>
-          <li className='pages-menu-item'>
-            <Link to='/Schedule'>Schedule</Link>
-          </li>
-          <li className='pages-menu-item'>
-            <Link to='/Gallery'>Gallery</Link>
-          </li>
-          <li className='pages-menu-item'>
-            <Link to='/Blog'>Blog</Link>
-          </li>
-        </ul>
-      </nav> */}
-    </div>
+      <ul>
+        <li className='menu-item'>
+          <a href='/Camps'>Camps</a>
+        </li>
+        <li className='menu-item'>
+          <a href='/#about-page'>About</a>
+        </li>
+        <li className='menu-item'>
+          <a href='/#classes-page'>Classes</a>
+        </li>
+        <li className='menu-item'>
+          <a href='/Schedule'>Schedule</a>
+        </li>
+        <li className='menu-item'>
+          <a href='/Gallery'>Gallery</a>
+        </li>
+        <li className='menu-item'>
+          <a href='/Blog'>Blog</a>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

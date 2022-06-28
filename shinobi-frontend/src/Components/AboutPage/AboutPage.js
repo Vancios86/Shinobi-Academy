@@ -63,7 +63,14 @@ const AboutPage = () => {
                 quisquam ducimus obcaecati.Doloremque maxime quibusdam,
                 recusandae voluptatem error quisquam ducimus
                 obcaecati.Doloremque maxime quibusdam, recusandae voluptatem
-                error quisquam ducimus obcaecati.
+                error quisquam ducimus obcaecati. Labore consequuntur officia
+                adipisci, dolorum et dolorem neque explicabo aut nostrum rem
+                atque. Doloremque maxime quibusdam, recusandae voluptatem error
+                quisquam ducimus obcaecati. Doloremque maxime quibusdam,
+                recusandae voluptatem error quisquam ducimus obcaecati.
+                Doloremque maxime quibusdam, recusandae voluptatem error
+                quisquam ducimus obcaecati.Doloremque maxime quibusdam,
+                recusandae voluptatem error quisquam ducimus obcaecati.
               </p>
             </div>
           </section>

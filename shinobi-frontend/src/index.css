@@ -35,6 +35,9 @@
   --ls-1: 0.12rem;
   --ls-2: 0.18rem;
   --ls-3: 0.24rem;
+
+  /* Box Shadow */
+  --bs: 0 0 0.33rem 0.15rem hsl(var(--clr-dark));
 }
 
 /* ----------------- */
@@ -87,6 +90,11 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+/* Remove list notation */
+ul {
+  list-style: none;
 }
 
 /* Remove animations for those who disabled them */
@@ -249,6 +257,10 @@ select {
   line-height: 1.1;
 }
 
+.shadowed-box {
+  box-shadow: var(--bs);
+}
+
 .page-title {
   font-size: var(--fs-600);
   display: flex;
@@ -256,7 +268,7 @@ select {
   align-items: center;
   padding: 4.5rem 0.3rem 3rem 0.3rem;
   color: hsl(var(--clr-white));
-  text-shadow: 0 0 0.25rem hsl(var(--clr-dark));
+  text-shadow: 0 -0.21rem 0.21rem hsl(var(--clr-dark));
   text-transform: uppercase;
   -webkit-text-stroke: 0.5px hsl(var(--clr-dark));
 }
@@ -287,11 +299,11 @@ select {
   gap: 1rem;
   justify-content: space-evenly;
   position: relative;
-  border: 0.125rem solid hsl(var(--clr-dark));
   height: auto;
-  max-width: 99vw;
+  max-width: 96vw;
+  border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
-  box-shadow: 0 0 0.33rem 0.15rem hsl(var(--clr-dark));
+  box-shadow: var(--bs);
   margin: 0.55rem;
 }
 
@@ -366,13 +378,12 @@ select {
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 630px) {
   body {
     font-size: var(--fs-400);
   }
   .page-title {
     font-size: var(--fs-800);
-    /* padding: 50% 0.3rem 30% 0.3rem; */
     letter-spacing: var(--ls-2);
   }
   .text-content {
@@ -397,7 +408,6 @@ select {
   }
   .preview-component {
     min-height: 30rem;
-    margin: 3rem 0.55rem;
   }
   .component-title {
     font-size: var(--fs-900);

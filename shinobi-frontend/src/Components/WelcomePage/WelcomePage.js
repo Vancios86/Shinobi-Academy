@@ -1,5 +1,5 @@
 import './WelcomePage.css';
-import MainNav from '../Navigation/MainNav';
+import Navigation from '../Navigation/Navigation';
 import Logo from '../Logo/Logo';
 import { Parallax } from 'react-scroll-parallax';
 import ShinobiVideo from './SHINOBI.mp4';
@@ -23,7 +23,7 @@ const WelcomePage = () => {
             <video width={'100%'} autoPlay={'on'} loop={'on'} muted>
               <source src={ShinobiVideo} type='video/mp4' />
             </video>
-            <MainNav />
+            <Navigation />
           </div>
         </Parallax>
       </div>
