@@ -1,0 +1,40 @@
+.contact-form {
+  width: 100%;
+  position: relative;
+  max-width: 39rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.contact-form-title {
+  padding: 3rem 0 1rem 0;
+}
+.contact-form form {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.contact-form form > input,
+textarea {
+  margin-bottom: 0.5rem;
+  width: 100%;
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+}
+
+.contact-form form {
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+  padding: 1rem;
+}
+
+.contact-form form > textarea {
+  margin-bottom: 0.5rem;
+  width: 100%;
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+}
