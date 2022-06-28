@@ -1,5 +1,5 @@
 import './ContactPage.css';
-import ContactFormComponent from '../ContactFormComponent/ContactFormComponent';
+import ContactFormComponent from './ContactFormComponent/ContactFormComponent';
 import { Parallax } from 'react-scroll-parallax';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { IconContext } from 'react-icons';
@@ -10,7 +10,7 @@ const ContactPage = () => {
   return (
     <Parallax speed={3}>
       <div className='contact-page container flex'>
-        <div className='page-title'>
+        <div className='page-title' id='contact'>
           <h3>Contact</h3>
         </div>
 
