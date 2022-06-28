@@ -1,0 +1,116 @@
+.contact-page {
+  flex-direction: column;
+  width: 90vw;
+  min-height: 100vh;
+  max-width: 70rem;
+  margin-bottom: 4.5rem;
+}
+
+.social-media-container {
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+  width: 90%;
+  max-width: 35rem;
+  height: auto;
+}
+.sm-item {
+  padding: 1.2rem;
+  border: 0.15rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+}
+
+.sm-item:hover {
+  box-shadow: var(--bs);
+  cursor: pointer;
+}
+.sm-item:hover > svg {
+  transform: scale(120%);
+}
+
+.contact-list-container {
+  height: auto;
+  width: 100%;
+  max-width: 39rem;
+  margin-bottom: 2rem;
+}
+.contact-list {
+  width: 100%;
+}
+.contact-list-items {
+  flex-direction: column;
+  list-style: none;
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+  padding: 1rem;
+  width: 90%;
+  max-height: 10.5rem;
+}
+
+.contact-list-items > li {
+  word-break: break-all;
+  line-height: 2;
+}
+.contact-list-items > li svg {
+  transition: transform 0.5s ease-in-out;
+}
+.contact-list-items > li:hover svg {
+  transform: scale(167%);
+}
+
+.map {
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://source.unsplash.com/Gw_UOoFk4Wk');
+  background-size: cover;
+  background-position: center;
+  max-width: 35rem;
+  width: 90%;
+}
+
+.inline-elements {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 99%;
+  max-width: 80rem;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 320px) {
+  .contact-page {
+    width: 100vw;
+  }
+  .sm-item {
+    padding: 0.99rem;
+  }
+  .contact-list-items {
+    padding: 0.33rem;
+  }
+}
+@media screen and (min-width: 800px) {
+  .contact-page {
+    max-width: 77rem;
+    width: 90vw;
+  }
+  .inline-elements {
+    flex-direction: row;
+    padding-left: 1.5rem;
+    justify-content: space-between;
+  }
+  .inline-elements-bottom {
+    align-items: flex-end;
+  }
+
+  .social-media-container {
+    margin-top: -2rem;
+    height: 10.5rem;
+  }
+  .map {
+    aspect-ratio: 4/3;
+  }
+}
