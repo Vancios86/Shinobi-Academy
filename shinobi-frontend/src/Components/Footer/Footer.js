@@ -8,7 +8,7 @@ import Tilt from 'react-parallax-tilt';
 
 const Footer = () => {
   return (
-    <div className='footer container grid bg-light text-dark shadowed-box'>
+    <div className='footer container grid bg-light text-dark'>
       <div className='section footer-top'>
         <div className='logo-footer'>
           <Tilt>
