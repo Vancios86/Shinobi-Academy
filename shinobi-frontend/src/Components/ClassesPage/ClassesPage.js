@@ -1,5 +1,6 @@
 import './ClassesPage.css';
 import { Parallax } from 'react-scroll-parallax';
+import { Link } from 'react-router-dom';
 
 const ClassesPage = () => {
   return (
@@ -70,7 +71,9 @@ const ClassesPage = () => {
               </div>
             </Parallax>
             <div className='schedule-button'>
-              <button className='button-large'>View Schedule</button>
+              <button className='button-large'>
+                <Link to='/schedule'>View schedule</Link>
+              </button>
             </div>
           </div>
         </div>
