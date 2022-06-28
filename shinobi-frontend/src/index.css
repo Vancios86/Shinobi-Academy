@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   scroll-behavior: smooth;
+
   /* Global colors */
   --clr-red: 357 95% 41%;
   --clr-white: 240 100% 100%;
@@ -145,24 +146,7 @@ ul {
   max-width: 80rem;
   margin-inline: 1rem;
 }
-/* 
-.container-grid {
-  outline: 0.2rem solid hsl(var(--clr-red));
-  display: grid;
-  margin-top: 2rem;
-  grid-template-columns: minmax(2rem, 1fr) repeat(2, minmax(0, 40rem)) minmax(
-      2rem,
-      1fr
-    );
-}
 
-.container-grid > *:first-child {
-  grid-column: 2;
-}
-
-.container-grid > *:last-child {
-  grid-column: 3;
-} */
 /* when using this class the elements are visualy gone but still in the DOM */
 .sr-only {
   position: absolute;
@@ -319,6 +303,10 @@ ul {
   text-transform: uppercase;
   max-width: 20rem;
   color: hsl(var(--clr-white));
+}
+.button-large > a {
+  text-decoration: none;
+  color: hsl(var(--clr-light));
 }
 .button-large:hover,
 .button-large:focus {

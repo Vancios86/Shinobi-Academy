@@ -2,15 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Main from './Main';
-// import { BrowserRouter } from 'react-router-dom';
+import CampsPage from './Components/Camps/CampsPage/CampsPage';
+import GalleryPage from './Components/Gallery/GalleryPage/GalleryPage';
+import SchedulePage from './Components/ClassesPage/SchedulePage/SchedulePage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <BrowserRouter> */}
-    <Main />
-    {/* </BrowserRouter> */}
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Main />} />
+        <Route path='/camps' element={<CampsPage />} />
+        <Route path='/gallery' element={<GalleryPage />} />
+        <Route path='/schedule' element={<SchedulePage />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
