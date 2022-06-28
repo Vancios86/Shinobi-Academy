@@ -23,9 +23,9 @@
   color: hsl(var(--clr-red));
   overflow: hidden;
   width: 0%;
-  animation: animate 5s linear;
+  animation: animate 10s linear;
   animation-fill-mode: forwards;
-  animation-delay: 1.5s;
+  animation-delay: 2s;
 }
 
 /* Text animation */
