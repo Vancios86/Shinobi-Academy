@@ -1,5 +1,5 @@
 import './Navigation.css';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   return (
@@ -10,7 +10,7 @@ const Navigation = () => {
       </label>
       <ul>
         <li className='menu-item'>
-          <a href='/Camps'>Camps</a>
+          <Link to='/Camps'>Camps </Link>
         </li>
         <li className='menu-item'>
           <a href='/#about-page'>About</a>
@@ -19,13 +19,13 @@ const Navigation = () => {
           <a href='/#classes-page'>Classes</a>
         </li>
         <li className='menu-item'>
-          <a href='/Schedule'>Schedule</a>
+          <Link to='/schedule'>Schedule</Link>
         </li>
         <li className='menu-item'>
-          <a href='/Gallery'>Gallery</a>
+          <Link to='/gallery'>Gallery</Link>
         </li>
         <li className='menu-item'>
-          <a href='/Blog'>Blog</a>
+          <a href='/#contact'>Contact</a>
         </li>
       </ul>
     </nav>
