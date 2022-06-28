@@ -1,5 +1,6 @@
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
+import { Link } from 'react-router-dom';
 
 const GalleryComponent = () => {
   return (
@@ -17,7 +18,9 @@ const GalleryComponent = () => {
           </p>
         </div>
         <div className='component-button flex'>
-          <button className='button-large'>visit gallery</button>
+          <button className='button-large'>
+            <Link to='/gallery'>Visit gallery</Link>
+          </button>
         </div>
         <div className='gallery-background'></div>
       </div>
