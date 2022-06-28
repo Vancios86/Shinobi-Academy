@@ -1,5 +1,6 @@
 import './CampsComponent.css';
 import { Parallax, ParallaxProvider } from 'react-scroll-parallax';
+import { Link } from 'react-router-dom';
 
 const CampsComponent = () => {
   return (
@@ -19,7 +20,9 @@ const CampsComponent = () => {
             </p>
           </div>
           <div className='component-button flex'>
-            <button className='button-large'>view details</button>
+            <button className='button-large'>
+              <Link to='/camps'>View details</Link>
+            </button>
           </div>
           <div className='camps-background'></div>
         </div>

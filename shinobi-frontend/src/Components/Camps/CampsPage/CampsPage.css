@@ -1,0 +1,14 @@
+.camps-page {
+  position: relative;
+  min-height: 100vh;
+}
+
+.camps-description {
+  border: 1px solid red;
+}
+
+.secondary-page-footer > * {
+  margin-inline: 0;
+  position: absolute;
+  bottom: 0;
+}
