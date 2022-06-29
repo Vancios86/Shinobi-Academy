@@ -30,7 +30,7 @@ const AboutPage = () => {
       <div className='page-title' id='about-page'>
         <h3>About us</h3>
       </div>
-      <Parallax speed={16} opacity={[1]}>
+      <Parallax speed={-1} opacity={[1]}>
         <div className='about-page-content'>
           <section className='container flow'>
             <div className='container'>
