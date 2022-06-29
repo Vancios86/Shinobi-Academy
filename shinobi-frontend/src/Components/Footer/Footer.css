@@ -50,3 +50,7 @@ ul li svg:hover {
   cursor: pointer;
   transform: scale(1.2);
 }
+.secondary-page-footer > * {
+  margin-inline: 0;
+  width: 100vw;
+}
