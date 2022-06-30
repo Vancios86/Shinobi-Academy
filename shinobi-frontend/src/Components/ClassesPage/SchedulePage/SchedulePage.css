@@ -3,6 +3,7 @@
   width: 99vw;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   flex-direction: column;
   position: relative;
 }
@@ -20,8 +21,15 @@
 }
 .back-button > button {
   width: 88px;
-  color: red;
-  background-color: hsl(var(--clr-dark));
-  border-radius: 0.33rem;
-  font-size: xx-large;
+  color: hsl(var(--clr-dark));
+  background-color: hsl(var(--clr-light));
+  /* border-radius: 0.33rem; */
+  font-size: var(--fs-900);
+  border: none;
+  transition: transform 0.5s ease-in-out;
+}
+.back-button > button:hover {
+  transform: scale(110%);
+  cursor: pointer;
+  color: hsl(var(--clr-red));
 }
