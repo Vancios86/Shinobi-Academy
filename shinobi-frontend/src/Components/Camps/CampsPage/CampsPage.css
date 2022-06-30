@@ -1,14 +1,11 @@
 .camps-page {
   position: relative;
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .camps-description {
   border: 1px solid red;
-}
-
-.secondary-page-footer > * {
-  margin-inline: 0;
-  position: absolute;
-  bottom: 0;
 }
