@@ -303,10 +303,19 @@ ul {
   text-transform: uppercase;
   max-width: 20rem;
   color: hsl(var(--clr-white));
+  position: relative;
 }
 .button-large > a {
   text-decoration: none;
   color: hsl(var(--clr-light));
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .button-large:hover,
 .button-large:focus {
