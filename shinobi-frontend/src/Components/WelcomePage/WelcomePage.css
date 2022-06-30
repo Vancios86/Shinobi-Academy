@@ -56,4 +56,5 @@
   border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
   box-shadow: var(--bs);
+  max-height: 100vh;
 }

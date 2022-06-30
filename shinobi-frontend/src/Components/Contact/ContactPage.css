@@ -1,7 +1,6 @@
 .contact-page {
   flex-direction: column;
   width: 90vw;
-  min-height: 100vh;
   max-width: 70rem;
   margin-bottom: 4.5rem;
 }

@@ -20,7 +20,13 @@ const WelcomePage = () => {
         </Parallax>
         <Parallax speed={30} opacity={[1]}>
           <div className='nav-container'>
-            <video width={'100%'} autoPlay={'on'} loop={'on'} muted>
+            <video
+              width={'100%'}
+              autoPlay={'on'}
+              loop={'on'}
+              muted
+              id='main-video'
+            >
               <source src={ShinobiVideo} type='video/mp4' />
             </video>
             <Navigation />
