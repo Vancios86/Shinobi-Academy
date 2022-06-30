@@ -23,7 +23,7 @@ const Footer = () => {
           }}
         >
           <div className='contact flex'>
-            <ul>
+            <ul className='footer-contact-list'>
               <li>
                 <span>
                   <MdPhone />

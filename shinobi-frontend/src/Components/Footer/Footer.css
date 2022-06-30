@@ -24,7 +24,9 @@
   margin: 0 0.33rem;
   width: auto;
 }
-
+.footer-contact-list li:hover svg {
+  transform: scale(1.5);
+}
 .footer ul {
   list-style: none;
   padding-left: 2rem;
@@ -43,13 +45,16 @@
   padding: 0;
 }
 
-.social-media ul li svg {
-  transition: transform ease-in-out 0.33s;
+ul li svg {
+  transition: transform ease-in-out 0.5s;
 }
-ul li svg:hover {
+ul li:hover {
   cursor: pointer;
+}
+ul li:hover svg {
   transform: scale(1.2);
 }
+
 .secondary-page-footer > * {
   margin-inline: 0;
   width: 100vw;
