@@ -23,7 +23,6 @@
   width: 88px;
   color: hsl(var(--clr-dark));
   background-color: hsl(var(--clr-light));
-  /* border-radius: 0.33rem; */
   font-size: var(--fs-900);
   border: none;
   transition: transform 0.5s ease-in-out;
