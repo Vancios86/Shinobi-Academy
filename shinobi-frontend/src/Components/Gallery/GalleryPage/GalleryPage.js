@@ -24,7 +24,9 @@ const GalleryPage = () => {
         <Logo />
       </div>
       <div className='back-button'>
-        <button onClick={() => navigate(-1)}>&#11013;</button>
+        <button onClick={() => navigate(-1)}>
+          <b>⇦</b>
+        </button>
       </div>
       <div className='gallery-page-content'>
         <div className='page-title'>
