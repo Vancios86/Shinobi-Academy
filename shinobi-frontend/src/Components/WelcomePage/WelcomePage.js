@@ -15,6 +15,7 @@ const WelcomePage = () => {
     const video = document.querySelector('.nav-container video');
     const fallback = document.querySelector('.nav-container .mobile-devices');
     if (windowSize >= 600) {
+      video.setAttribute('autoplay', '');
       video.style.display = '';
       video.classList.remove('sr-only');
       fallback.classList.add('sr-only');
@@ -46,13 +47,7 @@ const WelcomePage = () => {
         </Parallax>
         <Parallax speed={0}>
           <div className='nav-container' id='main-video'>
-            <video
-              width={'100%'}
-              autoPlay={'on'}
-              loop={'on'}
-              muted
-              className='sr-only'
-            >
+            <video width={'100%'} preload='none' loop muted className='sr-only'>
               <source src={ShinobiVideo} type='video/mp4' />
             </video>
             <div className='mobile-devices'>
