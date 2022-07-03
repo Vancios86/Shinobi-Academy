@@ -180,7 +180,7 @@ ul {
 .text-dark {
   color: hsl(var(--clr-dark));
 }
-.text-light {
+.text-white {
   color: hsl(var(--clr-white));
 }
 .text-red {
@@ -252,10 +252,8 @@ ul {
   justify-content: center;
   align-items: center;
   padding: 4.5rem 0.3rem 3rem 0.3rem;
-  color: hsl(var(--clr-white));
-  text-shadow: 0 -0.21rem 0.21rem hsl(var(--clr-dark));
+  color: hsl(var(--clr-dark));
   text-transform: uppercase;
-  -webkit-text-stroke: 0.5px hsl(var(--clr-dark));
 }
 
 .component-title {
@@ -309,8 +307,8 @@ ul {
 }
 .button-large > a {
   text-decoration: none;
-  color: hsl(var(--clr-light));
   position: absolute;
+  color: inherit;
   top: 0;
   left: 0;
   right: 0;
@@ -323,6 +321,68 @@ ul {
 .button-large:focus {
   box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
   color: hsl(var(--clr-red));
+}
+.go-to-top-button {
+  background-color: hsl(var(--clr-dark));
+  opacity: 0;
+  transition: opacity 0.33s ease-in-out;
+  z-index: 999;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 2rem;
+  height: 3rem;
+  border-radius: 0.33rem;
+  border: 0.125rem solid hsl(var(--clr-red));
+  margin: 0.33rem;
+  font-size: var(--fs-600);
+  text-align: center;
+}
+.go-to-top-button > a {
+  padding-bottom: 0.5rem;
+  text-decoration: none;
+  color: hsl(var(--clr-white));
+  transition: all 0.33s ease-in-out;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.go-to-top-button:hover,
+.go-to-top-button:focus {
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
+}
+
+.show {
+  opacity: 0.91;
+}
+.show:hover {
+  opacity: 1;
+}
+
+#back-button {
+  position: absolute;
+  top: 25%;
+  left: 0rem;
+  width: 3rem;
+  height: 2rem;
+  color: hsl(var(--clr-white));
+  background-color: hsl(var(--clr-dark));
+  border: 0.125rem solid hsl(var(--clr-red));
+  font-size: var(--fs-700);
+  border-radius: 0.33rem;
+  margin: 0.33rem;
+}
+#back-button b {
+  position: absolute;
+  bottom: -3px;
+}
+#back-button:hover {
+  cursor: pointer;
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
 }
 
 .underline-indicators > * {
@@ -372,7 +432,6 @@ ul {
   .page-title {
     font-size: var(--fs-700);
     letter-spacing: var(--ls-1);
-    /* padding: 33% 0.3rem 33% 0.3rem; */
   }
   .text-content {
     font-size: var(--fs-300);
@@ -380,6 +439,11 @@ ul {
   .component-title {
     font-size: var(--fs-700);
     letter-spacing: var(--ls-1);
+  }
+  .go-to-top-button {
+    width: 2.6rem;
+    height: 3.6rem;
+    font-size: var(--fs-700);
   }
 }
 
