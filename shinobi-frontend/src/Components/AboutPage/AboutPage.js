@@ -30,8 +30,8 @@ const AboutPage = () => {
       <div className='page-title' id='about-page'>
         <h3>About us</h3>
       </div>
-      <Parallax speed={-1} opacity={[1]}>
-        <div className='about-page-content'>
+      <Parallax speed={-3} opacity={[3, 0]}>
+        <div className='about-page-content shadowed-box'>
           <section className='container flow'>
             <div className='container'>
               <div className='photo-colin'>
@@ -76,7 +76,7 @@ const AboutPage = () => {
           </section>
 
           <section className='container flow'>
-            <div className='team-title'>
+            <div className='team-title flex'>
               <h3>MEET OUR TEAM</h3>
             </div>
 
