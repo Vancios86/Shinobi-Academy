@@ -416,7 +416,7 @@ ul {
 }
 @media screen and (max-width: 600px) {
   body {
-    overflow: hidden;
+    overflow-x: hidden;
   }
   .container {
     margin-inline: 0rem;
