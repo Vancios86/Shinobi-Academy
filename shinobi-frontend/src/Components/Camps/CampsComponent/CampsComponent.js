@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 const CampsComponent = () => {
   return (
     <ParallaxProvider>
-      <Parallax speed={16}>
+      <Parallax speed={16} opacity={[3, 0]}>
         <div className='camps-component preview-component container flow'>
           <div className='component-title'>
             <h3 id='camps-component-title'>Camps</h3>
           </div>
           <div className='container flex'>
-            <p className='text-content text-light' id='camps-component-text'>
+            <p className='text-content text-white' id='camps-component-text'>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni
               eligendi perspiciatis est nisi iusto voluptas minima aliquid
               repellat tempora. Perferendis quos repellat praesentium magni

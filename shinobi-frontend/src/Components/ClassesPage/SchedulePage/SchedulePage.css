@@ -14,21 +14,3 @@
   height: 30rem;
   margin: 2rem 0;
 }
-.back-button {
-  position: absolute;
-  top: 25%;
-  left: 0;
-}
-.back-button > button {
-  width: 88px;
-  color: hsl(var(--clr-dark));
-  background-color: hsl(var(--clr-light));
-  font-size: var(--fs-900);
-  border: none;
-  transition: transform 0.5s ease-in-out;
-}
-.back-button > button:hover {
-  transform: scale(110%);
-  cursor: pointer;
-  color: hsl(var(--clr-red));
-}

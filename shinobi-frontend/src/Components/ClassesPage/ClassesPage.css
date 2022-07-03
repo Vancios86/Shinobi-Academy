@@ -2,8 +2,13 @@
   width: 100%;
   min-height: 100vh;
 }
+.classes-content {
+  border-radius: 0.33rem;
+  margin: 0.33rem;
+}
 .classes {
   height: 11.1rem;
+  max-height: 450px;
   margin-bottom: 1rem;
   display: flex;
   background-size: cover;
@@ -41,7 +46,6 @@
 }
 .class-jj {
   background-image: url('https://source.unsplash.com/7MRajrPiTqw');
-  /* background-position: left; */
   width: 88%;
 }
 .class-s {

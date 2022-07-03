@@ -12,6 +12,7 @@ const SchedulePage = () => {
       ' |Y position: ',
       window.scrollY
     );
+
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -23,11 +24,17 @@ const SchedulePage = () => {
       <div className='welcome-logo flex'>
         <Logo />
       </div>
-      <div className='back-button'>
-        <button onClick={() => navigate(-1)}>
-          <b>⇦</b>
-        </button>
-      </div>
+
+      <button
+        className='flex'
+        id='back-button'
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        <b>↞</b>
+      </button>
+
       <div className='schedule-page-content'>
         <div className='page-title'>
           <h3>Weekly Schedule</h3>

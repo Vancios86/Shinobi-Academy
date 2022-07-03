@@ -23,11 +23,15 @@ const CampsPage = () => {
       <div className='welcome-logo flex'>
         <Logo />
       </div>
-      <div className='back-button'>
-        <button onClick={() => navigate(-1)}>
-          <b>⇦</b>
-        </button>
-      </div>
+      <button
+        className='flex'
+        id='back-button'
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        <b>↞</b>
+      </button>
       <div className='camps-page-content'>
         <div className='page-title'>
           <h3>Camps</h3>

@@ -31,15 +31,16 @@ const WelcomePage = () => {
         <div className='welcome-logo flex'>
           <Logo />
         </div>
-        <Parallax speed={-30}>
+        <Parallax speed={-30} opacity={[3, -1.2]}>
           <div className='page-title' id='welcome-text'>
             <h3 data-text='Welcome to Shinobi Academy'>
               Welcome to <span>Shinobi</span> Academy
             </h3>
+
             <div className='down-arrow'>
               <button>
                 <a href='#main-video' id='down-arrow'>
-                  &#5167;
+                  <b>↡</b>
                 </a>
               </button>
             </div>
@@ -50,8 +51,8 @@ const WelcomePage = () => {
             <video width={'100%'} preload='none' loop muted className='sr-only'>
               <source src={ShinobiVideo} type='video/mp4' />
             </video>
-            <div className='mobile-devices'>
-              <p className='text-light'>video in portrait mode to come</p>
+            <div className='mobile-devices shadowed-box'>
+              <p className='text-white'>video in portrait mode to come</p>
             </div>
             <Navigation />
           </div>

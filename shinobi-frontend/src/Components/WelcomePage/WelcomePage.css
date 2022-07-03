@@ -6,9 +6,8 @@
 #welcome-text {
   height: 100vh;
   min-height: 600px;
-  max-height: 80rem;
+  max-height: 50rem;
   position: relative;
-  -webkit-text-stroke: 0.5px black;
 }
 
 #welcome-text h3 span {
@@ -33,16 +32,32 @@
   bottom: 20%;
 }
 .down-arrow > button {
-  border: none;
-  background-color: white;
+  width: 2rem;
+  height: 3rem;
+  background-color: hsl(var(--clr-dark));
+  border: 0.125rem solid hsl(var(--clr-red));
+  font-size: var(--fs-600);
+  border-radius: 0.33rem;
+  margin: 0.33rem;
+  transition: all 0.33s ease-in-out;
+  position: relative;
 }
 .down-arrow > button #down-arrow {
-  color: hsl(var(--clr-dark));
-  font-size: var(--fs-900);
+  text-decoration: none;
+  color: hsl(var(--clr-white));
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
-button #down-arrow:hover {
+.down-arrow > button:hover {
   color: hsl(var(--clr-red));
   cursor: pointer;
+  box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
+}
+.down-arrow > button:hover #down-arrow {
+  color: hsl(var(--clr-red));
 }
 /* Text animation */
 @keyframes animate {
@@ -69,14 +84,12 @@ button #down-arrow:hover {
 }
 
 .nav-container video {
-  border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
   box-shadow: var(--bs);
   max-height: 100vh;
 }
 
 .mobile-devices {
-  border: 1px solid black;
   width: 100%;
   height: 99vh;
   background-image: url('https://source.unsplash.com/AsCCBr7J-XM');
@@ -86,4 +99,12 @@ button #down-arrow:hover {
   border-radius: 0.33rem;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (min-width: 500px) {
+  .down-arrow > button {
+    width: 2.6rem;
+    height: 3.6rem;
+    font-size: var(--fs-700);
+  }
 }

@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 const GalleryComponent = () => {
   return (
-    <Parallax speed={16}>
+    <Parallax speed={16} opacity={[3, 0]}>
       <div className='gallery-component preview-component container flow'>
         <div className='component-title'>
           <h3 id='gallery-component-title'>Media Gallery</h3>
         </div>
         <div className='container flex'>
-          <p className='text-content text-light' id='gallery-component-text'>
+          <p className='text-content text-white' id='gallery-component-text'>
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni
             eligendi perspiciatis est nisi iusto voluptas minima aliquid
             repellat tempora. Perferendis quos repellat praesentium magni atque
