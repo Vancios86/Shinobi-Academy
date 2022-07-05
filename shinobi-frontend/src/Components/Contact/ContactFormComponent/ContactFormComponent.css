@@ -32,9 +32,6 @@ textarea {
   padding: 1rem;
 }
 
-.contact-form form > textarea {
-  margin-bottom: 0.5rem;
+#send-message {
   width: 100%;
-  border: 0.125rem solid hsl(var(--clr-dark));
-  border-radius: 0.33rem;
 }

@@ -16,6 +16,7 @@ const WelcomePage = () => {
     const fallback = document.querySelector('.nav-container .mobile-devices');
     if (windowSize >= 600) {
       video.setAttribute('autoplay', '');
+      video.removeAttribute('preload', 'none');
       video.style.display = '';
       video.classList.remove('sr-only');
       fallback.classList.add('sr-only');

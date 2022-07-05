@@ -26,8 +26,7 @@ const SchedulePage = () => {
       </div>
 
       <button
-        className='flex'
-        id='back-button'
+        className='back-button flex'
         onClick={() => {
           navigate(-1);
         }}
