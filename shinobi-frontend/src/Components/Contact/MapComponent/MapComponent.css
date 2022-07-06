@@ -1,0 +1,14 @@
+.map {
+  border: 0.125rem solid hsl(var(--clr-dark));
+  border-radius: 0.33rem;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://source.unsplash.com/Gw_UOoFk4Wk');
+  background-size: cover;
+  background-position: center;
+  max-width: 35rem;
+  max-height: 25rem;
+  width: 90%;
+}

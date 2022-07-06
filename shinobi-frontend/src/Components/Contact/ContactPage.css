@@ -56,20 +56,6 @@
   transform: scale(167%);
 }
 
-.map {
-  border: 0.125rem solid hsl(var(--clr-dark));
-  border-radius: 0.33rem;
-  aspect-ratio: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: url('https://source.unsplash.com/Gw_UOoFk4Wk');
-  background-size: cover;
-  background-position: center;
-  max-width: 35rem;
-  width: 90%;
-}
-
 .inline-elements {
   display: flex;
   justify-content: center;

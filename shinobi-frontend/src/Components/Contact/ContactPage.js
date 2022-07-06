@@ -1,5 +1,6 @@
 import './ContactPage.css';
 import ContactFormComponent from './ContactFormComponent/ContactFormComponent';
+import MapComponent from './MapComponent/MapComponent';
 import { Parallax } from 'react-scroll-parallax';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { IconContext } from 'react-icons';
@@ -65,7 +66,8 @@ const ContactPage = () => {
         </div>
 
         <div className='inline-elements inline-elements-bottom'>
-          <div className='map shadowed-box'>MAP</div>
+          <MapComponent />
+
           <ContactFormComponent />
         </div>
       </div>
