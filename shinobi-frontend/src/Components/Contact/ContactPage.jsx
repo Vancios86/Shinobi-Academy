@@ -1,11 +1,13 @@
 import './ContactPage.css';
 import ContactFormComponent from './ContactFormComponent/ContactFormComponent';
-import MapComponent from './MapComponent/MapComponent';
+// import MapComponent from './MapComponent/MapComponent';
+import MyMap from './MapComponent/Map';
 import { Parallax } from 'react-scroll-parallax';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { IconContext } from 'react-icons';
 import { SiTwitter, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
+// import { Wrapper, Status } from '@googlemaps/react-wrapper';
 
 const ContactPage = () => {
   return (
@@ -66,7 +68,8 @@ const ContactPage = () => {
         </div>
 
         <div className='inline-elements inline-elements-bottom'>
-          <MapComponent />
+          {/* <MapComponent /> */}
+          <MyMap />
 
           <ContactFormComponent />
         </div>

@@ -8,7 +8,6 @@
   background-image: url('https://source.unsplash.com/Gw_UOoFk4Wk');
   background-size: cover;
   background-position: center;
-  max-width: 35rem;
   max-height: 25rem;
-  width: 90%;
+  width: 100%;
 }

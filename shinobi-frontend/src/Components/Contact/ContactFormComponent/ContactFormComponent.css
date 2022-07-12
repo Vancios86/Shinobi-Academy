@@ -1,7 +1,6 @@
 .contact-form {
   width: 100%;
   position: relative;
-  max-width: 39rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +10,7 @@
   padding: 3rem 0 1rem 0;
 }
 .contact-form form {
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

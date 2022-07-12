@@ -1,15 +1,14 @@
 .contact-page {
   flex-direction: column;
-  width: 90vw;
-  max-width: 70rem;
+  width: 100vw;
+  max-width: 80rem;
   margin-bottom: 4.5rem;
 }
 
 .social-media-container {
   border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
-  width: 90%;
-  max-width: 35rem;
+  width: 100%;
   height: auto;
 }
 .sm-item {
@@ -29,7 +28,6 @@
 .contact-list-container {
   height: auto;
   width: 100%;
-  max-width: 39rem;
   margin-bottom: 2rem;
 }
 .contact-list {
@@ -41,7 +39,7 @@
   border: 0.125rem solid hsl(var(--clr-dark));
   border-radius: 0.33rem;
   padding: 1rem;
-  width: 90%;
+  width: 100%;
   max-height: 10.5rem;
 }
 
@@ -63,13 +61,10 @@
   flex-direction: column;
   width: 99%;
   max-width: 80rem;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 @media screen and (max-width: 320px) {
-  .contact-page {
-    width: 100vw;
-  }
   .sm-item {
     padding: 0.99rem;
   }
@@ -78,13 +73,8 @@
   }
 }
 @media screen and (min-width: 800px) {
-  .contact-page {
-    max-width: 77rem;
-    width: 90vw;
-  }
   .inline-elements {
     flex-direction: row;
-    padding-left: 1.5rem;
     justify-content: space-between;
   }
   .inline-elements-bottom {
