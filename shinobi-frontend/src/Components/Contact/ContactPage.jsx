@@ -7,7 +7,6 @@ import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { IconContext } from 'react-icons';
 import { SiTwitter, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
-// import { Wrapper, Status } from '@googlemaps/react-wrapper';
 
 const ContactPage = () => {
   return (

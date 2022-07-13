@@ -14,10 +14,11 @@ const center = {
 };
 
 function MyMap() {
+  console.log(process.env.REACT_APP_GOOGLEMAP_API);
   const [map, setMap] = useState(null);
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyDjvj28M8xkVs572yBWCNlnL1nfNq9caQI',
+    googleMapsApiKey: process.env.REACT_APP_GOOGLEMAP_API,
   });
 
   function createKey() {
