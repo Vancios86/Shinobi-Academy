@@ -11,9 +11,9 @@ const ClassesPage = () => {
         </div>
 
         <div className='classes-content shadowed-box grid text-silver'>
-          <div className='classes class-jj'>
+          <div className='classes class-s'>
             <div className='classes-name'>
-              <h3>JiuJitsu</h3>
+              <h3>MMA <br /> Box <br /> Muay-Thai</h3>
             </div>
 
             <Parallax speed={-13} opacity={[0, 2]}>
@@ -25,9 +25,9 @@ const ClassesPage = () => {
             </Parallax>
           </div>
 
-          <div className='classes class-s'>
+          <div className='classes class-jj'>
             <div className='classes-name'>
-              <h3>MMA</h3>
+              <h3>JiuJitsu</h3>
             </div>
             <Parallax speed={-16} opacity={[0, 2]}>
               <p className='classes-text-left'>
@@ -40,7 +40,7 @@ const ClassesPage = () => {
 
           <div className='classes class-w'>
             <div className='classes-name'>
-              <h3>Wrestling</h3>
+              <h3>Wrestling <br /> Judo</h3>
             </div>
             <Parallax speed={-19} opacity={[0, 2]}>
               <p className='classes-text-right'>
@@ -51,9 +51,9 @@ const ClassesPage = () => {
             </Parallax>
           </div>
 
-          <div className='classes class-spar'>
+          <div className='classes class-c'>
             <div className='classes-name'>
-              <h3>Sparring</h3>
+              <h3>Strength <br /> Condition</h3>
             </div>
             <Parallax speed={-22} opacity={[0, 2]}>
               <p className='classes-text-left'>
