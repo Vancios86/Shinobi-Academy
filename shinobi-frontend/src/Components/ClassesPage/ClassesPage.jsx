@@ -27,7 +27,7 @@ const ClassesPage = () => {
 
           <div className='classes class-jj'>
             <div className='classes-name'>
-              <h3>JiuJitsu</h3>
+              <h3>BJJ <br /> Grappling</h3>
             </div>
             <Parallax speed={-16} opacity={[0, 2]}>
               <p className='classes-text-left'>

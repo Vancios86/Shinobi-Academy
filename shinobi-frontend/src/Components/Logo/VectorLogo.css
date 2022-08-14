@@ -1,5 +1,4 @@
 .Vector {
-  width: 6rem;
+  width: 4.5rem;
   margin: 0.5rem;
-  border: 2px solid hsl(var(--clr-dark));
 }
