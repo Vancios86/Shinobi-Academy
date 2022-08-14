@@ -1,110 +1,60 @@
-.welcome-logo {
-  padding-inline: 0.33rem;
-  height: auto;
+.welcome-page {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#welcome-text {
-  height: 100vh;
-  min-height: 600px;
-  max-height: 50rem;
-  position: relative;
-}
-
-#welcome-text h3 span {
-  position: relative;
-}
-#welcome-text h3 span::before {
-  content: 'Shinobi Academy';
+.welcome-video {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  color: hsl(var(--clr-red));
-  overflow: hidden;
-  width: 0%;
-  animation: animate 10s linear;
-  animation-fill-mode: forwards;
-  animation-delay: 2s;
-}
-.down-arrow {
-  position: absolute;
-  bottom: 20%;
-}
-.down-arrow > button {
-  width: 2rem;
-  height: 3rem;
-  background-color: hsl(var(--clr-dark));
-  border: 0.125rem solid hsl(var(--clr-red));
-  font-size: var(--fs-600);
-  border-radius: 0.33rem;
-  margin: 0.33rem;
-  transition: all 0.33s ease-in-out;
-  position: relative;
-}
-.down-arrow > button #down-arrow {
-  text-decoration: none;
-  color: hsl(var(--clr-white));
-  position: absolute;
-  top: 0;
   bottom: 0;
   right: 0;
-  left: 0;
+  z-index: -1;
 }
-.down-arrow > button:hover {
-  color: hsl(var(--clr-red));
-  cursor: pointer;
-  box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
-}
-.down-arrow > button:hover #down-arrow {
-  color: hsl(var(--clr-red));
-}
-/* Text animation */
-@keyframes animate {
-  0% {
-    width: 0;
-    top: -2.5px;
+
+@media (min-aspect-ratio: 16/9) {
+  .welcome-video {
+    width: 100%;
+    height: auto;
   }
-  50% {
-    width: 200%;
-    top: -2.5px;
+}
+
+@media (max-aspect-ratio: 16/9) {
+  .welcome-video {
+    width: auto;
+    height: 100%;
+  }
+}
+
+.presentation-text {
+  display: flex;
+  gap: 6rem;
+  font-size: var(--fs-800);
+  padding-top: 6rem;
+  -webkit-text-stroke: 0.1rem hsl(var(--clr-red));
+  -webkit-text-fill-color: transparent;
+  overflow-x: hidden;
+  width: max-content;
+  animation: infinite-loop 18s infinite linear;
+}
+
+@keyframes infinite-loop {
+  0% {
+    margin-right: -300%;
   }
   100% {
-    width: 0%;
-    top: -2.5px;
+    margin-right: 300%;
   }
 }
-.welcome-content .nav-container {
-  position: relative;
-  width: 100%;
-  height: auto;
-  max-height: 54rem;
-  max-width: 80rem;
-  padding: 0.33rem;
-}
 
-.nav-container video {
-  border-radius: 0.33rem;
-  box-shadow: var(--bs);
-  max-height: 100vh;
-}
-
-.mobile-devices {
-  width: 100%;
-  height: 99vh;
-  background-image: url('https://source.unsplash.com/AsCCBr7J-XM');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 0.33rem;
-  display: flex;
-  justify-content: center;
-}
-
-@media screen and (min-width: 500px) {
-  .down-arrow > button {
-    width: 2.6rem;
-    height: 3.6rem;
-    font-size: var(--fs-700);
-  }
+.enter-button {
+  width: 20rem;
+  position: absolute;
+  bottom: 3rem;
 }
