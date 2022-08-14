@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 const CampsPage = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     console.log(
       'X position :',

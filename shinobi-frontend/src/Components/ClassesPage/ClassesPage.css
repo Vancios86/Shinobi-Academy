@@ -45,24 +45,24 @@
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 .class-s {
-  background-image: url('./classes-media/striking.jpg');
+  background-image: url('../../assets/classes-assets/striking.jpg');
   background-position-Y: 18%;
   width: 88%;
 }
 .class-jj {
-  background-image: url('./classes-media/jiujitsu.jpg');
+  background-image: url('../../assets/classes-assets/jiujitsu.jpg');
   background-position-Y: 66%;
   justify-self: flex-end;
   width: 88%;
   flex-direction: row-reverse;
 }
 .class-w {
-  background-image: url('./classes-media/wrestling.jpg');
+  background-image: url('../../assets/classes-assets/wrestling.jpg');
   background-position-y: 11%;
   width: 88%;
 }
 .class-c {
-  background-image: url('./classes-media/conditioning.jpg');
+  background-image: url('../../assets/classes-assets/conditioning.jpg');
   background-position-Y: center;
   justify-self: flex-end;
   width: 88%;
