@@ -1,14 +1,14 @@
 import './Main.css';
 
-import Footer from './Components/Footer/Footer';
-import WelcomePage from './Components/WelcomePage/WelcomePage';
+import { useEffect } from 'react';
+import { ParallaxProvider } from 'react-scroll-parallax';
+import TopPage from './Components/TopPage/TopPage';
 import AboutPage from './Components/AboutPage/AboutPage';
 import ClassesPage from './Components/ClassesPage/ClassesPage';
 import CampsComponent from './Components/Camps/CampsComponent/CampsComponent';
 import GalleryComponent from './Components/Gallery/GalleryComponent/GalleryComponent';
 import ContactPage from './Components/Contact/ContactPage';
-import { ParallaxProvider } from 'react-scroll-parallax';
-import { useEffect } from 'react';
+import Footer from './Components/Footer/Footer';
 
 const Main = () => {
   useEffect(() => {
@@ -22,21 +22,20 @@ const Main = () => {
   });
 
   return (
-    <div className='main grid container'>
+    <div className="main grid container">
       <ParallaxProvider>
-        <WelcomePage />
+        <TopPage />
         <AboutPage />
         <ClassesPage />
-        <div className='inline-components-section'>
+        <div className="inline-components-section">
           <CampsComponent />
           <GalleryComponent />
         </div>
         <ContactPage />
         <Footer />
       </ParallaxProvider>
-
-      <button className='go-to-top-button'>
-        <a href='#main-video' id='back-to-top-link'>
+      <button className="go-to-top-button">
+        <a href="#nav-container" id="back-to-top-link">
           <b>↟</b>
         </a>
       </button>

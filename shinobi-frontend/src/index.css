@@ -75,7 +75,7 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  /* border: 1px solid hsl(var(--clr-silver)); */
+  overflow-x: hidden;
 }
 
 /* Reset image format */
@@ -249,7 +249,7 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4.5rem 0.3rem 3rem 0.3rem;
+  padding: 6rem 0.3rem 3rem 0.3rem;
   color: hsl(var(--clr-dark));
   text-transform: uppercase;
 }
@@ -421,9 +421,6 @@ ul {
   }
   .container {
     margin-inline: 0rem;
-  }
-  #welcome-text {
-    margin-top: -45%;
   }
 }
 @media screen and (min-width: 500px) {
