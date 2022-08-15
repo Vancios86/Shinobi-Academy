@@ -66,7 +66,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url(./view.jpg);
-  background-position-y: 21%;
+  background-position-y: center;
   background-position-x: center;
   border-radius: 0.33rem;
   min-height: min-content;
@@ -104,36 +104,46 @@
   background-position-y: center;
 }
 
+@media screen and (max-width: 600px) {
+  #nav-container {
+    height: 15rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: center;
+  }
+}
+
 @media screen and (max-width: 480px) {
   #nav-container {
     height: 15rem;
+    width: auto;
+    margin-inline: 0.33rem;
   }
   .partners-logos {
     gap: 1rem;
+    margin-top: 3rem;
   }
   .partners-logos > div {
     width: 6.6rem;
   }
 }
 
-@media screen and (min-width: 570px) {
-  .partners-logos {
-    margin: 3.3rem 0;
-  }
-}
-
-@media screen and (max-width: 990px) {
-  #nav-container {
-    height: 17.5rem;
-  }
+@media screen and (max-width: 999px) {
   .partners-logos > div {
     width: 7.2rem;
   }
 }
 
+@media screen and (min-width: 454px) {
+  .partners-logos {
+    margin-top: 4rem;
+  }
+}
+
 @media screen and (min-width: 990px) {
   #nav-container {
-    background-position-y: 29%;
+    background-position-y: 36%;
   }
   .partners-logos {
     margin: 6rem 0;
@@ -142,15 +152,25 @@
 
 @media screen and (max-height: 800px) {
   #welcome-text {
-    padding-top: 1.8rem;
+    padding-top: 1rem;
   }
   #to-top {
     margin-top: 0.3rem;
   }
   .partners-logos {
-    margin: 3.3rem 0;
+    margin-top: 2.7rem;
   }
   .partners-logos > div {
     width: 8.8rem;
+  }
+}
+@media screen and (min-height: 750px) {
+  .partners-logos {
+    margin-top: 4rem;
+  }
+}
+@media screen and (min-height: 900px) {
+  .partners-logos {
+    margin-top: 6rem;
   }
 }
