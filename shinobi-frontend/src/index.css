@@ -363,9 +363,7 @@ ul {
 }
 
 .back-button {
-  position: absolute;
-  top: 25%;
-  left: 0rem;
+  position: relative;
   width: 3rem;
   height: 2rem;
   color: hsl(var(--clr-white));
@@ -373,7 +371,7 @@ ul {
   border: 0.125rem solid hsl(var(--clr-red));
   font-size: var(--fs-700);
   border-radius: 0.33rem;
-  margin: 0.33rem;
+  margin: 2rem 0.33rem -5rem;
   transition: all 0.33s ease-in-out;
 }
 .back-button b {
@@ -385,20 +383,6 @@ ul {
   color: hsl(var(--clr-red));
   box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
 }
-
-/* .underline-indicators > * {
-  padding: var(--underline-gap, 1rem) 0;
-  border-bottom: 0.2em solid hsl(var(--clr-red) / 0);
-}
-
-.underline-indicators > *:hover,
-.underline-indicators > *:focus {
-  border-color: hsl(var(--clr-red) / 0.5);
-}
-
-.underline-indicators > .active {
-  border-bottom: 0.2em solid hsl(var(--clr-red) / 1);
-} */
 
 /* --------------- */
 /* Media Querries  */

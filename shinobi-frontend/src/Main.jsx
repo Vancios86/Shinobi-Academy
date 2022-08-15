@@ -22,20 +22,20 @@ const Main = () => {
   });
 
   return (
-    <div className="main grid container">
+    <div className='main grid container'>
       <ParallaxProvider>
         <TopPage />
         <AboutPage />
         <ClassesPage />
-        <div className="inline-components-section">
+        <div className='inline-components-section'>
           <CampsComponent />
           <GalleryComponent />
         </div>
         <ContactPage />
         <Footer />
       </ParallaxProvider>
-      <button className="go-to-top-button">
-        <a href="#nav-container" id="back-to-top-link">
+      <button className='go-to-top-button'>
+        <a href='#to-top' id='back-to-top-link'>
           <b>↟</b>
         </a>
       </button>
