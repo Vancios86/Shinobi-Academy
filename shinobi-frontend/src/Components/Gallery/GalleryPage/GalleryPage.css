@@ -3,12 +3,11 @@
 }
 
 .gallery-container {
-  column-count: 3;
-  -webkit-column-width: 33%;
-  -moz-column-width: 33%;
-  column-width: 33%;
   padding: 0.33rem;
   margin-bottom: 3rem;
+  column-count: 3;
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
 }
 
 .gallery-item {
@@ -59,7 +58,6 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  color: hsl(var(--clr-red));
   cursor: pointer;
   font-size: 3rem;
   padding: 0.5rem;
@@ -67,6 +65,7 @@
 }
 .close-modal {
   z-index: 101;
+  color: hsl(var(--clr-red));
 }
 .modal.open svg:hover {
   padding: 0.3rem;
@@ -76,24 +75,26 @@
   height: 100vh;
   left: 0;
   bottom: 0;
+  color: hsl(var(--clr-gold));
 }
 .swap-right {
   position: fixed;
   height: 100vh;
+  color: hsl(var(--clr-gold));
 }
 
 @media screen and (max-width: 888px) {
   .gallery-container {
     column-count: 2;
-    -moz-column-width: 50%;
-    column-width: 50%;
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
   }
 }
 
 @media screen and (max-width: 480px) {
   .gallery-container {
     column-count: 1;
-    -moz-column-width: 100%;
-    column-width: 100%;
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
   }
 }
