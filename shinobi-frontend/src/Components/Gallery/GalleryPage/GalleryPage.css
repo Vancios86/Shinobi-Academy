@@ -1,7 +1,99 @@
 .gallery-page {
   position: relative;
-  min-height: 100vh;
+}
+
+.gallery-container {
+  column-count: 3;
+  -webkit-column-width: 33%;
+  -moz-column-width: 33%;
+  column-width: 33%;
+  padding: 0.33rem;
+  margin-bottom: 3rem;
+}
+
+.gallery-item {
+  transition: all 500ms ease;
+  cursor: pointer;
+}
+
+.gallery-item:hover {
+  filter: opacity(0.8);
+}
+
+.modal {
+  width: 100%;
+  height: auto;
+  max-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  z-index: 10;
+  background: hsl(var(--clr-dark));
+  visibility: hidden;
+  transition: opacity 500ms ease, visibility 500ms ease,
+    transform 500ms ease-in-out;
+  opacity: 0;
+  transform: scale(0);
+  overflow: hidden;
+}
+.modal img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100vh;
+  margin: 0 auto;
+  line-height: 0;
+  padding: 1rem 0 1rem;
+}
+.modal.open {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+}
+.modal.open svg {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  color: hsl(var(--clr-red));
+  cursor: pointer;
+  font-size: 3rem;
+  padding: 0.5rem;
+  transition: all 500ms ease-in-out;
+}
+.close-modal {
+  z-index: 101;
+}
+.modal.open svg:hover {
+  padding: 0.3rem;
+}
+.swap-left {
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  bottom: 0;
+}
+.swap-right {
+  position: fixed;
+  height: 100vh;
+}
+
+@media screen and (max-width: 888px) {
+  .gallery-container {
+    column-count: 2;
+    -moz-column-width: 50%;
+    column-width: 50%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .gallery-container {
+    column-count: 1;
+    -moz-column-width: 100%;
+    column-width: 100%;
+  }
 }
