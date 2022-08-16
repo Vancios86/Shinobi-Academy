@@ -1,8 +1,23 @@
+import { useState, useEffect } from 'react';
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
+import { images } from '../../../assets/gallery-assets/gallery-assets';
 
 const GalleryComponent = () => {
+  const [imgStr, setImgStr] = useState(images[0].src);
+  //change the background image every 5 seconds
+  useEffect(() => {
+    let index = 0;
+    setInterval(() => {
+      index += 1;
+      if (index === images.length - 1) {
+        index = 0;
+      }
+      setImgStr(images[index].src);
+    }, 5000);
+  }, []);
+
   return (
     <Parallax speed={16} opacity={[3, 0]}>
       <div className='gallery-component preview-component container flow'>
@@ -22,7 +37,12 @@ const GalleryComponent = () => {
             <Link to='/gallery'>Visit gallery</Link>
           </button>
         </div>
-        <div className='gallery-background'></div>
+        <div
+          className='gallery-background'
+          style={{
+            backgroundImage: `url(${imgStr})`,
+          }}
+        ></div>
       </div>
     </Parallax>
   );
