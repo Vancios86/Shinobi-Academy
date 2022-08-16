@@ -6,7 +6,7 @@ const VectorLogo = () => {
   return (
     <Tilt>
       <div className='Vector'>
-        <img src={Vector} alt='logo head' />
+        <img src={Vector} loading='lazy' alt='logo head' />
       </div>
     </Tilt>
   );

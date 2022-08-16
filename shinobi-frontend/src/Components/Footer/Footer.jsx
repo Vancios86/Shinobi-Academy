@@ -12,7 +12,7 @@ const Footer = () => {
       <div className='section footer-top'>
         <div className='logo-footer'>
           <Tilt>
-            <img src={vector} alt='vector-logo' />
+            <img src={vector} loading='lazy' alt='vector-logo' />
           </Tilt>
         </div>
 

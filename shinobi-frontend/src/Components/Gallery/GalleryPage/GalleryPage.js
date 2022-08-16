@@ -63,7 +63,7 @@ const GalleryPage = () => {
         <b>↞</b>
       </button>
       <div className={modal ? 'modal open' : 'modal'}>
-        <img src={tempImage} alt='' />
+        <img src={tempImage} loading='lazy' alt='' />
         <AiOutlineClose
           onClick={() => setModal(false)}
           className='close-modal'
@@ -88,7 +88,7 @@ const GalleryPage = () => {
               key={image.id}
               onClick={() => getImage(image.src, image.id)}
             >
-              <img src={image.src} alt={image.title} />
+              <img src={image.src} loading='lazy' alt={image.title} />
             </div>
           ))}
         </div>

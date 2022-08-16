@@ -41,7 +41,11 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.01}
               >
-                <img src='https://source.unsplash.com/cVLOqm8sSXc' alt='' />
+                <img
+                  src='https://source.unsplash.com/cVLOqm8sSXc'
+                  loading='lazy'
+                  alt=''
+                />
               </Tilt>
             </div>
 
@@ -70,7 +74,7 @@ const AboutPage = () => {
               recusandae voluptatem error quisquam ducimus obcaecati.
             </p>
             <aside>
-              <img src={img46} alt='shinobi-view' />
+              <img src={img46} loading='lazy' alt='shinobi-view' />
               <p>
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                 Assumenda molestiae quod alias ex atque est eveniet, numquam
