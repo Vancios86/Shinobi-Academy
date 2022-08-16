@@ -3,6 +3,21 @@
   padding: 0.33rem;
   margin: 0.33rem;
 }
+
+aside {
+  gap: 0.33rem;
+  padding: 1rem 0.33rem;
+}
+
+aside img {
+  float: right;
+  max-height: 20rem;
+  width: 50%;
+  min-width: 12rem;
+  border-radius: 0.33rem;
+  margin-left: 0.33rem;
+}
+
 .coaches-wrapper {
   grid-template-columns: 1fr 1fr;
   place-items: center;
