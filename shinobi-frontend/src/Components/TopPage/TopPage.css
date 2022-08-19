@@ -13,6 +13,7 @@
   height: auto;
   position: relative;
   padding-bottom: 0;
+  padding-top: 3.3rem;
 }
 
 #welcome-text h3 span {
@@ -59,7 +60,7 @@
   position: relative;
   display: flex;
   width: 98vw;
-  height: 20rem;
+  height: 17rem;
   max-height: 50vh;
   max-width: 79.5rem;
   padding: 0.33rem;
@@ -104,6 +105,17 @@
   background-position-y: center;
 }
 
+@media screen and (max-width: 999px) {
+  .partners-logos > div {
+    width: 7.2rem;
+  }
+}
+@media screen and (max-width: 630px) {
+  .partners-logos > div {
+    width: 6.6rem;
+  }
+}
+
 @media screen and (max-width: 480px) {
   #nav-container {
     height: 15rem;
@@ -118,11 +130,8 @@
     gap: 1rem;
     margin-top: 3rem;
   }
-}
-
-@media screen and (max-width: 630px) {
   .partners-logos > div {
-    width: 6.6rem;
+    width: 5.5rem;
   }
 }
 
@@ -131,12 +140,19 @@
     margin-top: 4rem;
   }
 }
-
-@media screen and (min-width: 990px) {
+@media screen and (min-width: 800px) {
   #nav-container {
+    height: 18.5rem;
+    background-position-y: 27%;
+  }
+}
+@media screen and (min-width: 999px) {
+  #nav-container {
+    height: 20rem;
     background-position-y: 36%;
   }
 }
+
 @media screen and (max-height: 500px) {
   #nav-container {
     max-height: none;
@@ -167,8 +183,8 @@
     margin-top: 6rem;
   }
 }
-@media screen and (min-height: 910px) {
+/* @media screen and (min-height: 910px) {
   .partners-logos {
     margin-top: 7.5rem;
   }
-}
+} */

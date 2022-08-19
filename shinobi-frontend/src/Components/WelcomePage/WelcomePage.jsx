@@ -26,6 +26,7 @@ const WelcomePage = () => {
         loop
         muted
         playsInline
+        loading="lazy"
         className="welcome-video"
       >
         <source src={ShinobiVideo} type="video/mp4" />

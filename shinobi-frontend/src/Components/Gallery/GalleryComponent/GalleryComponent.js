@@ -26,10 +26,7 @@ const GalleryComponent = () => {
         </div>
         <div className='container flex'>
           <p className='text-content text-white' id='gallery-component-text'>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni
-            eligendi perspiciatis est nisi iusto voluptas minima aliquid
-            repellat tempora. Perferendis quos repellat praesentium magni atque
-            repudiandae quod, dolorem id consectetur modi tenetur inventore!
+            We gathered some photos from over the years and put them together in a gallery. Enjoy!
           </p>
         </div>
         <div className='component-button flex'>

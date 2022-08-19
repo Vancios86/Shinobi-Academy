@@ -10,8 +10,8 @@
 
 @media screen and (min-width: 1000px) {
   .inline-components-section {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    columns: 1fr 1fr;
   }
 }
