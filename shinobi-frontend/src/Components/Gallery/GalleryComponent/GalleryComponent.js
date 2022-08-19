@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react';
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
-import { images } from '../../../assets/gallery-assets/gallery-assets';
+import { images2 } from '../../../assets/gallery-assets/gallery-assets';
 
 const GalleryComponent = () => {
-  const [imgStr, setImgStr] = useState(images[0].src);
+  const [imgStr, setImgStr] = useState(images2[0].src);
   //change the background image every 5 seconds
   useEffect(() => {
     let index = 0;
     setInterval(() => {
       index += 1;
-      if (index === images.length - 1) {
+      if (index === images2.length - 1) {
         index = 0;
       }
-      setImgStr(images[index].src);
-    }, 5000);
+      setImgStr(images2[index].src);
+    }, 7000);
   }, []);
 
   return (

@@ -277,3 +277,41 @@ export const images = [
     src: img46,
   },
 ];
+
+export const images2 = [
+  {
+    id: 1,
+    title: 'Image 1',
+    src: img1,
+  },
+  {
+    id: 5,
+    title: 'Image 5',
+    src: img5,
+  },
+  {
+    id: 7,
+    title: 'Image 7',
+    src: img7,
+  },
+  {
+    id: 9,
+    title: 'Image 9',
+    src: img9,
+  },
+  {
+    id: 12,
+    title: 'Image 12',
+    src: img12,
+  },
+  {
+    id: 22,
+    title: 'Image 22',
+    src: img22,
+  },
+  {
+    id: 33,
+    title: 'Image 33',
+    src: img33,
+  }
+]
