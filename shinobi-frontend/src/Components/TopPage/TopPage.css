@@ -156,15 +156,12 @@
 @media screen and (max-height: 500px) {
   #nav-container {
     max-height: none;
-    background-position-y: center;
+    background-position-y: 35%;
   }
 }
-@media screen and (max-height: 800px) {
-  #to-top {
-    margin-top: 0.3rem;
-  }
-  .partners-logos {
-    margin-top: 2.7rem;
+@media screen and (max-height: 670px) {
+  #welcome-text {
+    padding-top: 1.2rem;
   }
 }
 @media screen and (max-height: 800px) and (min-width: 800px) {
@@ -172,13 +169,17 @@
     width: 8rem;
   }
 }
-@media screen and (min-height: 800px) {
+@media screen and (max-height: 900px) {
+  #to-top {
+    margin-top: 0.3rem;
+  }
   .partners-logos {
-    margin-top: 4.5rem;
+    margin-top: 2.7rem;
   }
 }
+
 @media screen and (min-height: 830px) {
   .partners-logos {
-    margin-top: 6rem;
+    margin-top: 5.5rem;
   }
 }
