@@ -46,12 +46,12 @@
 }
 .class-s {
   background-image: url('../../assets/classes-assets/striking.jpg');
-  background-position-Y: 18%;
+  background-position-y: 18%;
   width: 88%;
 }
 .class-jj {
   background-image: url('../../assets/classes-assets/jiujitsu.jpg');
-  background-position-Y: 66%;
+  background-position-y: 66%;
   justify-self: flex-end;
   width: 88%;
   flex-direction: row-reverse;
@@ -63,7 +63,7 @@
 }
 .class-c {
   background-image: url('../../assets/classes-assets/conditioning.jpg');
-  background-position-Y: center;
+  background-position-y: center;
   justify-self: flex-end;
   width: 88%;
   flex-direction: row-reverse;
