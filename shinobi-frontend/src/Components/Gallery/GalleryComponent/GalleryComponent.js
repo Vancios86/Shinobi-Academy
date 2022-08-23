@@ -19,7 +19,7 @@ const GalleryComponent = () => {
   }, []);
 
   return (
-    <Parallax speed={16} opacity={[3, 0]}>
+    <Parallax opacity={[3, 0]}>
       <div className='gallery-component preview-component container flow'>
         <div className='component-title'>
           <h3 id='gallery-component-title'>Media Gallery</h3>

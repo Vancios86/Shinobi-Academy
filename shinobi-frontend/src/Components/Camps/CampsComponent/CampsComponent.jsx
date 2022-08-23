@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const CampsComponent = () => {
   return (
     <ParallaxProvider>
-      <Parallax speed={16} opacity={[3, 0]}>
+      <Parallax opacity={[3, 0]}>
         <div className='camps-component preview-component container flow'>
           <div className='component-title'>
             <h3 id='camps-component-title'>Camps</h3>

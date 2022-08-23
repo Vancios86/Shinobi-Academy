@@ -1,6 +1,6 @@
 .camps-component {
   overflow: hidden;
-  margin-top: 4.5rem;
+  margin-top: 6rem;
 }
 #camps-component-text {
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));

@@ -1,5 +1,6 @@
 .gallery-component {
   overflow: hidden;
+  margin-top: 6rem;
 }
 #gallery-component-text {
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
@@ -21,10 +22,4 @@
 .gallery-component:hover .gallery-background {
   filter: blur(0);
   scale: 110%;
-}
-
-@media screen and (min-width: 1000px) {
-  .gallery-component {
-    margin-top: 4.5rem;
-  }
 }
