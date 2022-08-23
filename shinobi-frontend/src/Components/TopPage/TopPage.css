@@ -160,20 +160,19 @@
   }
 }
 @media screen and (max-height: 800px) {
-  #welcome-text {
-    padding-top: 1rem;
-  }
   #to-top {
     margin-top: 0.3rem;
   }
   .partners-logos {
     margin-top: 2.7rem;
   }
+}
+@media screen and (max-height: 800px) and (min-width: 800px) {
   .partners-logos > div {
-    width: 8.8rem;
+    width: 8rem;
   }
 }
-@media screen and (min-height: 750px) {
+@media screen and (min-height: 800px) {
   .partners-logos {
     margin-top: 4.5rem;
   }
@@ -183,8 +182,3 @@
     margin-top: 6rem;
   }
 }
-/* @media screen and (min-height: 910px) {
-  .partners-logos {
-    margin-top: 7.5rem;
-  }
-} */
