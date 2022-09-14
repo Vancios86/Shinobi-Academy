@@ -4,25 +4,29 @@
       "id": 1,
       "name": "Colin",
       "xp": "25 years",
-      "skills": "ex pro fighter, BJJ and Ninjutsu Black Belt"
+      "skills": "ex pro fighter, BJJ and Ninjutsu Black Belt",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1G1z3wo4ncSN2qW8V9k11NXW5ptzBP9oX"
     },
     {
       "id": 2,
-      "name": "Bryne",
-      "xp": "23 years",
-      "skills": "pro MMA fighter, boxer, wrestler"
+      "name": "Kieran",
+      "xp": "10 years",
+      "skills": "pro MMA fighter, BJJ purple belt",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1qAlZkpxY26HKVgGiUSOYOjmy6E4rLPRc"
     },
     {
       "id": 3,
-      "name": "Josh",
-      "xp": "20 years",
-      "skills": "BJJ Black Belt, multiple podium finishes"
+      "name": "Ivo",
+      "xp": "14 years",
+      "skills": "MMA fighter, BJJ purple belt, wrestler",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1V7_MZT73NTBj4VaJ9YWf2pQhauFv2QM_"
     },
     {
       "id": 4,
-      "name": "Kieran",
-      "xp": "10 years",
-      "skills": "pro MMA fighter, BJJ purple belt"
+      "name": "Alex",
+      "xp": "12 years",
+      "skills": "BJJ Purple Belt, MMA practicioner",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1gX9ZYGoK_RIQ3r6JMxleUtOUIgf8FlYT"
     }
   ]
 }

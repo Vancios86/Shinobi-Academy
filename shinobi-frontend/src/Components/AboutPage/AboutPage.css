@@ -83,31 +83,12 @@ aside img {
   position: absolute;
   background-size: cover;
   border-radius: 0.33rem;
+  width: 100%;
+  height: 100%;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-}
-
-.photo-kieran {
-  content: '';
-  float: right;
-  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
-}
-.photo-josh {
-  content: '';
-  float: left;
-  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
-}
-.photo-bryne {
-  content: '';
-  float: right;
-  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
-}
-.photo-colin-coach {
-  content: '';
-  float: left;
-  background-image: url('https://source.unsplash.com/cVLOqm8sSXc');
 }
 
 @media screen and (min-width: 600px) {
