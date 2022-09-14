@@ -49,9 +49,10 @@
 }
 .contact-list-items > li svg {
   transition: transform 0.5s ease-in-out;
+  margin-bottom: -3px;
 }
 .contact-list-items > li:hover svg {
-  transform: scale(167%);
+  transform: scale(133%);
 }
 
 .inline-elements {
