@@ -64,7 +64,7 @@ const ContactPage = () => {
                 </li>
                 <li>
                   <a
-                    href='mailto:shinobiacademy@gmail.com?&subject=Email sent from the Shinobi Academy website'
+                    href='mailto:shinobiacademy@gmail.com?&subject=From Shinobi Academy website'
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <MdEmail /> Send us an Email
@@ -81,8 +81,6 @@ const ContactPage = () => {
 
       <div className='inline-elements inline-elements-bottom'>
         <MapComponent />
-        {/* <MyMap /> */}
-
         <ContactFormComponent />
       </div>
     </div>
