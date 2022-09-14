@@ -6,6 +6,24 @@
   flex-direction: column;
 }
 
-.camps-description {
-  border: 1px solid red;
+.camps-container {
+  flex-direction: column;
+  width: 99%;
+  margin: 0 auto;
+}
+
+.camps-title {
+  padding: 0.3rem;
+}
+
+.camps-page-content {
+  padding-inline: 0.3rem;
+}
+
+.camp-video {
+  max-height: 100vh;
+}
+
+iframe {
+  border: none;
 }
