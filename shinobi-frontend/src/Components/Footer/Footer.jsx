@@ -1,6 +1,6 @@
 import './Footer.css';
 import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
-import { SiTwitter, SiYoutube } from 'react-icons/si';
+import { SiFacebook, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
 import vector from '../Logo/vector.jpeg';
@@ -28,13 +28,19 @@ const Footer = () => {
                 <span>
                   <MdPhone />
                 </span>{' '}
-                977 777 777
+                (+351) 977 777 777
               </li>
               <li>
-                <MdEmail /> shinobyacademy@gmail.com
+                <a
+                  href='mailto:shinobiacademy@gmail.com?&subject=From Shinobi Academy website'
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <MdEmail /> shinobiacademy@gmail.com
+                </a>
               </li>
               <li>
-                <MdLocationPin /> Rua xxxxx nr15
+                <MdLocationPin /> R.Convento da Trindade 15
+                <br /> &emsp;8600-613 Lagos
               </li>
             </ul>
           </div>
@@ -52,17 +58,28 @@ const Footer = () => {
           <div className='social-media clr-red'>
             <ul className='flex'>
               <li>
-                <AiFillInstagram />
+                <AiFillInstagram
+                  onClick={() =>
+                    window.open('https://instagram.com/shinobiacademylagos')
+                  }
+                />
               </li>
               <li>
-                <SiTwitter />
+                <SiFacebook
+                  onClick={() => window.open('https://www.facebook.com/')}
+                />
               </li>
               <li>
-                <SiYoutube />
+                <SiYoutube
+                  onClick={() =>
+                    window.open('https://www.youtube.com/c/ShinobiVlog')
+                  }
+                />
               </li>
             </ul>
           </div>
         </div>
+        <em className='flex created-by'>Created by I.Albu</em>
       </IconContext.Provider>
     </div>
   );
