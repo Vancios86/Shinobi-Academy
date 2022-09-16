@@ -19,9 +19,18 @@ const TopPage = () => {
           <Navigation />
         </div>
         <div className='partners-logos'>
-          <div className='partner1'></div>
-          <div className='partner2'></div>
-          <div className='partner3'></div>
+          <div
+            className='partner1'
+            onClick={() => window.open('https://www.mcgregorfast.com/')}
+          ></div>
+          <div
+            className='partner2'
+            onClick={() => window.open('https://www.revgear.com/')}
+          ></div>
+          <div
+            className='partner3'
+            onClick={() => window.open('https://www.fujimats.com/')}
+          ></div>
         </div>
       </div>
     </div>
