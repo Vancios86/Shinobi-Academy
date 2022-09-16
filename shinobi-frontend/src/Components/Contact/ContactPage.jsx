@@ -40,7 +40,11 @@ const ContactPage = () => {
                 </li>
                 <li className='sm-item'>
                   <SiFacebook
-                    onClick={() => window.open('https://www.facebook.com/')}
+                    onClick={() =>
+                      window.open(
+                        'https://www.facebook.com/profile.php?id=100028550547285'
+                      )
+                    }
                   />
                 </li>
               </ul>
