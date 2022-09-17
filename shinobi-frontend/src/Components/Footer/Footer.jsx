@@ -79,7 +79,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <em className='flex created-by'>Created by I.Albu</em>
+        <p className='flex created-by'>Created by I. Albu</p>
       </IconContext.Provider>
     </div>
   );

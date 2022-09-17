@@ -68,6 +68,7 @@ ul li:hover svg {
   color: hsl(var(--clr-gold));
   font-size: 0.66rem;
   background-color: hsl(var(--clr-dark));
+  font-family: var(--ff-hand);
 }
 
 .secondary-page-footer > * {
