@@ -1,7 +1,10 @@
 /* ------------------  */
 /*  Custom Properties  */
 /* ------------------  */
-
+@font-face {
+  font-family: 'Antonio';
+  src: url(./assets/Antonio-VariableFont_wght.ttf);
+}
 :root {
   /* Position */
   display: flex;
@@ -16,7 +19,7 @@
   --clr-silver: 27 26% 93%;
 
   /* Font-families */
-  --ff-normal: 'Antonio', 'Anton', sans-serif;
+  --ff-normal: 'Antonio', sans-serif;
   --ff-hand: 'Shadows Into Light', cursive;
 
   /* Font-sizes */
@@ -66,7 +69,7 @@ picture {
 /* Set up the body */
 body {
   font-family: var(--ff-normal);
-  font-size: var(--fs-200);
+  font-size: var(--fs-100);
   color: var(--clr-dark);
   background-color: var(--clr-white);
   line-height: 1.5;
