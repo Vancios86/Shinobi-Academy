@@ -73,5 +73,5 @@ ul li:hover svg {
 
 .secondary-page-footer > * {
   margin-inline: 0;
-  width: 100vw;
+  width: 100%;
 }
