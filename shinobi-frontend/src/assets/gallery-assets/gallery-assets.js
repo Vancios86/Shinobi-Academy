@@ -109,6 +109,131 @@ export const galleryImages = [
     title: 'gallery-photo',
     src: 'http://drive.google.com/uc?export=view&id=1wLls978EmtUvMXbI5OZVUPCG2B1fduKr',
   },
+  {
+    id: 23,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1DJvjqsEBoMLx5qN0s1S17nCfeRd8dl6g',
+  },
+  {
+    id: 24,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1aSoIK_nyQ3Rb_mKO28XjyKAImHpRKlXS',
+  },
+  {
+    id: 25,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1BSP5Z6bxvi1bwukttdxH2bKRtJ5aipeR',
+  },
+  {
+    id: 26,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1xcNmHpG_2QuctUAt2OGt-_8SapvNy7yC',
+  },
+  {
+    id: 27,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1H0hlI_aF9xWgGQOT7-y35Yc98ES5aRTM',
+  },
+  {
+    id: 28,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1ltL-6jU_8I7_MBSdIK8lzDAZzLS5YSkK',
+  },
+  {
+    id: 29,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1oVRz-ML3kW3LGDiaiyV5a66kP2ndrxS5',
+  },
+  {
+    id: 30,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1TSDRx6PhvFntrRVM5VADpKTq_ZHCO4D3',
+  },
+  {
+    id: 31,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1inkK2c7TGGzpxo0b-ztRdOt3djLCaQfX',
+  },
+  {
+    id: 32,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1T61lyt3S1LNez2mmjHE6StkYjzMo22xF',
+  },
+  {
+    id: 33,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1i2LGpi1uREL1Ifj0ep-ePoMbFT-OU-8o',
+  },
+  {
+    id: 34,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1V7_MZT73NTBj4VaJ9YWf2pQhauFv2QM_',
+  },
+  {
+    id: 35,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=16C87iOf25yWKZIE78KJEH0rp5ZyAdG4C',
+  },
+  {
+    id: 36,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1perSP50QVJLvklncym4kUQlrLka1B5Hu',
+  },
+  {
+    id: 37,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1kCLWqZrLhvPr0Raf2HzOrT2YBSz_Vp9x',
+  },
+  {
+    id: 38,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1G1z3wo4ncSN2qW8V9k11NXW5ptzBP9oX',
+  },
+  {
+    id: 39,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1NXIbPGFf9Csx2HDhd0B2GItRTx4NuG4U',
+  },
+  {
+    id: 40,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1GctmiwHXBh1TLoI1CCDnQZbWJE384n0V',
+  },
+  {
+    id: 41,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1fy6o5C1voAUP0nF1LdasK3thbkNlHdju',
+  },
+  {
+    id: 42,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1MIR0DYCN8PVxmvsp7MpZCQf3CkYBQIRG',
+  },
+  {
+    id: 43,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1OFdbT12HeSMM6uUt7D4tnatOHHmPi6h4',
+  },
+  {
+    id: 44,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1Gbgr6dJP0X0bY2erbOTPFaWQ0VmoIPGo',
+  },
+  {
+    id: 45,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1v4Uh3q1tYgwyiQsL1k7ivxX0Yn3cJ30t',
+  },
+  {
+    id: 46,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=1ntUYasVeOLJNPBsL1d5JcRLNMxH3JY03',
+  },
+  {
+    id: 47,
+    title: 'gallery-photo',
+    src: 'http://drive.google.com/uc?export=view&id=16aiz7BTRq0lBKvJb-g2nBdScCVdPA-aY',
+  },
 ];
 
 export const galleryPreviewImages = [
