@@ -8,14 +8,14 @@ const GalleryComponent = () => {
   const [imgStr, setImgStr] = useState(galleryPreviewImages[0].src);
   //change the background image every 5 seconds
   useEffect(() => {
-    let index = 0;
+    let index = 1;
     setInterval(() => {
       index += 1;
-      if (index === galleryPreviewImages.length - 1) {
+      if (index === galleryPreviewImages.length) {
         index = 0;
       }
       setImgStr(galleryPreviewImages[index].src);
-    }, 7000);
+    }, 5000);
   }, []);
 
   return (

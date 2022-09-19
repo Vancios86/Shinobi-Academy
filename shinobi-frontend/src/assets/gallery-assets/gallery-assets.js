@@ -238,18 +238,28 @@ export const galleryImages = [
 
 export const galleryPreviewImages = [
   {
-    id: 1,
-    title: 'Image 1',
-    src: 'http://drive.google.com/uc?export=view&id=1_6ssWtWFdFOJIau2bHhNlHzYnl5ete89',
+    id: 100,
+    title: 'gallery-preview',
+    src: 'http://drive.google.com/uc?export=view&id=1OFdbT12HeSMM6uUt7D4tnatOHHmPi6h4',
   },
   {
-    id: 5,
-    title: 'Image 5',
-    src: 'http://drive.google.com/uc?export=view&id=1FDjZ0jdjUBOzQO5tSXun8THbfAegGTaw',
+    id: 101,
+    title: 'gallery-preview',
+    src: 'http://drive.google.com/uc?export=view&id=1fy6o5C1voAUP0nF1LdasK3thbkNlHdju',
   },
   {
-    id: 7,
-    title: 'Image 7',
-    src: 'http://drive.google.com/uc?export=view&id=1K93XlY26L11k32YonJOyoKiZumKtq0td',
+    id: 102,
+    title: 'gallery-preview',
+    src: 'http://drive.google.com/uc?export=view&id=13uSpqI1dpowGWKjyHYrTbcIkimdoG4mn',
+  },
+  {
+    id: 103,
+    title: 'gallery-preview',
+    src: 'http://drive.google.com/uc?export=view&id=1inkK2c7TGGzpxo0b-ztRdOt3djLCaQfX',
+  },
+  {
+    id: 104,
+    title: 'gallery-preview',
+    src: 'http://drive.google.com/uc?export=view&id=1D9icDqiASfnuZae4Oy1vDwyI3cr-ILDq',
   },
 ];
