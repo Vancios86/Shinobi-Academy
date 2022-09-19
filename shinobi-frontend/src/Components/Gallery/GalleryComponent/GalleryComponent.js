@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
-import { images2 } from '../../../assets/gallery-assets/gallery-assets';
+import { galleryPreviewImages } from '../../../assets/gallery-assets/gallery-assets';
 
 const GalleryComponent = () => {
-  const [imgStr, setImgStr] = useState(images2[0].src);
+  const [imgStr, setImgStr] = useState(galleryPreviewImages[0].src);
   //change the background image every 5 seconds
   useEffect(() => {
     let index = 0;
     setInterval(() => {
       index += 1;
-      if (index === images2.length - 1) {
+      if (index === galleryPreviewImages.length - 1) {
         index = 0;
       }
-      setImgStr(images2[index].src);
+      setImgStr(galleryPreviewImages[index].src);
     }, 7000);
   }, []);
 
@@ -26,7 +26,8 @@ const GalleryComponent = () => {
         </div>
         <div className='container flex'>
           <p className='text-content text-white' id='gallery-component-text'>
-            We gathered some photos from over the years and put them together in a gallery. Enjoy!
+            We gathered some photos from over the years and put them together in
+            a gallery. Enjoy!
           </p>
         </div>
         <div className='component-button flex'>

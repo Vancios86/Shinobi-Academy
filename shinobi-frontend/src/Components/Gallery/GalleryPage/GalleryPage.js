@@ -4,7 +4,7 @@ import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { images } from '../../../assets/gallery-assets/gallery-assets';
+import { galleryImages } from '../../../assets/gallery-assets/gallery-assets';
 import { AiOutlineClose } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 import { AiOutlineLeft } from 'react-icons/ai';
@@ -12,43 +12,40 @@ import { AiOutlineLeft } from 'react-icons/ai';
 const GalleryPage = () => {
   const [modal, setModal] = useState(false);
   const [tempImage, setTempImage] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  });
+
+  console.log(window.scrollY);
 
   const getImage = (imageSrc, imageId) => {
     setTempImage(imageSrc, imageId);
     setModal(true);
   };
 
-  const getPrevPhoto = ([images], imageSrc) => {
-    let imgObj = images.find((image) => image.src === imageSrc);
+  const getPrevPhoto = ([galleryImages], imageSrc) => {
+    let imgObj = galleryImages.find((image) => image.src === imageSrc);
     let prevImgObj =
       imgObj.id > 1
-        ? images[images.indexOf(imgObj) - 1].src
-        : images[images.length - 1].src;
+        ? galleryImages[galleryImages.indexOf(imgObj) - 1].src
+        : galleryImages[galleryImages.length - 1].src;
     setTempImage(prevImgObj);
   };
 
-  const getNextPhoto = ([images], imageSrc) => {
-    let imgObj = images.find((image) => image.src === imageSrc);
+  const getNextPhoto = ([galleryImages], imageSrc) => {
+    let imgObj = galleryImages.find((image) => image.src === imageSrc);
     let nextImgObj =
-      imgObj.id < images.length
-        ? images[images.indexOf(imgObj) + 1].src
-        : images[0].src;
+      imgObj.id < galleryImages.length
+        ? galleryImages[galleryImages.indexOf(imgObj) + 1].src
+        : galleryImages[0].src;
     setTempImage(nextImgObj);
   };
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    console.log(
-      'X position :',
-      window.scrollX,
-      ' |Y position: ',
-      window.scrollY
-    );
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  });
   return (
     <div className='gallery-page container'>
       <div className='welcome-logo flex'>
@@ -70,11 +67,11 @@ const GalleryPage = () => {
         />
         <AiOutlineLeft
           className='swap-left'
-          onClick={() => getPrevPhoto([images], tempImage)}
+          onClick={() => getPrevPhoto([galleryImages], tempImage)}
         />
         <AiOutlineRight
           className='swap-right'
-          onClick={() => getNextPhoto([images], tempImage)}
+          onClick={() => getNextPhoto([galleryImages], tempImage)}
         />
       </div>
       <div className='gallery-page-content'>
@@ -82,7 +79,7 @@ const GalleryPage = () => {
           <h3>Media Gallery</h3>
         </div>
         <div className='gallery-container flow'>
-          {images.map((image) => (
+          {galleryImages.map((image) => (
             <div
               className='gallery-item'
               key={image.id}
