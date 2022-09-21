@@ -2,6 +2,8 @@ import './AboutPage.css';
 import { Parallax } from 'react-scroll-parallax';
 import Tilt from 'react-parallax-tilt';
 import data from '../../data.json';
+import colin from '../../assets/images/colin.webp';
+import view from '../../assets/images/shinobi-view.webp';
 
 const teamMemberCard = (id, name, xp, skills, imgSrc) => {
   return (
@@ -26,7 +28,7 @@ const teamMemberCard = (id, name, xp, skills, imgSrc) => {
 
 const AboutPage = () => {
   return (
-    <Parallax opacity={[3, 0]}>
+    <Parallax opacity={[3, 0.2]}>
       <div className='about-page grid'>
         <div className='page-title' id='about-page'>
           <h3>About us</h3>
@@ -42,11 +44,7 @@ const AboutPage = () => {
                   glareMaxOpacity={0.5}
                   scale={1.01}
                 >
-                  <img
-                    src='http://drive.google.com/uc?export=view&id=1TQwYYblkerfK6vIGBO3J2mSjSHo0WYR8'
-                    loading='lazy'
-                    alt=''
-                  />
+                  <img src={colin} loading='lazy' alt='' />
                 </Tilt>
               </div>
 
@@ -82,11 +80,7 @@ const AboutPage = () => {
                 Wattbike, Concept 2 rower , inversion table and more.
               </p>
               <aside>
-                <img
-                  src='http://drive.google.com/uc?export=view&id=1ntUYasVeOLJNPBsL1d5JcRLNMxH3JY03'
-                  loading='lazy'
-                  alt='shinobi-view'
-                />
+                <img src={view} loading='lazy' alt='shinobi-view' />
                 <p>
                   The Dojo is available for training camps for teams and clubs.
                   The strength and conditioning room is also available for small

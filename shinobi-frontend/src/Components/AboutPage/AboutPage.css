@@ -90,6 +90,12 @@ aside img {
   right: 0;
   left: 0;
 }
+@media screen and (min-width: 500px) {
+  .coaches-wrapper {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
 
 @media screen and (min-width: 600px) {
   .photo-colin {
@@ -97,9 +103,6 @@ aside img {
   }
   .team-title {
     font-size: var(--fs-400);
-  }
-  .coaches-wrapper {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
@@ -109,9 +112,6 @@ aside img {
   }
   .team-title {
     font-size: var(--fs-500);
-  }
-  .coaches-wrapper {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   .coach-member {
     width: 9rem;
@@ -132,5 +132,12 @@ aside img {
   }
   .team-member .coach-description {
     font-size: var(--fs-300);
+  }
+}
+
+@media screen and (min-width: 1150px) {
+  .coaches-wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
   }
 }
