@@ -66,7 +66,7 @@
   padding: 0.33rem;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url('http://drive.google.com/uc?export=view&id=1mnFw3Knzb_LTu0t7NmYk8al9VXm_DGgx');
+  background-image: url('../../assets/images/top-image.webp');
   background-position-y: center;
   background-position-x: center;
   border-radius: 0.33rem;
@@ -90,19 +90,19 @@
   cursor: pointer;
 }
 .partner1 {
-  background-image: url('./partners-logo/fast-logo.jpg');
+  background-image: url('../../assets/partners-logo/fast-logo.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position-y: center;
 }
 .partner2 {
-  background-image: url('partners-logo/revgear-logo.jpg');
+  background-image: url('../../assets/partners-logo/revgear-logo.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 .partner3 {
-  background-image: url('./partners-logo/FUJI-Mats-Logos.webp');
+  background-image: url('../../assets/partners-logo/FUJI-Mats-Logos.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position-y: center;
