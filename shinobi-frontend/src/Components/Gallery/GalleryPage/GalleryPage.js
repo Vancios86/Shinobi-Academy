@@ -19,9 +19,7 @@ const GalleryPage = () => {
       top: 0,
       behavior: 'smooth',
     });
-  });
-
-  console.log(window.scrollY);
+  }, []);
 
   const getImage = (imageSrc, imageId) => {
     setTempImage(imageSrc, imageId);

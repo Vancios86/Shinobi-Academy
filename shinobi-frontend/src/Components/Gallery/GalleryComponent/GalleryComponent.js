@@ -25,8 +25,6 @@ const GalleryComponent = () => {
     return () => clearInterval(interval);
   }, [imgSrc]);
 
-  console.log(imgSrc);
-
   return (
     <Parallax opacity={[3, 0]}>
       <div className='gallery-component preview-component container flow'>
