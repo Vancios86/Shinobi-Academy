@@ -64,14 +64,20 @@ ul li:hover svg {
   transform: scale(1.2);
 }
 
+.secondary-page-footer {
+  width: 100%;
+  height: auto;
+  grid-template-rows: auto auto;
+  gap: 0;
+}
+
+.secondary-page-footer > * {
+  margin-inline: 0;
+}
+
 .created-by {
   color: hsl(var(--clr-gold));
   font-size: 0.66rem;
   background-color: hsl(var(--clr-dark));
   font-family: var(--ff-hand);
-}
-
-.secondary-page-footer > * {
-  margin-inline: 0;
-  width: 100%;
 }
