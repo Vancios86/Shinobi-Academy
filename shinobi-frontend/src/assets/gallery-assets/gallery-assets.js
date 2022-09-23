@@ -235,31 +235,3 @@ export const galleryImages = [
     src: 'http://drive.google.com/uc?export=view&id=16aiz7BTRq0lBKvJb-g2nBdScCVdPA-aY',
   },
 ];
-
-export const galleryPreviewImages = [
-  {
-    id: 100,
-    title: 'gallery-preview',
-    src: 'http://drive.google.com/uc?export=view&id=1OFdbT12HeSMM6uUt7D4tnatOHHmPi6h4',
-  },
-  {
-    id: 101,
-    title: 'gallery-preview',
-    src: 'http://drive.google.com/uc?export=view&id=1fy6o5C1voAUP0nF1LdasK3thbkNlHdju',
-  },
-  {
-    id: 102,
-    title: 'gallery-preview',
-    src: 'http://drive.google.com/uc?export=view&id=13uSpqI1dpowGWKjyHYrTbcIkimdoG4mn',
-  },
-  {
-    id: 103,
-    title: 'gallery-preview',
-    src: 'http://drive.google.com/uc?export=view&id=1inkK2c7TGGzpxo0b-ztRdOt3djLCaQfX',
-  },
-  {
-    id: 104,
-    title: 'gallery-preview',
-    src: 'http://drive.google.com/uc?export=view&id=1D9icDqiASfnuZae4Oy1vDwyI3cr-ILDq',
-  },
-];

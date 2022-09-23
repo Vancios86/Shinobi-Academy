@@ -2,21 +2,30 @@ import { useState, useEffect } from 'react';
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
-import { galleryPreviewImages } from '../../../assets/gallery-assets/gallery-assets';
+import prev1 from '../../../assets/gallery-assets/gallery-preview-images/prev1.webp';
+import prev2 from '../../../assets/gallery-assets/gallery-preview-images/prev2.webp';
+import prev3 from '../../../assets/gallery-assets/gallery-preview-images/prev3.webp';
+import prev4 from '../../../assets/gallery-assets/gallery-preview-images/prev4.webp';
 
 const GalleryComponent = () => {
-  const [imgStr, setImgStr] = useState(galleryPreviewImages[0].src);
-  //change the background image every 5 seconds
+  const [imgSrc, setImgSrc] = useState(prev1);
+  //change the background image every 7 seconds
   useEffect(() => {
-    let index = 1;
-    setInterval(() => {
-      index += 1;
-      if (index === galleryPreviewImages.length) {
-        index = 0;
+    const interval = setInterval(() => {
+      if (imgSrc === prev1) {
+        setImgSrc(prev2);
+      } else if (imgSrc === prev2) {
+        setImgSrc(prev3);
+      } else if (imgSrc === prev3) {
+        setImgSrc(prev4);
+      } else if (imgSrc === prev4) {
+        setImgSrc(prev1);
       }
-      setImgStr(galleryPreviewImages[index].src);
-    }, 5000);
-  }, []);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [imgSrc]);
+
+  console.log(imgSrc);
 
   return (
     <Parallax opacity={[3, 0]}>
@@ -38,7 +47,7 @@ const GalleryComponent = () => {
         <div
           className='gallery-background'
           style={{
-            backgroundImage: `url(${imgStr})`,
+            backgroundImage: `url(${imgSrc})`,
           }}
         ></div>
       </div>
