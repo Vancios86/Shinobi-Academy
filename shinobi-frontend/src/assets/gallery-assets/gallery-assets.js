@@ -162,7 +162,7 @@ export const galleryImages = [
   {
     id: 33,
     title: 'gallery-photo',
-    src: 'http://drive.google.com/uc?export=view&id=1i2LGpi1uREL1Ifj0ep-ePoMbFT-OU-8o',
+    src: 'http://drive.google.com/uc?export=view&id=10LABEUnmE55gL-3VIw1a4UKUdxsqwLQn',
   },
   {
     id: 34,
