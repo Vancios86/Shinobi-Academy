@@ -18,7 +18,7 @@ const ContactFormComponent = () => {
   function handleSubmit(e) {
     e.preventDefault();
     setSending(true);
-    send('service_ye4tcqg', 'template_18njl6h', toSend, 'emPxvqPK_UFrRPnwB')
+    send('service_mtav7vb', 'template_okhram8', toSend, 'YLAsSYEnWm66148GH')
       .then((response) => {
         setTimeout(() => {
           setSending(false);
