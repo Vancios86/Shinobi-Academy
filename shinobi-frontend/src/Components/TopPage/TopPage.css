@@ -90,13 +90,13 @@
   cursor: pointer;
 }
 .partner1 {
-  background-image: url('../../assets/partners-logo/fast-logo.webp');
+  background-image: url('../../assets/partners-logo/revgear-logo.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position-y: center;
 }
 .partner2 {
-  background-image: url('../../assets/partners-logo/revgear-logo.webp');
+  background-image: url('../../assets/partners-logo/fast-logo.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

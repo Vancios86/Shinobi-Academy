@@ -21,11 +21,11 @@ const TopPage = () => {
         <div className='partners-logos'>
           <div
             className='partner1'
-            onClick={() => window.open('https://www.mcgregorfast.com/')}
+            onClick={() => window.open('https://www.revgear.com/')}
           ></div>
           <div
             className='partner2'
-            onClick={() => window.open('https://www.revgear.com/')}
+            onClick={() => window.open('https://www.mcgregorfast.com/')}
           ></div>
           <div
             className='partner3'
