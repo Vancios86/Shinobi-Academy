@@ -1,4 +1,4 @@
-import logo from './SHINOBI.png';
+import logo from '../../assets/logos/logo.png';
 import './Logo.css';
 
 const Logo = () => {
