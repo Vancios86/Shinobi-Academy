@@ -3,7 +3,7 @@ import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
 import { SiFacebook, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
-import vector from '../Logo/vector.jpeg';
+import logoMask from '../../assets/logos/logo-mask.png';
 import Tilt from 'react-parallax-tilt';
 
 const Footer = () => {
@@ -12,9 +12,30 @@ const Footer = () => {
       <div className='section footer-top'>
         <div className='logo-footer'>
           <Tilt>
-            <img src={vector} loading='lazy' alt='vector-logo' />
+            <img src={logoMask} loading='lazy' alt='vector-logo' />
           </Tilt>
         </div>
+
+        <h3 className='text-gold flex'>We'are all one!</h3>
+        {/* <div className='footer-menu'>
+          <ul>
+            <li>
+              <a href='#'>Home</a>
+            </li>
+            <li>
+              <a href='#'>About</a>
+            </li>
+            <li>
+              <a href='#'>Classes</a>
+            </li>
+            <li>
+              <a href='#'>Gallery</a>
+            </li>
+            <li>
+              <a href='#'>Camps</a>
+            </li>
+          </ul>
+        </div> */}
 
         <IconContext.Provider
           value={{

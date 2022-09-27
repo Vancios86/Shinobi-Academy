@@ -17,6 +17,7 @@
 .logo-footer {
   width: 20%;
   max-width: 100px;
+  padding: 0.11rem;
   display: flex;
   align-items: center;
   margin-left: 0.3rem;
