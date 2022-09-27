@@ -5,7 +5,7 @@ import data from '../../data.json';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 
-const teamMemberCard = (id, name, xp, skills, imgSrc) => {
+const teamMemberCard = (id, name, imgSrc) => {
   return (
     <Tilt
       className='parallax-effect-glare-scale'
@@ -17,10 +17,7 @@ const teamMemberCard = (id, name, xp, skills, imgSrc) => {
     >
       <div className='team-member'>
         <img src={imgSrc} alt='coach' loading='lazy' className='coach-photo' />
-        <p className='coach-description'>
-          Name: {name} <br /> Experience: {xp} <br />
-          Skills: {skills}
-        </p>
+        <p className='coach-description'>{name}</p>
       </div>
     </Tilt>
   );
@@ -96,18 +93,59 @@ const AboutPage = () => {
 
           <section className='container flow'>
             <div className='team-title flex'>
-              <h3>OUR RESIDENT TRAINERS</h3>
+              <h3>SHINOBI COACHES</h3>
+            </div>
+            <div className='coaches-description'>
+              <p>
+                <strong>Colin Byrne</strong>
+                <br />
+                Founder of Shinobi Academy, Brazilian Jiu-Jitsu brown belt,
+                medalist in European Jiu-Jitsu Championships, MMA fighter and
+                coach for over 20 years, 3rd Dan Black Belt in Ninjustu under
+                Brian McCarthy, corner man and part of Team Conor McGregor,
+                founding member of McGregor Fast
+              </p>
+              <p>
+                <strong>Jeff Knight</strong>
+                <br />
+                Brazilian Jiu-Jitsu black belt under John Danaher. Trained for
+                12 years in Renzo Grecie’s Academy in New York city. Jeff is an
+                excellent practitioner in Gi and also No Gi. and has coached all
+                over the world, including GlobeTrotters
+              </p>
+              <p>
+                <strong>Keiran Ikin</strong>
+                <br />
+                MMA fighter and Purple belt in Brazilian Jiu-Jitsu. He has
+                fought under the Cage Warrior banner in the UK and was a
+                sparring partner for Conor McGregor for the Poirier2 training
+                camp
+              </p>
+              <p>
+                <strong>Ivo Guerreiro</strong>
+                <br />
+                MMA fighter and Jiu-Jitsu Purple belt. Ivo is training over 12
+                year , great coach and a huge part of the academy
+              </p>
+              <p>
+                <strong>Karl McCormack</strong>
+                <br />
+                Black belt in Ninjutsu, Purple belt in Jiu-Jitsu, Trained Jiu
+                Jitsu in Abu Dhabi UAE Trained Muay Thai in Thailand. Karl has
+                20 years experience in martial arts and his own unique style to
+                add to the coaching
+              </p>
+              <p>
+                <strong>Alex “Gracie” Lino</strong>
+                <br />
+                Brown belt in Brazilian Jiu-Jitsu, Alex comes from Brazil and
+                has spent his whole life training Jiu-Jitsu, Capoeira and MMA.
+              </p>
             </div>
 
             <div className='coaches-wrapper container grid'>
               {data.teamMembers.map((member) =>
-                teamMemberCard(
-                  member.id,
-                  member.name,
-                  member.xp,
-                  member.skills,
-                  member.imgSrc
-                )
+                teamMemberCard(member.id, member.name, member.imgSrc)
               )}
             </div>
           </section>

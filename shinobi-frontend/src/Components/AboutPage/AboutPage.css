@@ -40,7 +40,7 @@ aside img {
 .team-title {
   font-size: var(--fs-300);
   text-transform: uppercase;
-  padding: 3rem 0;
+  padding: 3rem 0 1rem 0;
 }
 .team-member {
   height: 10rem;
@@ -68,13 +68,14 @@ aside img {
   transform-style: preserve-3d;
 }
 .team-member .coach-description {
-  font-size: var(--fs-200);
+  font-size: var(--fs-300);
   color: hsl(var(--clr-silver));
   position: absolute;
   height: 100%;
+  width: 100%;
   z-index: 3;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   padding: 0.5rem;
   text-shadow: 0 1px 0 hsl(var(--clr-dark));

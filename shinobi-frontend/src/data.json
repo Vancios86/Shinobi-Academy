@@ -2,45 +2,33 @@
   "teamMembers": [
     {
       "id": 1,
-      "name": "Colin",
-      "xp": "25 years",
-      "skills": "ex pro fighter, BJJ and Ninjutsu Black Belt",
+      "name": "Colin Byrne",
       "imgSrc": "http://drive.google.com/uc?export=view&id=1YSWqasYCxSyFwuxsyGL8_Vybb2Yx5Y94"
     },
     {
       "id": 2,
-      "name": "Kieran",
-      "xp": "10 years",
-      "skills": "pro MMA fighter, BJJ purple belt",
+      "name": "Kieran Ikin",
       "imgSrc": "http://drive.google.com/uc?export=view&id=1BxkPRgwnuxSGy6BM1GF6aZJQwbCUxBOk"
     },
     {
       "id": 3,
-      "name": "Ivo",
-      "xp": "14 years",
-      "skills": "MMA fighter, BJJ purple belt, wrestler",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O"
+      "name": "Jeff Knight",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1nY9dwDVAZXQK6BrpxwtV3txuXUhEzOmp"
     },
     {
       "id": 4,
-      "name": "Alex",
-      "xp": "12 years",
-      "skills": "BJJ Purple Belt, MMA practicioner",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1Ks4-CI2QxmzWuRNhQNBzPmMAFnHMCHA7"
+      "name": "Ivo Guerreiro",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O"
     },
     {
       "id": 5,
-      "name": "Jeff",
-      "xp": "12 years",
-      "skills": "BJJ Balck Belt, multiple podium finishes",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1Ks4-CI2QxmzWuRNhQNBzPmMAFnHMCHA7"
+      "name": "Karl McCormack",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O"
     },
     {
       "id": 6,
-      "name": "Karl",
-      "xp": "12 years",
-      "skills": "BJJ Purple Belt",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O"
+      "name": "Alex \"Gracie\" Lino",
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1Ks4-CI2QxmzWuRNhQNBzPmMAFnHMCHA7"
     }
   ]
 }
