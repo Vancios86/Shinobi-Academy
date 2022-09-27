@@ -45,28 +45,33 @@
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
 .class-s {
-  background-image: url('./classes-assets/mma.webp');
+  background-image: url('../../assets/classes-assets/mma.webp');
   background-position-y: 18%;
   width: 88%;
 }
 .class-jj {
-  background-image: url('./classes-assets/bjj.webp');
+  background-image: url('../../assets/classes-assets/bjj.webp');
   background-position-y: 66%;
   justify-self: flex-end;
   width: 88%;
   flex-direction: row-reverse;
 }
 .class-w {
-  background-image: url('./classes-assets/wj.webp');
+  background-image: url('../../assets/classes-assets/wj.webp');
   background-position-y: 11%;
   width: 88%;
 }
 .class-c {
-  background-image: url('./classes-assets/sc.webp');
+  background-image: url('../../assets/classes-assets/sc.webp');
   background-position-y: center;
   justify-self: flex-end;
   width: 88%;
   flex-direction: row-reverse;
+}
+.class-private {
+  background-image: url('../../assets/classes-assets/private.webp');
+  background-position-y: 18%;
+  width: 88%;
 }
 .schedule-button {
   width: 100%;

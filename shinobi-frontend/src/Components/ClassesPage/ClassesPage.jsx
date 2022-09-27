@@ -17,7 +17,6 @@ const ClassesPage = () => {
                 MMA <br /> Box <br /> Muay-Thai
               </h3>
             </div>
-
             <Parallax speed={9}>
               <p className='classes-text-right'>
                 our classes Lorem ipsum dolor sit amet consectetur adipisicing
@@ -65,6 +64,19 @@ const ClassesPage = () => {
             </div>
             <Parallax speed={15}>
               <p className='classes-text-left'>
+                our classes Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Corporis, nesciunt totam nostrum provident quis placeat
+                minus sunt architecto assumenda consequuntur?
+              </p>
+            </Parallax>
+          </div>
+
+          <div className='classes class-private'>
+            <div className='classes-name'>
+              <h3>Private classes</h3>
+            </div>
+            <Parallax speed={17}>
+              <p className='classes-text-right'>
                 our classes Lorem ipsum dolor sit amet consectetur adipisicing
                 elit. Corporis, nesciunt totam nostrum provident quis placeat
                 minus sunt architecto assumenda consequuntur?
