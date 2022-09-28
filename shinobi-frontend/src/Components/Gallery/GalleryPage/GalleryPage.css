@@ -1,5 +1,6 @@
 .gallery-page {
   position: relative;
+  width: 100vw;
 }
 
 .gallery-container {
@@ -8,6 +9,7 @@
   column-count: 3;
   -webkit-column-count: 3;
   -moz-column-count: 3;
+  border: 0.15rem solid hsl(var(--clr-dark));
 }
 
 .gallery-item {

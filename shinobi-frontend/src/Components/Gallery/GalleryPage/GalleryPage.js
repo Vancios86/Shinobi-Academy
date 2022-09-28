@@ -76,7 +76,7 @@ const GalleryPage = () => {
         <div className='page-title'>
           <h3>Media Gallery</h3>
         </div>
-        <div className='gallery-container flow'>
+        <div className='gallery-container flow shadowed-box'>
           {galleryImages.map((image) => (
             <div
               className='gallery-item'
