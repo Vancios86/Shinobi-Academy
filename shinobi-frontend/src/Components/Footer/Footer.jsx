@@ -9,33 +9,14 @@ import Tilt from 'react-parallax-tilt';
 const Footer = () => {
   return (
     <div className='footer container grid text-dark'>
-      <div className='section footer-top'>
+      <div className='section footer-top shadowed-box'>
         <div className='logo-footer'>
           <Tilt>
             <img src={logoMask} loading='lazy' alt='vector-logo' />
           </Tilt>
         </div>
 
-        <h3 className='text-gold flex'>We'are all one!</h3>
-        {/* <div className='footer-menu'>
-          <ul>
-            <li>
-              <a href='#'>Home</a>
-            </li>
-            <li>
-              <a href='#'>About</a>
-            </li>
-            <li>
-              <a href='#'>Classes</a>
-            </li>
-            <li>
-              <a href='#'>Gallery</a>
-            </li>
-            <li>
-              <a href='#'>Camps</a>
-            </li>
-          </ul>
-        </div> */}
+        <h3 className='text-gold flex'>We are all one!</h3>
 
         <IconContext.Provider
           value={{
