@@ -1,7 +1,7 @@
 import './AboutPage.css';
 import { Parallax } from 'react-scroll-parallax';
 import Tilt from 'react-parallax-tilt';
-import data from '../../data.json';
+import data from './coaches-data.json';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 
