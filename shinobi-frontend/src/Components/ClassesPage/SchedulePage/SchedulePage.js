@@ -38,8 +38,14 @@ const SchedulePage = () => {
         <div className='page-title'>
           <h3>Weekly Schedule</h3>
         </div>
-        <div className='schedule-container flow flex'>
-          <h3>Here will be displayed the schedule</h3>
+        <div className='schedule-container'>
+          <img
+            src='http://drive.google.com/uc?export=view&id=1yQKFngCjADBS1KwnDn9ehXNossU1UhTC'
+            alt='schedule'
+            width={'100%'}
+            height={'100%'}
+            loading='lazy'
+          />
         </div>
       </div>
       <div className='secondary-page-footer'>

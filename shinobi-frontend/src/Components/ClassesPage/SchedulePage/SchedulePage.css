@@ -1,16 +1,77 @@
 .schedule-page {
-  min-height: 100vh;
-  width: 99vw;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
+  width: 100vw;
   position: relative;
 }
 .schedule-container {
-  border: 0.15rem solid hsl(var(--clr-dark));
-  width: 90vw;
-  max-width: 77rem;
-  height: 30rem;
-  margin: 2rem 0;
+  height: auto;
+  max-width: 80rem;
+  height: 100vh;
+  max-height: 48rem;
+  margin-bottom: 3rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .schedule-container > img {
+    display: none;
+  }
+  .schedule-container {
+    width: 100vw;
+    background-size: 1300px 100%;
+    background-image: url('http://drive.google.com/uc?export=view&id=1yQKFngCjADBS1KwnDn9ehXNossU1UhTC');
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+@media screen and (max-width: 700px) {
+  .schedule-container {
+    background-size: 1200px 100%;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .schedule-container {
+    background-size: 1100px 100%;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .schedule-container {
+    background-size: 1050px 100%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .schedule-container {
+    background-size: 1000px 100%;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .schedule-container {
+    background-size: 950px 100%;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .schedule-container {
+    background-size: 900px 100%;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .schedule-container {
+    background-size: 840px 100%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .schedule-container {
+    background-size: 800px 100%;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .schedule-container {
+    background-size: 700px 100%;
+  }
 }
