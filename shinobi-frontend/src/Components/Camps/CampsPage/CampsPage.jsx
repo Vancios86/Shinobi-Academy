@@ -4,15 +4,20 @@ import Footer from '../../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
+//TODO: solve the go to top issue
+
 const CampsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('rendering camps page begin');
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+    console.log('rendering camps page end!!!');
   });
+
   return (
     <div className='camps-page container'>
       <div className='welcome-logo flex'>
@@ -41,16 +46,19 @@ const CampsPage = () => {
               past.
             </p>
           </div>
-          <div className='camps-container flow flex'>
+
+          <div className='camps-container flow'>
             <hr />
-            <section className='section1'>
+
+            <section className='section1 camp-section shadowed-box'>
               <h2 className='camp-title flex'>Team Ryano</h2>
-              <div style={{ padding: '75% 0 0 0', position: 'relative' }}>
+              <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
                 <iframe
-                  src='https://player.vimeo.com/video/748805260?h=c8016ae329&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
+                  src='https://player.vimeo.com/video/755202131?h=b12193bd19&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
                   frameBorder='0'
                   allow='autoplay; fullscreen; picture-in-picture'
                   allowFullScreen
+                  loading='lazy'
                   style={{
                     position: 'absolute',
                     top: '0',
@@ -61,46 +69,77 @@ const CampsPage = () => {
                   title='Team Ryano'
                 ></iframe>
               </div>
-              <script src='https://player.vimeo.com/api/player.js'></script>
-              <p className='camp-description'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestiae cum, eum assumenda blanditiis voluptas voluptate
-                dolorem ut rem nemo, quisquam illum placeat impedit totam
-                voluptatum a non debitis ad sequi fuga?
-              </p>
             </section>
-            <section className='section2'>
+
+            <section className='section2 camp-section shadowed-box'>
               <h2 className='camp-title flex'>Silverback Jiujitsu</h2>
-              <p className='camp-description'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestiae cum, eum assumenda blanditiis voluptas voluptate
-                dolorem ut rem nemo, quisquam illum placeat impedit totam
-                voluptatum a non debitis ad sequi fuga?
-              </p>
+              <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+                <iframe
+                  src='https://player.vimeo.com/video/755202930?h=d537e645c5&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
+                  frameBorder='0'
+                  allow='autoplay; fullscreen; picture-in-picture'
+                  allowFullScreen
+                  loading='lazy'
+                  style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  title='Silverback.mp4'
+                ></iframe>
+              </div>
             </section>
-            <section className='section3'>
-              <h2 className='camp-title flex'>Holohan Martial Arts</h2>
-              <p className='camp-description'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestiae cum, eum assumenda blanditiis voluptas voluptate
-                dolorem ut rem nemo, quisquam illum placeat impedit totam
-                voluptatum a non debitis ad sequi fuga?
-              </p>
+
+            <section className='section3 camp-section shadowed-box'>
+              <h2 className='camp-title flex'>Mark Roper</h2>
+              <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+                <iframe
+                  src='https://player.vimeo.com/video/752482165?h=2b609f21c0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
+                  frameBorder='0'
+                  allow='autoplay; fullscreen; picture-in-picture'
+                  allowFullScreen
+                  loading='lazy'
+                  style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  title='MarkRoper.mp4'
+                ></iframe>
+              </div>
             </section>
-            <section className='section4'>
-              <h2 className='camp-title flex'>Team MMA</h2>
-              <p className='camp-description'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestiae cum, eum assumenda blanditiis voluptas voluptate
-                dolorem ut rem nemo, quisquam illum placeat impedit totam
-                voluptatum a non debitis ad sequi fuga?
-              </p>
+
+            <section className='section4 camp-section shadowed-box'>
+              <h2 className='camp-title flex'>Irish Strength Institute</h2>
+              <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+                <iframe
+                  src='https://player.vimeo.com/video/755204264?h=c33611bc76&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'
+                  frameBorder='0'
+                  allow='autoplay; fullscreen; picture-in-picture'
+                  allowFullScreen
+                  loading='lazy'
+                  style={{
+                    position: 'absolute',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  title='ISI.mp4'
+                ></iframe>
+              </div>
+              <script src='https://player.vimeo.com/api/player.js'></script>
             </section>
+
             <hr />
           </div>
-          <p>
+          <p className='flex' style={{ paddingBlockEnd: '3rem' }}>
             For any information you might need regarding our camps please
-            contact us using your favourite method of <a href='#'>contact</a>
+            contact us!
           </p>
         </div>
       </div>
