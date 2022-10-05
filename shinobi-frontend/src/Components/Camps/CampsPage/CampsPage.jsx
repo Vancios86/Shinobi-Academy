@@ -2,21 +2,23 @@ import './CampsPage.css';
 import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-
-//TODO: solve the go to top issue
+import { useEffect, useState } from 'react';
 
 const CampsPage = () => {
+  const [enteringCampsPage, setEnteringCampsPage] = useState(false);
   const navigate = useNavigate();
 
+  console.log(enteringCampsPage);
+
   useEffect(() => {
-    console.log('rendering camps page begin');
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    console.log('rendering camps page end!!!');
-  });
+    setEnteringCampsPage(true);
+    if (enteringCampsPage) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, [enteringCampsPage]);
 
   return (
     <div className='camps-page container'>
@@ -41,15 +43,12 @@ const CampsPage = () => {
               The Dojo is available for training camps for teams and clubs. The
               strength and conditioning room is also available for small groups.
               We also run our own training camps and we have guests and coaches
-              from all over the world throughout the year. Down below you can
-              find captures from some of the training camps we have run in the
-              past.
+              from all over the world throughout the year. Below you can find
+              captures from some of the training camps we have run in the past.
             </p>
           </div>
 
           <div className='camps-container flow'>
-            <hr />
-
             <section className='section1 camp-section shadowed-box'>
               <h2 className='camp-title flex'>Team Ryano</h2>
               <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
@@ -134,10 +133,8 @@ const CampsPage = () => {
               </div>
               <script src='https://player.vimeo.com/api/player.js'></script>
             </section>
-
-            <hr />
           </div>
-          <p className='flex' style={{ paddingBlockEnd: '3rem' }}>
+          <p className='flex' style={{ padding: '3rem 0 3rem 0' }}>
             For any information you might need regarding our camps please
             contact us!
           </p>
