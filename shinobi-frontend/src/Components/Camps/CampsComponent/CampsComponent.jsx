@@ -1,6 +1,7 @@
 import './CampsComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
+import backgroundImage from '../../../assets/images/camps-background.webp';
 
 const CampsComponent = () => {
   return (
@@ -22,7 +23,12 @@ const CampsComponent = () => {
             <Link to='/camps'>View details</Link>
           </button>
         </div>
-        <div className='camps-background'></div>
+        <div
+          className='camps-background'
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+          }}
+        ></div>
       </div>
     </Parallax>
   );
