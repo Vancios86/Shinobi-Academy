@@ -19,8 +19,6 @@ const WelcomePage = () => {
     window.innerWidth < 501 ? setIsMobile(true) : setIsMobile(false);
   }, []);
 
-  console.log('is mobile: ', isMobile);
-
   return (
     <div className='welcome-page'>
       <Logo />
