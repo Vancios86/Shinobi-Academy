@@ -1,17 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './WelcomePage.css';
 import Logo from '../Logo/Logo';
 import WelcomeVideo from '../../assets/welcome.mp4';
+import WelcomeMobileVideo from '../../assets/welcome-mobile.mp4';
 import { useNavigate } from 'react-router-dom';
 import { GiSoundOn, GiSoundOff } from 'react-icons/gi';
 
 const WelcomePage = () => {
   const [withSound, setWithSound] = useState(false);
+  const [isMobile, setIsMobile] = useState(undefined);
   const navigate = useNavigate();
 
   const handleSound = () => {
     return setWithSound(!withSound);
   };
+
+  useEffect(() => {
+    window.innerWidth < 501 ? setIsMobile(true) : setIsMobile(false);
+  }, []);
+
+  console.log('is mobile: ', isMobile);
 
   return (
     <div className='welcome-page'>
@@ -43,7 +51,10 @@ const WelcomePage = () => {
         loading='lazy'
         className='welcome-video'
       >
-        <source src={WelcomeVideo} type='video/mp4' />
+        <source
+          src={isMobile ? WelcomeMobileVideo : WelcomeVideo}
+          type='video/mp4'
+        />
       </video>
       <div className='flex'>
         <button

@@ -29,7 +29,7 @@
 }
 
 .sound-icon {
-  color: hsl(var(--clr-dark));
+  color: hsl(var(--clr-red));
   font-size: 3rem;
   position: absolute;
   top: 0;
@@ -37,7 +37,7 @@
 }
 .sound-icon:hover {
   cursor: pointer;
-  color: hsl(var(--clr-red));
+  color: hsl(var(--clr-gold));
 }
 
 .presentation-text {
