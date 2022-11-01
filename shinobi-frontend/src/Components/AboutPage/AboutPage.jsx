@@ -1,26 +1,10 @@
+// import { memo } from 'react';
 import './AboutPage.css';
 import Tilt from 'react-parallax-tilt';
 import data from './coaches-data.json';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
-
-const teamMemberCard = (id, name, imgSrc) => {
-  return (
-    <Tilt
-      className='parallax-effect-glare-scale'
-      perspective={500}
-      glareEnable={true}
-      glareMaxOpacity={0.5}
-      scale={1.02}
-      key={id}
-    >
-      <div className='team-member'>
-        <img src={imgSrc} alt='coach' loading='lazy' className='coach-photo' />
-        <p className='coach-description'>{name}</p>
-      </div>
-    </Tilt>
-  );
-};
+import TeamMemberCard from './TeamMemberCard';
 
 const AboutPage = () => {
   return (
@@ -93,9 +77,9 @@ const AboutPage = () => {
             <h3>SHINOBI COACHES</h3>
           </div>
           <div className='coaches-wrapper container grid'>
-            {data.teamMembers.map((member) =>
-              teamMemberCard(member.id, member.name, member.imgSrc)
-            )}
+            {data?.teamMembers.map((member, idx) => (
+              <TeamMemberCard props={member} key={idx} />
+            ))}
           </div>
           <div className='coaches-description'>
             <p>
