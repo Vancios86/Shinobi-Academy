@@ -11,55 +11,58 @@ import { AiOutlineLeft } from 'react-icons/ai';
 const GalleryPage = () => {
   const [modal, setModal] = useState(false);
   const [tempImage, setTempImage] = useState(null);
-  // const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
-  const pageEntered = useRef(false);
+  // const pageEntered = useRef(false);
 
-  useEffect(() => console.log('component did mount or update'));
+  // console.log('current state for page eneterd is: ', pageEntered.current);
+
+  useEffect(
+    () =>
+      console.log(
+        'component did mount or update and pageEntered is: '
+        // pageEntered.current
+      )
+    // [pageEntered.current]
+  );
 
   useEffect(() => console.log('component did mount'), []);
 
-  // const rooter = document.querySelector('.test-viewport');
+  // use interesection observer to load images as they come into view
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    };
 
-  // const options = {
-  //   root: null,
-  //   rootMargin: '500px',
-  //   threshold: 0.5,
-  // };
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // console.log('entry is intersecting', entry);
+          const image = entry.target;
+          image.src = image.dataset.src;
+          observer.unobserve(image);
+        }
+      });
+    }, options);
+
+    const images = document.querySelectorAll('.gallery-image');
+    images.forEach((image) => observer.observe(image));
+  }, []);
 
   // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries, self) => {
-  //       entries.forEach((entry) => {
-  //         if (entry.isIntersecting) {
-  //           console.log('intersecting', entry.target);
-  //           loadImage(entry.target);
-  //           // if (
-  //           //   entry.target.attributes['src'].value ===
-  //           //   entry.target.attributes['data-src'].value
-  //           // ) {
-  //           //   setImageLoaded(true);
-  //           // }
-  //           self.unobserve(entry.target);
-  //         }
-  //       });
-  //     },
-  //     { rootMargin: '0px', threshold: 0.5 }
-  //   );
-  //   const imgDataSrc = document.querySelectorAll('[data-src]');
-  //   imgDataSrc.forEach((src) => observer.observe(src));
-  //   return () => imgDataSrc.forEach((src) => observer.unobserve(src));
+  //   pageEntered.current = true;
   // }, []);
 
-  // const loadImage = (target) => (target.src = target.dataset.src);
-
-  useEffect(() => {
-    pageEntered.current = true;
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }, []);
+  // useEffect(() => {
+  //   // console.log('page entered from inside use effect', pageEntered.current);
+  //   if (!pageEntered.current) {
+  //     window.scrollTo({
+  //       top: 0,
+  //       behavior: 'smooth',
+  //     });
+  //   }
+  // });
 
   const getImage = (imageSrc, imageId) => {
     setTempImage(imageSrc, imageId);
@@ -126,7 +129,6 @@ const GalleryPage = () => {
               data-src={image.src}
               alt=''
               onClick={() => getImage(image.src, image.id)}
-              onLoad={() => console.log('on load still to implement')}
             />
           ))}
         </div>
