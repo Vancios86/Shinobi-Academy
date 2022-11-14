@@ -39,10 +39,7 @@
   position: absolute;
   top: 0;
   right: 0;
-}
-.sound-icon:hover {
   cursor: pointer;
-  color: hsl(var(--clr-gold));
 }
 
 .presentation-text {
