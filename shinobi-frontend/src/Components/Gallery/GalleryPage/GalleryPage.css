@@ -1,23 +1,24 @@
 .gallery-page {
   position: relative;
-  width: 100vw;
+  width: 100%;
 }
 
-.gallery-container {
+.images-container {
   padding: 0.33rem;
   margin-bottom: 3rem;
   column-count: 3;
   -webkit-column-count: 3;
-  -moz-column-count: 3;
   border: 0.15rem solid hsl(var(--clr-dark));
 }
 
-.gallery-item {
+.gallery-image {
   transition: all 500ms ease;
+  min-height: 150px;
   cursor: pointer;
+  filter: blur(10px);
 }
 
-.gallery-item:hover {
+.gallery-image:hover {
   filter: opacity(0.8);
 }
 
@@ -71,24 +72,27 @@
 .modal.open svg:hover {
   padding: 0.3rem;
 }
-.swap-left {
+.swipe-left {
   position: fixed;
-  height: 100vh;
+  height: 100%;
   left: 0;
   bottom: 0;
   color: hsl(var(--clr-gold));
 }
-.swap-right {
+.swipe-right {
   position: fixed;
-  height: 100vh;
+  height: 100%;
   color: hsl(var(--clr-gold));
+}
+.loaded {
+  filter: blur(0);
+  transition: filter 1s linear;
 }
 
 @media screen and (max-width: 888px) {
   .gallery-container {
     column-count: 2;
     -webkit-column-count: 2;
-    -moz-column-count: 2;
   }
 }
 
@@ -96,6 +100,5 @@
   .gallery-container {
     column-count: 1;
     -webkit-column-count: 1;
-    -moz-column-count: 1;
   }
 }

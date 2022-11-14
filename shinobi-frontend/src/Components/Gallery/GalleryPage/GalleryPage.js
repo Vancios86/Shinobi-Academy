@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './GalleryPage.css';
 import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';
@@ -11,58 +11,45 @@ import { AiOutlineLeft } from 'react-icons/ai';
 const GalleryPage = () => {
   const [modal, setModal] = useState(false);
   const [tempImage, setTempImage] = useState(null);
+  const [enteringGalleryPage, setEnteringGalleryPage] = useState(false);
   const navigate = useNavigate();
-  // const pageEntered = useRef(false);
 
-  // console.log('current state for page eneterd is: ', pageEntered.current);
-
-  useEffect(
-    () =>
-      console.log(
-        'component did mount or update and pageEntered is: '
-        // pageEntered.current
-      )
-    // [pageEntered.current]
-  );
-
-  useEffect(() => console.log('component did mount'), []);
+  useEffect(() => {
+    setEnteringGalleryPage(true);
+    if (enteringGalleryPage) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, [enteringGalleryPage]);
 
   // use interesection observer to load images as they come into view
   useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
+    setTimeout(() => {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      };
 
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // console.log('entry is intersecting', entry);
-          const image = entry.target;
-          image.src = image.dataset.src;
-          observer.unobserve(image);
-        }
-      });
-    }, options);
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const image = entry.target;
+            image.src = image.dataset.src;
+            image.onload = () => {
+              image.classList.add('loaded');
+            };
+            observer.unobserve(image);
+          }
+        });
+      }, options);
 
-    const images = document.querySelectorAll('.gallery-image');
-    images.forEach((image) => observer.observe(image));
+      const images = document.querySelectorAll('.gallery-image');
+      images.forEach((image) => observer.observe(image));
+    }, 333);
   }, []);
-
-  // useEffect(() => {
-  //   pageEntered.current = true;
-  // }, []);
-
-  // useEffect(() => {
-  //   // console.log('page entered from inside use effect', pageEntered.current);
-  //   if (!pageEntered.current) {
-  //     window.scrollTo({
-  //       top: 0,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  // });
 
   const getImage = (imageSrc, imageId) => {
     setTempImage(imageSrc, imageId);
@@ -120,7 +107,7 @@ const GalleryPage = () => {
           <h3>Media Gallery</h3>
         </div>
 
-        <div className='gallery-container flow shadowed-box'>
+        <div className='images-container flow shadowed-box'>
           {galleryImages.map((image) => (
             <img
               key={image.id}
