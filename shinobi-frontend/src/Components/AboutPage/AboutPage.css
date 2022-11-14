@@ -4,12 +4,12 @@
   margin: 0.33rem;
 }
 
-aside {
+.aside {
   gap: 0.33rem;
   padding: 1rem 0.33rem;
 }
 
-aside img {
+.aside img {
   float: right;
   max-height: 20rem;
   width: 50%;

@@ -57,7 +57,7 @@ const AboutPage = () => {
               machine, reverse hyper machine, sleds, Wattbike, Concept 2 rower ,
               inversion table and more.
             </p>
-            <aside>
+            <div className='aside'>
               <img src={view} loading='lazy' alt='shinobi-view' />
               <p>
                 The Dojo is available for training camps for teams and clubs.
@@ -68,7 +68,7 @@ const AboutPage = () => {
                 in the entire world. If you don't believe me, check out this
                 capture and I dare you to prove me wrong:).
               </p>
-            </aside>
+            </div>
           </div>
         </section>
 
