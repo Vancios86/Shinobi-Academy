@@ -8,8 +8,6 @@ const CampsPage = () => {
   const [enteringCampsPage, setEnteringCampsPage] = useState(false);
   const navigate = useNavigate();
 
-  console.log(enteringCampsPage);
-
   useEffect(() => {
     setEnteringCampsPage(true);
     if (enteringCampsPage) {

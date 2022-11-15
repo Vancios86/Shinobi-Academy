@@ -26,7 +26,7 @@ const AboutPage = () => {
                 <img src={colin} loading='lazy' alt='' />
               </Tilt>
             </div>
-            <p className='text-dark text-content' id='about-text'>
+            <p className='text-dark text-content'>
               Colin Byrne is a martial artist. Started training in 1997 in
               Ninjutsu and became a 3rd Dan Black Belt under Brian McCarthy. He
               has trained with Brian McCarthy with the US Marine corp and Police
@@ -57,7 +57,7 @@ const AboutPage = () => {
               machine, reverse hyper machine, sleds, Wattbike, Concept 2 rower ,
               inversion table and more.
             </p>
-            <div className='aside'>
+            <div className='aside text-dark text-content'>
               <img src={view} loading='lazy' alt='shinobi-view' />
               <p>
                 The Dojo is available for training camps for teams and clubs.
@@ -81,7 +81,7 @@ const AboutPage = () => {
               <TeamMemberCard props={member} key={idx} />
             ))}
           </div>
-          <div className='coaches-description'>
+          <div className='coaches-description text-dark text-content'>
             <p>
               <strong>Colin Byrne</strong>
               <br />
