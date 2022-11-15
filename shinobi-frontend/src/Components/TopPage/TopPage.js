@@ -6,7 +6,7 @@ const TopPage = () => {
   return (
     <div className='top-page'>
       <div className='top-content'>
-        <div className='top-logo flex'>
+        <div className='top-logo flex' id='to-top'>
           <Logo />
         </div>
         <div className='page-title' id='welcome-text'>
@@ -14,7 +14,7 @@ const TopPage = () => {
             Welcome to <span>Shinobi</span> Academy
           </h3>
         </div>
-        <div id='to-top'></div>
+        <div id='break-top'></div>
         <div className='shadowed-box' id='nav-container'>
           <Navigation />
         </div>
