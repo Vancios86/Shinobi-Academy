@@ -12,10 +12,8 @@ const CampsComponent = () => {
         </div>
         <div className='container flex'>
           <p className='text-content text-white' id='camps-component-text'>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni
-            eligendi perspiciatis est nisi iusto voluptas minima aliquid
-            repellat tempora. Perferendis quos repellat praesentium magni atque
-            repudiandae quod, dolorem id consectetur modi tenetur inventore!
+            We run our own training camps and welcome guests and coaches from
+            all over the world throughout the year...wanna join us?
           </p>
         </div>
         <div className='component-button flex'>
