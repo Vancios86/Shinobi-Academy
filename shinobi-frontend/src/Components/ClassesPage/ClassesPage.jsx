@@ -19,24 +19,23 @@ const ClassesPage = () => {
             </div>
             <Parallax speed={9}>
               <p className='classes-text-right'>
-                our classes Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Corporis, nesciunt totam nostrum provident quis placeat
-                minus sunt architecto assumenda consequuntur?
+                we will help you develop a strong and fluid striking foundation
+                based on techniques from the most efficient disciplines in the
+                world
               </p>
             </Parallax>
           </div>
 
           <div className='classes class-jj'>
             <div className='classes-name'>
-              <h3>
-                BJJ <br /> Grappling
-              </h3>
+              <h3>Brazilian Jiu-Jitsu</h3>
             </div>
             <Parallax speed={11}>
               <p className='classes-text-left'>
-                our classes Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Corporis, nesciunt totam nostrum provident quis placeat
-                minus sunt architecto assumenda consequuntur?
+                self-defense practice emphasizing grappling fighting. A good
+                workout that doesn't allow striking and teaches numerous
+                life-changing lessons, including discipline, consistency, and
+                combat methods
               </p>
             </Parallax>
           </div>
@@ -49,9 +48,10 @@ const ClassesPage = () => {
             </div>
             <Parallax speed={13}>
               <p className='classes-text-right'>
-                our classes Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Corporis, nesciunt totam nostrum provident quis placeat
-                minus sunt architecto assumenda consequuntur?
+                combat sports involving grappling-type techniques such as clinch
+                fighting, throws and takedowns, joint locks, pins and other
+                grappling holds which have been incorporated into martial arts,
+                combat sports and military systems
               </p>
             </Parallax>
           </div>
@@ -64,9 +64,9 @@ const ClassesPage = () => {
             </div>
             <Parallax speed={15}>
               <p className='classes-text-left'>
-                our classes Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Corporis, nesciunt totam nostrum provident quis placeat
-                minus sunt architecto assumenda consequuntur?
+                the practical application of sports science to enhance movement
+                quality, grounded in evidence-based research and physiology of
+                exercise and anatomy
               </p>
             </Parallax>
           </div>
@@ -77,9 +77,9 @@ const ClassesPage = () => {
             </div>
             <Parallax speed={17}>
               <p className='classes-text-right'>
-                our classes Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Corporis, nesciunt totam nostrum provident quis placeat
-                minus sunt architecto assumenda consequuntur?
+                one-on-one training with a coach, tailored to your needs and at
+                a time that suits you best - perfect for those who want to get
+                the most out of their training
               </p>
             </Parallax>
           </div>
