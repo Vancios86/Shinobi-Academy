@@ -90,14 +90,14 @@
 }
 
 @media screen and (max-width: 888px) {
-  .gallery-container {
+  .images-container {
     column-count: 2;
     -webkit-column-count: 2;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .gallery-container {
+  .images-container {
     column-count: 1;
     -webkit-column-count: 1;
   }
