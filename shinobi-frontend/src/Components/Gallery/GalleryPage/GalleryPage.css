@@ -1,6 +1,7 @@
 .gallery-page {
   position: relative;
-  width: 100%;
+  width: 100vw;
+  padding-inline: 1rem;
 }
 
 .images-container {
