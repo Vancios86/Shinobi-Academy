@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminPage.css';
 
 const AdminPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -52,9 +54,9 @@ const AdminPage = () => {
         // Successful login
         setLoginAttempts(0);
         setError('');
-        // TODO: Redirect to admin dashboard or set authentication state
         console.log('Login successful');
-        alert('Login successful! Welcome to the admin panel.');
+        // Navigate to dashboard after successful login
+        navigate('/dashboard');
       } else {
         // Failed login
         const newAttempts = loginAttempts + 1;

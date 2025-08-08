@@ -6,6 +6,7 @@ import CampsPage from './Components/Camps/CampsPage/CampsPage';
 import GalleryPage from './Components/Gallery/GalleryPage/GalleryPage';
 import SchedulePage from './Components/ClassesPage/SchedulePage/SchedulePage';
 import AdminPage from './Components/AdminPage/AdminPage';
+import AdminDashboard from './Components/AdminDashboard/AdminDashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import WelcomePage from './Components/WelcomePage/WelcomePage';
 //import reportWebVitals from './reportWebVitals';
@@ -21,6 +22,7 @@ root.render(
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
