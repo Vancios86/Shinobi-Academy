@@ -100,31 +100,15 @@ const AboutPage = () => {
               over the world, including GlobeTrotters
             </p>
             <p>
-              <strong>Keiran Ikin</strong>
-              <br />
-              MMA fighter and Purple belt in Brazilian Jiu-Jitsu. He has fought
-              under the Cage Warrior banner in the UK and was a sparring partner
-              for Conor McGregor for the Poirier2 training camp
-            </p>
-            <p>
               <strong>Ivo Guerreiro</strong>
               <br />
               MMA fighter and Jiu-Jitsu Purple belt. Ivo is training over 12
               year , great coach and a huge part of the academy
             </p>
-            <p>
-              <strong>Karl McCormack</strong>
+             <p>
+              <strong>Antonio Souza</strong>
               <br />
-              Black belt in Ninjutsu, Purple belt in Jiu-Jitsu, Trained Jiu
-              Jitsu in Abu Dhabi UAE Trained Muay Thai in Thailand. Karl has 20
-              years experience in martial arts and his own unique style to add
-              to the coaching
-            </p>
-            <p>
-              <strong>Alex “Gracie” Lino</strong>
-              <br />
-              Brown belt in Brazilian Jiu-Jitsu, Alex comes from Brazil and has
-              spent his whole life training Jiu-Jitsu, Capoeira and MMA.
+              MMA fighter and Jiu-Jitsu Purple belt. Souza has a vast experience in various styles of Martial Arts ...description ...
             </p>
           </div>
         </section>
