@@ -1,0 +1,235 @@
+.admin-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, hsl(var(--clr-white)) 0%, hsl(var(--clr-silver)) 100%);
+}
+
+.admin-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.admin-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 0 1rem;
+}
+
+.admin-login-card {
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 1rem;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.admin-title {
+  font-size: var(--fs-700);
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-2);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.form-label {
+  font-size: var(--fs-400);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 0.5rem;
+  font-size: var(--fs-400);
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.form-input::placeholder {
+  color: hsl(var(--clr-dark) / 0.6);
+}
+
+.admin-login-btn {
+  margin-top: 1rem;
+  padding: 0.875rem 2rem;
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-400);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-login-btn:hover {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.admin-login-btn:active {
+  transform: translateY(1px);
+}
+
+.admin-login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: hsl(var(--clr-dark) / 0.3);
+  color: hsl(var(--clr-dark) / 0.6);
+}
+
+.admin-login-btn:disabled:hover {
+  background: hsl(var(--clr-dark) / 0.3);
+  color: hsl(var(--clr-dark) / 0.6);
+  box-shadow: none;
+}
+
+.form-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: hsl(var(--clr-dark) / 0.1);
+}
+
+.error-message {
+  background: hsl(0 70% 50% / 0.1);
+  border: 1px solid hsl(0 70% 50%);
+  color: hsl(0 70% 50%);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: var(--fs-300);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Responsive design */
+@media screen and (max-width: 480px) {
+  .admin-main {
+    padding: 1rem 0.5rem;
+  }
+  
+  .admin-container {
+    padding: 0 0.5rem;
+  }
+  
+  .admin-login-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .admin-title {
+    font-size: var(--fs-500);
+  }
+  
+  .form-input {
+    font-size: var(--fs-300);
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .admin-login-btn {
+    font-size: var(--fs-300);
+    padding: 0.75rem 1.5rem;
+  }
+  
+}
+
+@media screen and (min-width: 481px) and (max-width: 600px) {
+  .admin-main {
+    padding: 1rem 0.5rem;
+  }
+  
+  .admin-login-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .admin-title {
+    font-size: var(--fs-600);
+  }
+  
+  .form-input {
+    font-size: var(--fs-300);
+  }
+  
+  .admin-login-btn {
+    font-size: var(--fs-300);
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 800px) {
+  .admin-container {
+    max-width: 450px;
+  }
+  
+  .admin-login-card {
+    padding: 2.5rem 2rem;
+  }
+  
+  .admin-title {
+    font-size: var(--fs-700);
+  }
+}
+
+@media screen and (min-width: 801px) {
+  .admin-container {
+    max-width: 500px;
+  }
+  
+  .admin-login-card {
+    padding: 3rem 2.5rem;
+  }
+  
+  .admin-title {
+    font-size: var(--fs-800);
+  }
+}
+
+/* Landscape orientation for mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .admin-main {
+    padding: 0.5rem 1rem;
+  }
+  
+  .admin-login-card {
+    padding: 1.5rem 2rem;
+  }
+  
+  .admin-title {
+    font-size: var(--fs-500);
+    margin-bottom: 1rem;
+  }
+  
+  .admin-form {
+    gap: 1rem;
+  }
+}
