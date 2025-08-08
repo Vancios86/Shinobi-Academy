@@ -10,23 +10,26 @@ import AdminDashboard from './Components/AdminDashboard/AdminDashboard';
 import GalleryManager from './Components/GalleryManager/GalleryManager';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import WelcomePage from './Components/WelcomePage/WelcomePage';
+import { GalleryProvider } from './contexts/GalleryContext';
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/home" element={<Main />} />
-        <Route path="/camps" element={<CampsPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/gallery-manager" element={<GalleryManager />} />
-      </Routes>
-    </BrowserRouter>
+    <GalleryProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/home" element={<Main />} />
+          <Route path="/camps" element={<CampsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/gallery-manager" element={<GalleryManager />} />
+        </Routes>
+      </BrowserRouter>
+    </GalleryProvider>
   </React.StrictMode>
 );
 

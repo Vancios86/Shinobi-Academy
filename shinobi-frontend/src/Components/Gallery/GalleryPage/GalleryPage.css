@@ -103,3 +103,18 @@
     -webkit-column-count: 1;
   }
 }
+
+/* Loading and Empty States */
+.loading-gallery {
+  text-align: center;
+  padding: 3rem;
+  color: hsl(var(--clr-dark));
+  font-size: var(--fs-400);
+}
+
+.empty-gallery-display {
+  text-align: center;
+  padding: 3rem;
+  color: hsl(var(--clr-dark) / 0.7);
+  font-size: var(--fs-400);
+}

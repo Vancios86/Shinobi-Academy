@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GalleryManager.css';
 import logo from '../../assets/logos/logo.png';
-import { galleryImages } from '../../assets/gallery-assets/gallery-assets.js';
+import { useGallery } from '../../contexts/GalleryContext';
 
 const GalleryManager = () => {
   const navigate = useNavigate();
-  const [galleryData, setGalleryData] = useState([]);
+  const { galleryData, updateGalleryData, clearGallery } = useGallery();
+  const [localGalleryData, setLocalGalleryData] = useState([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -18,14 +19,14 @@ const GalleryManager = () => {
 
   // Load initial gallery data - start with empty gallery
   useEffect(() => {
-    setGalleryData([]);
+    setLocalGalleryData([]);
   }, []);
 
   // Check for changes
   useEffect(() => {
-    const hasUnsavedChanges = galleryData.length > 0;
+    const hasUnsavedChanges = localGalleryData.length > 0;
     setHasChanges(hasUnsavedChanges);
-  }, [galleryData]);
+  }, [localGalleryData]);
 
   const handleBackToDashboard = () => {
     if (hasChanges) {
@@ -41,7 +42,7 @@ const GalleryManager = () => {
       return;
     }
 
-    const newId = Math.max(...galleryData.map(img => img.id), 0) + 1;
+    const newId = Math.max(...localGalleryData.map(img => img.id), 0) + 1;
     const imageToAdd = {
       id: newId,
       title: newImage.title,
@@ -49,7 +50,7 @@ const GalleryManager = () => {
       description: newImage.description || ''
     };
 
-    setGalleryData([...galleryData, imageToAdd]);
+    setLocalGalleryData([...localGalleryData, imageToAdd]);
     setNewImage({ title: '', src: '', description: '' });
   };
 
@@ -58,10 +59,10 @@ const GalleryManager = () => {
   };
 
   const handleSaveEdit = (id) => {
-    const updatedData = galleryData.map(img => 
+    const updatedData = localGalleryData.map(img => 
       img.id === id ? { ...img, title: img.title, description: img.description } : img
     );
-    setGalleryData(updatedData);
+    setLocalGalleryData(updatedData);
     setEditingId(null);
   };
 
@@ -72,20 +73,20 @@ const GalleryManager = () => {
   const handleDeleteImage = (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this image?');
     if (confirmDelete) {
-      setGalleryData(galleryData.filter(img => img.id !== id));
+      setLocalGalleryData(localGalleryData.filter(img => img.id !== id));
     }
   };
 
   const handleMoveImage = (id, direction) => {
-    const currentIndex = galleryData.findIndex(img => img.id === id);
+    const currentIndex = localGalleryData.findIndex(img => img.id === id);
     if (currentIndex === -1) return;
 
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= galleryData.length) return;
+    if (newIndex < 0 || newIndex >= localGalleryData.length) return;
 
-    const newData = [...galleryData];
+    const newData = [...localGalleryData];
     [newData[currentIndex], newData[newIndex]] = [newData[newIndex], newData[currentIndex]];
-    setGalleryData(newData);
+    setLocalGalleryData(newData);
   };
 
   const handleDeployChanges = async () => {
@@ -95,11 +96,8 @@ const GalleryManager = () => {
       // Simulate deployment process
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // TODO: Implement actual deployment logic here
-      // This would typically involve:
-      // 1. Saving to a database
-      // 2. Updating the gallery-assets.js file
-      // 3. Triggering a rebuild/redeploy
+      // Update the global gallery data
+      updateGalleryData(localGalleryData);
       
       alert('Gallery changes deployed successfully!');
       setHasChanges(false);
@@ -111,7 +109,7 @@ const GalleryManager = () => {
   };
 
   const handleInputChange = (id, field, value) => {
-    setGalleryData(galleryData.map(img => 
+    setLocalGalleryData(localGalleryData.map(img => 
       img.id === id ? { ...img, [field]: value } : img
     ));
   };
@@ -192,10 +190,10 @@ const GalleryManager = () => {
           {/* Gallery Images Section */}
           <div className='gallery-images-section'>
             <h2 className='section-title text-red'>
-              Gallery Images ({galleryData.length})
+              Gallery Images ({localGalleryData.length})
             </h2>
             
-            {galleryData.length === 0 ? (
+            {localGalleryData.length === 0 ? (
               <div className='empty-gallery shadowed-box'>
                 <div className='empty-gallery-icon'>
                   <svg viewBox="0 0 24 24" fill="currentColor" className='empty-icon-svg'>
@@ -209,7 +207,7 @@ const GalleryManager = () => {
               </div>
             ) : (
               <div className='images-grid'>
-                {galleryData.map((image, index) => (
+                {localGalleryData.map((image, index) => (
                   <div key={image.id} className='image-card shadowed-box'>
                     <div className='image-preview'>
                       <img 
@@ -271,7 +269,7 @@ const GalleryManager = () => {
                               </button>
                               <button 
                                 onClick={() => handleMoveImage(image.id, 'down')}
-                                disabled={index === galleryData.length - 1}
+                                disabled={index === localGalleryData.length - 1}
                                 className='move-btn'
                                 title='Move Down'
                               >

@@ -3,12 +3,13 @@ import './GalleryPage.css';
 import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
-import { galleryImages } from '../../../assets/gallery-assets/gallery-assets';
+import { useGallery } from '../../../contexts/GalleryContext';
 import { AiOutlineClose } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 import { AiOutlineLeft } from 'react-icons/ai';
 
 const GalleryPage = () => {
+  const { galleryData, isLoaded } = useGallery();
   const [modal, setModal] = useState(false);
   const [tempImage, setTempImage] = useState(null);
   const [enteringGalleryPage, setEnteringGalleryPage] = useState(false);
@@ -56,21 +57,21 @@ const GalleryPage = () => {
     setModal(true);
   };
 
-  const getPrevPhoto = ([galleryImages], imageSrc) => {
-    let imgObj = galleryImages.find((image) => image.src === imageSrc);
+  const getPrevPhoto = (imageSrc) => {
+    let imgObj = galleryData.find((image) => image.src === imageSrc);
     let prevImgObj =
       imgObj.id > 1
-        ? galleryImages[galleryImages.indexOf(imgObj) - 1].src
-        : galleryImages[galleryImages.length - 1].src;
+        ? galleryData[galleryData.indexOf(imgObj) - 1].src
+        : galleryData[galleryData.length - 1].src;
     setTempImage(prevImgObj);
   };
 
-  const getNextPhoto = ([galleryImages], imageSrc) => {
-    let imgObj = galleryImages.find((image) => image.src === imageSrc);
+  const getNextPhoto = (imageSrc) => {
+    let imgObj = galleryData.find((image) => image.src === imageSrc);
     let nextImgObj =
-      imgObj.id < galleryImages.length
-        ? galleryImages[galleryImages.indexOf(imgObj) + 1].src
-        : galleryImages[0].src;
+      imgObj.id < galleryData.length
+        ? galleryData[galleryData.indexOf(imgObj) + 1].src
+        : galleryData[0].src;
     setTempImage(nextImgObj);
   };
 
@@ -95,11 +96,11 @@ const GalleryPage = () => {
         />
         <AiOutlineLeft
           className='swipe-left'
-          onClick={() => getPrevPhoto([galleryImages], tempImage)}
+          onClick={() => getPrevPhoto(tempImage)}
         />
         <AiOutlineRight
           className='swipe-right'
-          onClick={() => getNextPhoto([galleryImages], tempImage)}
+          onClick={() => getNextPhoto(tempImage)}
         />
       </div>
       <div className='gallery-page-content'>
@@ -108,16 +109,26 @@ const GalleryPage = () => {
         </div>
 
         <div className='images-container flow shadowed-box'>
-          {galleryImages.map((image) => (
-            <img
-              key={image.id}
-              className='gallery-image'
-              src={''}
-              data-src={image.src}
-              alt=''
-              onClick={() => getImage(image.src, image.id)}
-            />
-          ))}
+          {!isLoaded ? (
+            <div className='loading-gallery'>
+              <p>Loading gallery...</p>
+            </div>
+          ) : galleryData.length === 0 ? (
+            <div className='empty-gallery-display'>
+              <p>No images in gallery yet.</p>
+            </div>
+          ) : (
+            galleryData.map((image) => (
+              <img
+                key={image.id}
+                className='gallery-image'
+                src={''}
+                data-src={image.src}
+                alt={image.title || 'Gallery image'}
+                onClick={() => getImage(image.src, image.id)}
+              />
+            ))
+          )}
         </div>
       </div>
       <div className='secondary-page-footer'>
