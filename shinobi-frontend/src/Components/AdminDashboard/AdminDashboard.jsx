@@ -12,9 +12,7 @@ const AdminDashboard = () => {
   };
 
   const handleUpdateGallery = () => {
-    // TODO: Implement gallery update functionality
-    console.log('Update gallery clicked');
-    alert('Gallery update functionality coming soon!');
+    navigate('/gallery-manager');
   };
 
   const handleUpdateCoaches = () => {
