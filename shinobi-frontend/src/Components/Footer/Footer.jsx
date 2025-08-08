@@ -81,7 +81,6 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <p className='flex created-by'>Created by I. Albu</p>
       </IconContext.Provider>
     </div>
   );

@@ -2,6 +2,10 @@
   position: relative;
   width: 100vw;
   padding-inline: 1rem;
+
+  .gallery-page-content {
+    min-height: 70vh;
+  }
 }
 
 .images-container {
