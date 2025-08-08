@@ -1,0 +1,521 @@
+.coaches-manager {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, hsl(var(--clr-white)) 0%, hsl(var(--clr-silver)) 100%);
+}
+
+.manager-header {
+  background: hsl(var(--clr-white));
+  border-bottom: 2px solid hsl(var(--clr-dark));
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px hsl(var(--clr-dark) / 0.1);
+}
+
+.manager-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.manager-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.manager-logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.manager-title {
+  font-size: var(--fs-600);
+  font-weight: bold;
+  color: hsl(var(--clr-red));
+  text-transform: uppercase;
+  letter-spacing: var(--ls-2);
+  margin: 0;
+}
+
+.back-btn {
+  padding: 0.5rem 1.5rem;
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-300);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.manager-main {
+  flex: 1;
+  padding: 2rem 1rem;
+}
+
+.manager-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: var(--fs-500);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+}
+
+/* Add Coach Section */
+.add-coach-section {
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.add-coach-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: var(--fs-300);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+}
+
+.form-input, .form-textarea {
+  padding: 0.75rem 1rem;
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 0.5rem;
+  font-size: var(--fs-300);
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.add-btn {
+  padding: 0.875rem 2rem;
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-400);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.add-btn:hover {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+/* Coaches Section */
+.coaches-section {
+  margin-bottom: 2rem;
+}
+
+/* Empty Coaches State */
+.empty-coaches {
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 1rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border-style: dashed;
+  border-width: 3px;
+}
+
+.empty-coaches-icon {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+  background: hsl(var(--clr-red) / 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon-svg {
+  width: 60px;
+  height: 60px;
+  color: hsl(var(--clr-red));
+}
+
+.empty-coaches-title {
+  font-size: var(--fs-600);
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+}
+
+.empty-coaches-text {
+  font-size: var(--fs-400);
+  opacity: 0.8;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.coaches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.coach-card {
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.coach-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px hsl(var(--clr-dark) / 0.15);
+}
+
+.coach-preview {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: hsl(var(--clr-silver));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.coach-card:hover .preview-img {
+  transform: scale(1.05);
+}
+
+.coach-info {
+  padding: 1.5rem;
+}
+
+.coach-name {
+  font-size: var(--fs-500);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--clr-dark));
+}
+
+.coach-specialty {
+  font-size: var(--fs-300);
+  color: hsl(var(--clr-red));
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+}
+
+.coach-description {
+  font-size: var(--fs-300);
+  color: hsl(var(--clr-dark) / 0.8);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.coach-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.edit-btn, .delete-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: var(--fs-200);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.edit-btn {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  border-color: hsl(var(--clr-red));
+}
+
+.edit-btn:hover {
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+}
+
+.delete-btn {
+  background: hsl(var(--clr-white));
+  color: hsl(0 70% 50%);
+  border-color: hsl(0 70% 50%);
+}
+
+.delete-btn:hover {
+  background: hsl(0 70% 50%);
+  color: hsl(var(--clr-white));
+}
+
+.move-buttons {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.move-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid hsl(var(--clr-dark));
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--fs-300);
+  font-weight: bold;
+}
+
+.move-btn:hover:not(:disabled) {
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border-color: hsl(var(--clr-red));
+}
+
+.move-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Edit Form */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.edit-input, .edit-textarea {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 0.5rem;
+  font-size: var(--fs-300);
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.edit-input:focus, .edit-textarea:focus {
+  outline: none;
+  border-color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.edit-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.save-btn, .cancel-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: var(--fs-200);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.save-btn {
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border-color: hsl(var(--clr-red));
+}
+
+.save-btn:hover {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+}
+
+.cancel-btn {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark));
+  border-color: hsl(var(--clr-dark));
+}
+
+.cancel-btn:hover {
+  background: hsl(var(--clr-dark));
+  color: hsl(var(--clr-white));
+}
+
+/* Deploy Section */
+.deploy-section {
+  text-align: center;
+  padding: 2rem;
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.deploy-btn {
+  padding: 1rem 3rem;
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-500);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deploy-btn:hover:not(:disabled) {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.3rem hsl(var(--clr-red) / 0.3);
+  transform: translateY(-2px);
+}
+
+.deploy-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.changes-notice {
+  margin-top: 1rem;
+  font-size: var(--fs-300);
+  color: hsl(var(--clr-red));
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .manager-header {
+    padding: 1rem;
+  }
+  
+  .manager-header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .manager-logo {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .manager-title {
+    font-size: var(--fs-500);
+  }
+  
+  .manager-logo-img {
+    height: 40px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .coaches-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .coach-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .move-buttons {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .deploy-btn {
+    padding: 0.875rem 2rem;
+    font-size: var(--fs-400);
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .coaches-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  .coaches-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,12 +1,14 @@
 // import { memo } from 'react';
 import './AboutPage.css';
 import Tilt from 'react-parallax-tilt';
-import data from './coaches-data.json';
+import { useCoaches } from '../../contexts/CoachesContext';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 import TeamMemberCard from './TeamMemberCard';
 
 const AboutPage = () => {
+  const { coachesData, isLoaded } = useCoaches();
+  
   return (
     <div className='about-page grid'>
       <div className='page-title' id='about-page'>
@@ -77,9 +79,19 @@ const AboutPage = () => {
             <h3>SHINOBI COACHES</h3>
           </div>
           <div className='coaches-wrapper container grid'>
-            {data?.teamMembers.map((member, idx) => (
-              <TeamMemberCard props={member} key={idx} />
-            ))}
+            {!isLoaded ? (
+              <div className='loading-coaches'>
+                <p>Loading coaches...</p>
+              </div>
+            ) : coachesData.length === 0 ? (
+              <div className='empty-coaches-display'>
+                <p>No coaches available yet.</p>
+              </div>
+            ) : (
+              coachesData.map((member, idx) => (
+                <TeamMemberCard props={member} key={idx} />
+              ))
+            )}
           </div>
           <div className='coaches-description text-dark text-content'>
             <p>

@@ -16,9 +16,7 @@ const AdminDashboard = () => {
   };
 
   const handleUpdateCoaches = () => {
-    // TODO: Implement coaches update functionality
-    console.log('Update coaches clicked');
-    alert('Coaches update functionality coming soon!');
+    navigate('/coaches-manager');
   };
 
   return (

@@ -143,3 +143,20 @@
     grid-template-rows: 1fr;
   }
 }
+
+/* Loading and Empty States */
+.loading-coaches {
+  text-align: center;
+  padding: 2rem;
+  color: hsl(var(--clr-dark));
+  font-size: var(--fs-400);
+  grid-column: 1 / -1;
+}
+
+.empty-coaches-display {
+  text-align: center;
+  padding: 2rem;
+  color: hsl(var(--clr-dark) / 0.7);
+  font-size: var(--fs-400);
+  grid-column: 1 / -1;
+}
