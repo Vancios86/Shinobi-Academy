@@ -6,7 +6,7 @@ import { useCoaches } from '../../contexts/CoachesContext';
 
 const CoachesManager = () => {
   const navigate = useNavigate();
-  const { coachesData, updateCoachesData, clearCoaches } = useCoaches();
+  const { coachesData, updateCoachesData } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);

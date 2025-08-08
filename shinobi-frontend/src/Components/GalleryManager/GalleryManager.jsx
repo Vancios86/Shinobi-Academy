@@ -6,7 +6,7 @@ import { useGallery } from '../../contexts/GalleryContext';
 
 const GalleryManager = () => {
   const navigate = useNavigate();
-  const { galleryData, updateGalleryData, clearGallery } = useGallery();
+  const { galleryData, updateGalleryData } = useGallery();
   const [localGalleryData, setLocalGalleryData] = useState([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
