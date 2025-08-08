@@ -18,16 +18,16 @@ const CoachesManager = () => {
     specialty: ''
   });
 
-  // Load initial coaches data - start with empty coaches
+  // Load initial coaches data from global context
   useEffect(() => {
-    setLocalCoachesData([]);
-  }, []);
+    setLocalCoachesData([...coachesData]);
+  }, [coachesData]);
 
   // Check for changes
   useEffect(() => {
-    const hasUnsavedChanges = localCoachesData.length > 0;
+    const hasUnsavedChanges = JSON.stringify(localCoachesData) !== JSON.stringify(coachesData);
     setHasChanges(hasUnsavedChanges);
-  }, [localCoachesData]);
+  }, [localCoachesData, coachesData]);
 
   const handleBackToDashboard = () => {
     if (hasChanges) {

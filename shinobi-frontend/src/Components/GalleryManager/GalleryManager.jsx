@@ -17,16 +17,16 @@ const GalleryManager = () => {
     description: ''
   });
 
-  // Load initial gallery data - start with empty gallery
+  // Load initial gallery data from global context
   useEffect(() => {
-    setLocalGalleryData([]);
-  }, []);
+    setLocalGalleryData([...galleryData]);
+  }, [galleryData]);
 
   // Check for changes
   useEffect(() => {
-    const hasUnsavedChanges = localGalleryData.length > 0;
+    const hasUnsavedChanges = JSON.stringify(localGalleryData) !== JSON.stringify(galleryData);
     setHasChanges(hasUnsavedChanges);
-  }, [localGalleryData]);
+  }, [localGalleryData, galleryData]);
 
   const handleBackToDashboard = () => {
     if (hasChanges) {
