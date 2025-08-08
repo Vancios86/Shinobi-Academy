@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminPage.css';
+import { useAuth } from '../../contexts/AuthContext';
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -55,8 +57,9 @@ const AdminPage = () => {
         setLoginAttempts(0);
         setError('');
         console.log('Login successful');
-        // Navigate to dashboard after successful login
-        navigate('/dashboard');
+        // Set authentication and navigate to dashboard
+        login();
+        navigate('/admin/dashboard');
       } else {
         // Failed login
         const newAttempts = loginAttempts + 1;

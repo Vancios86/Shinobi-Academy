@@ -2,21 +2,23 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import logo from '../../assets/logos/logo.png';
+import { useAuth } from '../../contexts/AuthContext';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    // TODO: Implement proper logout logic
+    logout();
     navigate('/admin');
   };
 
   const handleUpdateGallery = () => {
-    navigate('/gallery-manager');
+    navigate('/admin/gallery-manager');
   };
 
   const handleUpdateCoaches = () => {
-    navigate('/coaches-manager');
+    navigate('/admin/coaches-manager');
   };
 
   return (
