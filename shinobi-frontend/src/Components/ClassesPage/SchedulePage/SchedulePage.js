@@ -6,18 +6,12 @@ import { useEffect } from 'react';
 
 const SchedulePage = () => {
   useEffect(() => {
-    console.log(
-      'X position :',
-      window.scrollX,
-      ' |Y position: ',
-      window.scrollY
-    );
-
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   });
+  
   const navigate = useNavigate();
   return (
     <div className='schedule-page container'>

@@ -3,7 +3,6 @@ import Tilt from 'react-parallax-tilt';
 
 const TeamMemberCard = ({ props }) => {
   const { id, name, imgSrc } = { ...props };
-  console.error("id", id, "name", name, "imgSrc", imgSrc);
 
   return (
     <Tilt

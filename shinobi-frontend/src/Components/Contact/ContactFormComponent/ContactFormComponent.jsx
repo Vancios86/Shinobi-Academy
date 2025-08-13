@@ -20,17 +20,13 @@ const ContactFormComponent = () => {
     setSending(true);
     send('service_mtav7vb', 'template_okhram8', toSend, 'YLAsSYEnWm66148GH')
       .then((response) => {
-        setTimeout(() => {
-          setSending(false);
-          setToSend({ from_name: '', reply_to: '', message: '' });
-          setSubmitMessage('Message sent!');
-        }, 1000);
-        console.log('SUCCESS!', response.status, response.text);
+        setSubmitMessage('Message sent successfully!');
+        setSending(false);
+        setToSend({ name: '', email: '', message: '' });
       })
       .catch((err) => {
+        setSubmitMessage('Failed to send message. Please try again.');
         setSending(false);
-        setSubmitMessage('Sending message failed!!!');
-        console.log('FAILED...', err);
       });
   }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GalleryManager.css';
 import logo from '../../assets/logos/logo.png';
@@ -11,6 +11,11 @@ const GalleryManager = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
+  const [draggedImageId, setDraggedImageId] = useState(null);
+  const fileInputRef = useRef(null);
   const [newImage, setNewImage] = useState({
     title: '',
     src: '',
@@ -52,6 +57,125 @@ const GalleryManager = () => {
 
     setLocalGalleryData([...localGalleryData, imageToAdd]);
     setNewImage({ title: '', src: '', description: '' });
+  };
+
+  // Drag & Drop File Upload Functions
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  };
+
+  const handleFileSelect = (event) => {
+    const files = Array.from(event.target.files);
+    handleFiles(files);
+  };
+
+  const handleFiles = async (files) => {
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert(`File ${file.name} is not an image. Please upload only image files.`);
+          continue;
+        }
+
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+          continue;
+        }
+
+        // Simulate upload progress
+        await new Promise(resolve => {
+          const interval = setInterval(() => {
+            setUploadProgress(prev => {
+              const newProgress = prev + Math.random() * 20;
+              if (newProgress >= 100) {
+                clearInterval(interval);
+                resolve();
+                return 100;
+              }
+              return newProgress;
+            });
+          }, 200);
+        });
+
+        // Create image object from file
+        const newId = Math.max(...localGalleryData.map(img => img.id), 0) + 1;
+        const imageToAdd = {
+          id: newId,
+          title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for title
+          src: URL.createObjectURL(file),
+          description: `Uploaded on ${new Date().toLocaleDateString()}`
+        };
+
+        setLocalGalleryData(prev => [...prev, imageToAdd]);
+      }
+
+      alert(`${files.length} image(s) uploaded successfully!`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('An error occurred during upload. Please try again.');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Drag & Drop Reordering Functions
+  const handleDragStart = (e, imageId) => {
+    setDraggedImageId(imageId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOverImage = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDropImage = (e, targetImageId) => {
+    e.preventDefault();
+    
+    if (draggedImageId === targetImageId) return;
+
+    const draggedIndex = localGalleryData.findIndex(img => img.id === draggedImageId);
+    const targetIndex = localGalleryData.findIndex(img => img.id === targetImageId);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const newData = [...localGalleryData];
+    const [draggedItem] = newData.splice(draggedIndex, 1);
+    newData.splice(targetIndex, 0, draggedItem);
+    
+    setLocalGalleryData(newData);
+    setDraggedImageId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedImageId(null);
   };
 
   const handleEditImage = (id) => {
@@ -139,6 +263,55 @@ const GalleryManager = () => {
           {/* Add New Image Section */}
           <div className='add-image-section shadowed-box'>
             <h2 className='section-title text-red'>Add New Image</h2>
+            
+            {/* Drag & Drop Upload Area */}
+            <div className='upload-section'>
+              <div 
+                className={`upload-area ${dragOver ? 'drag-over' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className='upload-content'>
+                  <div className='upload-icon'>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className='upload-icon-svg'>
+                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                  </div>
+                  <h3 className='upload-title'>Drop images here or click to browse</h3>
+                  <p className='upload-subtitle'>
+                    Supports: JPG, PNG, GIF, WebP • Max size: 10MB
+                  </p>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    multiple
+                    accept='image/*'
+                    onChange={handleFileSelect}
+                    className='file-input'
+                  />
+                </div>
+              </div>
+
+              {isUploading && (
+                <div className='upload-progress'>
+                  <div className='progress-bar'>
+                    <div 
+                      className='progress-fill' 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className='progress-text'>Uploading... {Math.round(uploadProgress)}%</p>
+                </div>
+              )}
+            </div>
+
+            <div className='upload-divider'>
+              <span>OR</span>
+            </div>
+
+            {/* Manual Form */}
             <div className='add-image-form'>
               <div className='form-row'>
                 <div className='form-group'>
@@ -189,9 +362,16 @@ const GalleryManager = () => {
 
           {/* Gallery Images Section */}
           <div className='gallery-images-section'>
-            <h2 className='section-title text-red'>
-              Gallery Images ({localGalleryData.length})
-            </h2>
+            <div className='section-header'>
+              <h2 className='section-title text-red'>
+                Gallery Images ({localGalleryData.length})
+              </h2>
+              {localGalleryData.length > 0 && (
+                <div className='drag-instructions'>
+                  <span className='drag-hint'>💡 Drag images to reorder them</span>
+                </div>
+              )}
+            </div>
             
             {localGalleryData.length === 0 ? (
               <div className='empty-gallery shadowed-box'>
@@ -208,7 +388,18 @@ const GalleryManager = () => {
             ) : (
               <div className='images-grid'>
                 {localGalleryData.map((image, index) => (
-                  <div key={image.id} className='image-card shadowed-box'>
+                  <div
+                    key={image.id}
+                    className={`image-card shadowed-box ${
+                      draggedImageId === image.id ? 'dragging' : ''
+                    }`}
+                    onDragOver={handleDragOverImage}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDropImage(e, image.id)}
+                    onDragEnd={handleDragEnd}
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, image.id)}
+                  >
                     <div className='image-preview'>
                       <img 
                         src={image.src} 

@@ -56,7 +56,6 @@ const AdminPage = () => {
         // Successful login
         setLoginAttempts(0);
         setError('');
-        console.log('Login successful');
         // Set authentication and navigate to dashboard
         login();
         navigate('/admin/dashboard');
