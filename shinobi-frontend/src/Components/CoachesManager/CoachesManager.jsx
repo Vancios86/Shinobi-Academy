@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CoachesManager.css';
 import logo from '../../assets/logos/logo.png';
@@ -13,6 +13,11 @@ const CoachesManager = () => {
   const [editingId, setEditingId] = useState(null);
   const [coachesMarkedForDeletion, setCoachesMarkedForDeletion] = useState(new Set());
   const [deletedCoaches, setDeletedCoaches] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
+  const [draggedCoachId, setDraggedCoachId] = useState(null);
+  const fileInputRef = useRef(null);
   const [newCoach, setNewCoach] = useState({
     name: '',
     imgSrc: '',
@@ -76,6 +81,128 @@ const CoachesManager = () => {
 
     setLocalCoachesData([...localCoachesData, coachToAdd]);
     setNewCoach({ name: '', imgSrc: '', description: '', specialty: '' });
+  };
+
+  // Drag & Drop File Upload Functions
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    handleFiles(files);
+  };
+
+  const handleFileSelect = (event) => {
+    const files = Array.from(event.target.files);
+    handleFiles(files);
+  };
+
+  const handleFiles = async (files) => {
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert(`File ${file.name} is not an image. Please upload only image files.`);
+          continue;
+        }
+
+        // Validate file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+          continue;
+        }
+
+        // Simulate upload progress
+        await new Promise(resolve => {
+          const interval = setInterval(() => {
+            setUploadProgress(prev => {
+              const newProgress = prev + Math.random() * 20;
+              if (newProgress >= 100) {
+                clearInterval(interval);
+                resolve();
+                return 100;
+              }
+              return newProgress;
+            });
+          }, 200);
+        });
+
+        // Create coach object from file
+        const existingIds = localCoachesData.map(coach => coach.id);
+        const newId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+        
+        const coachToAdd = {
+          id: newId,
+          name: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for name
+          imgSrc: URL.createObjectURL(file),
+          description: `Coach uploaded on ${new Date().toLocaleDateString()}`,
+          specialty: ''
+        };
+
+        setLocalCoachesData(prev => [...prev, coachToAdd]);
+      }
+
+      alert(`${files.length} coach image(s) uploaded successfully!`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('An error occurred during upload. Please try again.');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Drag & Drop Reordering Functions
+  const handleDragStart = (e, coachId) => {
+    setDraggedCoachId(coachId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOverCoach = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDropCoach = (e, targetCoachId) => {
+    e.preventDefault();
+    
+    if (draggedCoachId === targetCoachId) return;
+
+    const draggedIndex = localCoachesData.findIndex(coach => coach.id === draggedCoachId);
+    const targetIndex = localCoachesData.findIndex(coach => coach.id === targetCoachId);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const newData = [...localCoachesData];
+    const [draggedItem] = newData.splice(draggedIndex, 1);
+    newData.splice(targetIndex, 0, draggedItem);
+    
+    setLocalCoachesData(newData);
+    setDraggedCoachId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedCoachId(null);
   };
 
   const handleEditCoach = (id) => {
@@ -251,6 +378,55 @@ const CoachesManager = () => {
           {/* Add New Coach Section */}
           <div className='add-coach-section shadowed-box'>
             <h2 className='section-title text-red'>Add New Coach</h2>
+            
+            {/* Drag & Drop Upload Area */}
+            <div className='upload-section'>
+              <div 
+                className={`upload-area ${dragOver ? 'drag-over' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className='upload-content'>
+                  <div className='upload-icon'>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className='upload-icon-svg'>
+                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                  </div>
+                  <h3 className='upload-title'>Drop coach images here or click to browse</h3>
+                  <p className='upload-subtitle'>
+                    Supports: JPG, PNG, GIF, WebP • Max size: 10MB
+                  </p>
+                  <input
+                    ref={fileInputRef}
+                    type='file'
+                    multiple
+                    accept='image/*'
+                    onChange={handleFileSelect}
+                    className='file-input'
+                  />
+                </div>
+              </div>
+
+              {isUploading && (
+                <div className='upload-progress'>
+                  <div className='progress-bar'>
+                    <div 
+                      className='progress-fill' 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className='progress-text'>Uploading... {Math.round(uploadProgress)}%</p>
+                </div>
+              )}
+            </div>
+
+            <div className='upload-divider'>
+              <span>OR</span>
+            </div>
+
+            {/* Manual Form */}
             <div className='add-coach-form'>
               <div className='form-row'>
                 <div className='form-group'>
@@ -316,9 +492,16 @@ const CoachesManager = () => {
 
           {/* Coaches Section */}
           <div className='coaches-section'>
-            <h2 className='section-title text-red'>
-              Coaches ({localCoachesData.length})
-            </h2>
+            <div className='section-header'>
+              <h2 className='section-title text-red'>
+                Coaches ({localCoachesData.length})
+              </h2>
+              {localCoachesData.length > 0 && (
+                <div className='drag-instructions'>
+                  <span className='drag-hint'>💡 Drag coaches to reorder them</span>
+                </div>
+              )}
+            </div>
             
             {localCoachesData.length === 0 ? (
               <div className='empty-coaches shadowed-box'>
@@ -335,7 +518,18 @@ const CoachesManager = () => {
             ) : (
               <div className='coaches-grid'>
                 {localCoachesData.map((coach, index) => (
-                  <div key={coach.id} className='coach-card shadowed-box'>
+                  <div
+                    key={coach.id}
+                    className={`coach-card shadowed-box ${
+                      draggedCoachId === coach.id ? 'dragging' : ''
+                    }`}
+                    onDragOver={handleDragOverCoach}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDropCoach(e, coach.id)}
+                    onDragEnd={handleDragEnd}
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, coach.id)}
+                  >
                     <div className='coach-preview'>
                       <img 
                         src={coach.imgSrc} 
