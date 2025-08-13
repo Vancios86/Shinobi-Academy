@@ -6,11 +6,13 @@ import { useCoaches } from '../../contexts/CoachesContext';
 
 const CoachesManager = () => {
   const navigate = useNavigate();
-  const { coachesData, updateCoachesData } = useCoaches();
+  const { coachesData, updateCoachesData, canDeleteCoach } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [coachesMarkedForDeletion, setCoachesMarkedForDeletion] = useState(new Set());
+  const [deletedCoaches, setDeletedCoaches] = useState([]);
   const [newCoach, setNewCoach] = useState({
     name: '',
     imgSrc: '',
@@ -31,8 +33,25 @@ const CoachesManager = () => {
 
   const handleBackToDashboard = () => {
     if (hasChanges) {
-      const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
+      let message = 'You have unsaved changes.';
+      
+      if (deletedCoaches.length > 0) {
+        message += `\n\n⚠️ ${deletedCoaches.length} coach(es) are marked for deletion.`;
+        message += '\n\nIf you leave now, these deletions will be lost.';
+      }
+      
+      message += '\n\nAre you sure you want to leave?';
+      
+      const confirmLeave = window.confirm(message);
       if (!confirmLeave) return;
+      
+      // Clear pending changes if user confirms leaving
+      if (deletedCoaches.length > 0) {
+        setDeletedCoaches([]);
+        setCoachesMarkedForDeletion(new Set());
+        setLocalCoachesData([...coachesData]);
+        setHasChanges(false);
+      }
     }
     navigate('/admin/dashboard');
   };
@@ -43,7 +62,10 @@ const CoachesManager = () => {
       return;
     }
 
-    const newId = Math.max(...localCoachesData.map(coach => coach.id), 0) + 1;
+    // Improved ID generation to avoid conflicts after deletions
+    const existingIds = localCoachesData.map(coach => coach.id);
+    const newId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+    
     const coachToAdd = {
       id: newId,
       name: newCoach.name,
@@ -73,9 +95,93 @@ const CoachesManager = () => {
   };
 
   const handleDeleteCoach = (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this coach?');
+    const coachToDelete = localCoachesData.find(coach => coach.id === id);
+    if (!coachToDelete) {
+      alert('Coach not found. Please refresh the page and try again.');
+      return;
+    }
+
+    // Prevent deleting the last coach
+    if (localCoachesData.length === 1) {
+      alert('Cannot delete the last coach. Your team must have at least one coach.');
+      return;
+    }
+
+    // Check if coach can be deleted using context function
+    const { canDelete, reason } = canDeleteCoach(id);
+    if (!canDelete) {
+      alert(`Cannot delete coach: ${reason}`);
+      return;
+    }
+
+    // Enhanced confirmation dialog with more details and warnings
+    const confirmDelete = window.confirm(
+      `⚠️ WARNING: You are about to delete "${coachToDelete.name}"\n\n` +
+      `This action will:\n` +
+      `• Remove the coach from your team\n` +
+      `• Cannot be undone\n` +
+      `• Will take effect after you deploy changes\n\n` +
+      `Are you absolutely sure you want to continue?`
+    );
+    
     if (confirmDelete) {
-      setLocalCoachesData(localCoachesData.filter(coach => coach.id !== id));
+      try {
+        // Store the deleted coach for potential undo
+        setDeletedCoaches(prev => [...prev, coachToDelete]);
+        
+        // Mark coach for deletion
+        setCoachesMarkedForDeletion(prev => new Set(prev).add(id));
+        
+        // Remove the coach from local state
+        const updatedCoaches = localCoachesData.filter(coach => coach.id !== id);
+        setLocalCoachesData(updatedCoaches);
+        
+        // Show success message
+        alert(`Coach "${coachToDelete.name}" has been marked for deletion.\n\nRemember to click "Deploy Changes!" to save this change.`);
+      } catch (error) {
+        console.error('Error deleting coach:', error);
+        alert('An error occurred while deleting the coach. Please try again.');
+      }
+    }
+  };
+
+  const handleUndoDelete = (coachId) => {
+    const coachToRestore = deletedCoaches.find(coach => coach.id === coachId);
+    if (!coachToRestore) return;
+
+    // Remove from deleted coaches
+    setDeletedCoaches(prev => prev.filter(coach => coach.id !== coachId));
+    
+    // Remove from marked for deletion
+    setCoachesMarkedForDeletion(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(coachId);
+      return newSet;
+    });
+    
+    // Restore to local coaches data
+    setLocalCoachesData(prev => [...prev, coachToRestore]);
+    
+    alert(`Coach "${coachToRestore.name}" has been restored.`);
+  };
+
+  const handleClearAllDeletions = () => {
+    if (deletedCoaches.length === 0) return;
+    
+    const confirmClear = window.confirm(
+      `Are you sure you want to restore all ${deletedCoaches.length} deleted coaches?\n\n` +
+      `This will undo all pending deletions.`
+    );
+    
+    if (confirmClear) {
+      // Restore all deleted coaches
+      setLocalCoachesData(prev => [...prev, ...deletedCoaches]);
+      
+      // Clear all deletion tracking
+      setDeletedCoaches([]);
+      setCoachesMarkedForDeletion(new Set());
+      
+      alert(`All ${deletedCoaches.length} coaches have been restored.`);
     }
   };
 
@@ -100,6 +206,10 @@ const CoachesManager = () => {
       
       // Update the global coaches data
       updateCoachesData(localCoachesData);
+      
+      // Clear the deletion tracking
+      setCoachesMarkedForDeletion(new Set());
+      setDeletedCoaches([]);
       
       alert('Coaches changes deployed successfully!');
       setHasChanges(false);
@@ -316,6 +426,53 @@ const CoachesManager = () => {
 
           {/* Deploy Changes Section */}
           <div className='deploy-section'>
+            {deletedCoaches.length > 0 && (
+              <div className='deleted-coaches-section shadowed-box'>
+                <div className='deleted-coaches-header'>
+                  <h3 className='section-title text-red'>Coaches Marked for Deletion</h3>
+                  <button 
+                    onClick={handleClearAllDeletions}
+                    className='clear-all-deletions-btn'
+                    title='Restore all deleted coaches'
+                  >
+                    Restore All
+                  </button>
+                </div>
+                <p className='deletion-warning'>
+                  The following coaches will be permanently deleted when you deploy changes:
+                </p>
+                <div className='deleted-coaches-list'>
+                  {deletedCoaches.map(coach => (
+                    <div key={coach.id} className='deleted-coach-item'>
+                      <div className='deleted-coach-info'>
+                        <img 
+                          src={coach.imgSrc} 
+                          alt={coach.name} 
+                          className='deleted-coach-img'
+                          onError={(e) => {
+                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
+                          }}
+                        />
+                        <div className='deleted-coach-details'>
+                          <h4 className='deleted-coach-name'>{coach.name}</h4>
+                          {coach.specialty && (
+                            <p className='deleted-coach-specialty'>{coach.specialty}</p>
+                          )}
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => handleUndoDelete(coach.id)}
+                        className='restore-btn'
+                        title='Restore this coach'
+                      >
+                        Restore
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
             <button 
               onClick={handleDeployChanges}
               disabled={!hasChanges || isDeploying}
@@ -324,9 +481,16 @@ const CoachesManager = () => {
               {isDeploying ? 'Deploying Changes...' : 'Deploy Changes!'}
             </button>
             {hasChanges && (
-              <p className='changes-notice'>
-                You have unsaved changes. Click "Deploy Changes!" to save them.
-              </p>
+              <div className='changes-notice'>
+                <p className='changes-text'>
+                  You have unsaved changes. Click "Deploy Changes!" to save them.
+                </p>
+                {coachesMarkedForDeletion.size > 0 && (
+                  <p className='deletion-notice'>
+                    ⚠️ {coachesMarkedForDeletion.size} coach(es) marked for deletion
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>

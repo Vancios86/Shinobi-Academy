@@ -56,6 +56,31 @@ export const CoachesProvider = ({ children }) => {
     setCoachesData(newData);
   };
 
+  // Delete a specific coach by ID
+  const deleteCoach = (coachId) => {
+    try {
+      const updatedCoaches = coachesData.filter(coach => coach.id !== coachId);
+      setCoachesData(updatedCoaches);
+      return { success: true, message: 'Coach deleted successfully' };
+    } catch (error) {
+      console.error('Error deleting coach:', error);
+      return { success: false, message: 'Failed to delete coach' };
+    }
+  };
+
+  // Check if a coach can be safely deleted
+  const canDeleteCoach = (coachId) => {
+    const coach = coachesData.find(c => c.id === coachId);
+    if (!coach) {
+      return { canDelete: false, reason: 'Coach not found' };
+    }
+    
+    // Add any business logic here for when coaches cannot be deleted
+    // For example, if they have active classes, etc.
+    
+    return { canDelete: true, reason: null };
+  };
+
   // Reset to original coaches data
   const resetToOriginal = () => {
     setCoachesData([...originalCoachesData.teamMembers]);
@@ -71,6 +96,8 @@ export const CoachesProvider = ({ children }) => {
   const value = {
     coachesData,
     updateCoachesData,
+    deleteCoach,
+    canDeleteCoach,
     resetToOriginal,
     clearCoaches,
     isLoaded

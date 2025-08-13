@@ -416,14 +416,137 @@
   color: hsl(var(--clr-white));
 }
 
-/* Deploy Section */
+/* Deleted Coaches Section */
+.deleted-coaches-section {
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(0 70% 50%);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.deleted-coaches-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.deleted-coaches-header .section-title {
+  margin: 0;
+}
+
+.clear-all-deletions-btn {
+  padding: 0.5rem 1rem;
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-200);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-all-deletions-btn:hover {
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+.deletion-warning {
+  color: hsl(0 70% 50%);
+  font-size: var(--fs-300);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.deleted-coaches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.deleted-coach-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: hsl(0 70% 50% / 0.05);
+  border: 1px solid hsl(0 70% 50% / 0.2);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.deleted-coach-item:hover {
+  background: hsl(0 70% 50% / 0.1);
+  border-color: hsl(0 70% 50% / 0.4);
+}
+
+.deleted-coach-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.deleted-coach-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 2px solid hsl(0 70% 50% / 0.3);
+}
+
+.deleted-coach-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.deleted-coach-name {
+  font-size: var(--fs-400);
+  font-weight: 600;
+  color: hsl(var(--clr-dark));
+  margin: 0;
+}
+
+.deleted-coach-specialty {
+  font-size: var(--fs-200);
+  color: hsl(var(--clr-red));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  margin: 0;
+}
+
+.restore-btn {
+  padding: 0.5rem 1rem;
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  border: 2px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  font-size: var(--fs-200);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restore-btn:hover {
+  background: hsl(var(--clr-red));
+  color: hsl(var(--clr-white));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
+}
+
+/* Deploy Changes Section */
 .deploy-section {
   text-align: center;
-  padding: 2rem;
-  background: hsl(var(--clr-white) / 0.95);
-  border: 2px solid hsl(var(--clr-dark));
-  border-radius: 1rem;
-  backdrop-filter: blur(10px);
+  margin-top: 2rem;
 }
 
 .deploy-btn {
@@ -432,32 +555,54 @@
   color: hsl(var(--clr-white));
   border: 2px solid hsl(var(--clr-red));
   border-radius: 0.5rem;
-  font-size: var(--fs-500);
-  font-weight: bold;
+  font-size: var(--fs-400);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: var(--ls-2);
+  letter-spacing: var(--ls-1);
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-bottom: 1rem;
 }
 
 .deploy-btn:hover:not(:disabled) {
   background: hsl(var(--clr-white));
   color: hsl(var(--clr-red));
-  box-shadow: 0 0 0 0.3rem hsl(var(--clr-red) / 0.3);
-  transform: translateY(-2px);
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
 }
 
 .deploy-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .changes-notice {
-  margin-top: 1rem;
+  background: hsl(var(--clr-white) / 0.95);
+  border: 2px solid hsl(var(--clr-dark));
+  border-radius: 0.5rem;
+  padding: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+}
+
+.changes-text {
+  margin: 0 0 0.5rem 0;
   font-size: var(--fs-300);
-  color: hsl(var(--clr-red));
+  color: hsl(var(--clr-dark));
+  font-weight: 500;
+}
+
+.deletion-notice {
+  margin: 0;
+  font-size: var(--fs-300);
+  color: hsl(0 70% 50%);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-1);
+  padding: 0.5rem;
+  background: hsl(0 70% 50% / 0.1);
+  border-radius: 0.25rem;
+  border: 1px solid hsl(0 70% 50% / 0.3);
 }
 
 /* Responsive Design */
