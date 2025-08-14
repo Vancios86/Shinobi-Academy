@@ -1,13 +1,23 @@
 // import { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import './AboutPage.css';
 import Tilt from 'react-parallax-tilt';
 import { useCoaches } from '../../contexts/CoachesContext';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 
-const AboutPage = () => {
+const AboutPage = memo(() => {
   const { coachesData, isLoaded } = useCoaches();
   
+  // Memoize the coaches data processing to avoid unnecessary re-renders
+  const processedCoachesData = useMemo(() => {
+    if (!coachesData || coachesData.length === 0) return [];
+    return coachesData.map(coach => ({
+      ...coach,
+      // Add any data processing here if needed in the future
+    }));
+  }, [coachesData]);
+
   return (
     <div className='about-page grid'>
       <div className='page-title' id='about-page'>
@@ -24,7 +34,7 @@ const AboutPage = () => {
                 glareMaxOpacity={0.5}
                 scale={1.01}
               >
-                <img src={colin} loading='lazy' alt='' />
+                <img src={colin} loading='lazy' alt='Colin Byrne - Founder' />
               </Tilt>
             </div>
             <p className='text-dark text-content'>
@@ -59,7 +69,7 @@ const AboutPage = () => {
               inversion table and more.
             </p>
             <div className='aside text-dark text-content'>
-              <img src={view} loading='lazy' alt='shinobi-view' />
+              <img src={view} loading='lazy' alt='Shinobi Academy view' />
               <p>
                 The Dojo is available for training camps for teams and clubs.
                 The strength and conditioning room is also available for small
@@ -78,10 +88,12 @@ const AboutPage = () => {
             <h3>SHINOBI COACHES</h3>
           </div>
           <div className='coaches-description text-dark text-content'>
-            {coachesData.length === 0 ? (
+            {!isLoaded ? (
+              <p><em>Loading coaches...</em></p>
+            ) : processedCoachesData.length === 0 ? (
               <p><em>No coaches available yet.</em></p>
             ) : (
-              coachesData.map((coach) => (
+              processedCoachesData.map((coach) => (
                 <p key={coach.id} className='coach-description-item'>
                   <div className='coach-description-header'>
                     <Tilt
@@ -93,8 +105,9 @@ const AboutPage = () => {
                     >
                       <img 
                         src={coach.imgSrc} 
-                        alt={coach.name} 
+                        alt={`${coach.name} - ${coach.specialty || 'Coach'}`}
                         className='coach-description-photo'
+                        loading='lazy'
                         onError={(e) => {
                           e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
                         }}
@@ -128,6 +141,8 @@ const AboutPage = () => {
       </div>
     </div>
   );
-};
+});
+
+AboutPage.displayName = 'AboutPage';
 
 export default AboutPage;

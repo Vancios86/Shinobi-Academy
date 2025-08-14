@@ -3,19 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-google-maps/api": "^2.12.0",
+    "@react-google-maps/api": "^2.20.7",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "emailjs-com": "^3.2.0",
     "nth-check": "^2.1.1",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-icons": "^4.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^4.12.0",
+    "react-lazy-load-image-component": "^1.6.3",
     "react-parallax-tilt": "^1.7.35",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.30.1",
     "react-scripts": "5.0.1",
     "react-scroll-parallax": "^3.2.0",
+    "react-virtualized-auto-sizer": "^1.0.26",
+    "react-window": "^1.8.11",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -23,7 +26,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postcss:watch": "postcss src/index.css --dir build --watch"
+    "postcss:watch": "postcss src/index.css --dir build --watch",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "build:analyze": "npm run build && npm run analyze",
+    "bundle-report": "webpack-bundle-analyzer build/bundle-stats.json"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +54,8 @@
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
     "postcss-import": "^15.0.0",
-    "postcss-preset-env": "^7.8.0"
+    "postcss-preset-env": "^7.8.0",
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

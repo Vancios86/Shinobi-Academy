@@ -1,7 +1,7 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import Tilt from 'react-parallax-tilt';
 
-const TeamMemberCard = ({ props }) => {
+const TeamMemberCard = memo(({ props }) => {
   const { id, name, imgSrc, specialty } = { ...props };
 
   return (
@@ -14,7 +14,12 @@ const TeamMemberCard = ({ props }) => {
       key={id}
     >
       <div className='team-member'>
-        <img src={imgSrc} alt='coach' loading='lazy' className='coach-photo' />
+        <img 
+          src={imgSrc} 
+          alt={`${name}${specialty ? ` - ${specialty}` : ''}`} 
+          loading='lazy' 
+          className='coach-photo' 
+        />
         <p className='coach-description'>{name}</p>
         {specialty && (
           <p className='coach-specialty'>{specialty}</p>
@@ -22,6 +27,8 @@ const TeamMemberCard = ({ props }) => {
       </div>
     </Tilt>
   );
-};
+});
 
-export default memo(TeamMemberCard);
+TeamMemberCard.displayName = 'TeamMemberCard';
+
+export default TeamMemberCard;
