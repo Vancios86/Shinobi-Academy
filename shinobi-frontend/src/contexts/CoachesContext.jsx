@@ -24,7 +24,13 @@ export const CoachesProvider = ({ children }) => {
         
         if (savedCoaches) {
           const parsedData = JSON.parse(savedCoaches);
-          setCoachesData(parsedData);
+          // Migrate existing data to include new fields if they don't exist
+          const migratedData = parsedData.map(coach => ({
+            ...coach,
+            description: coach.description || '',
+            specialty: coach.specialty || ''
+          }));
+          setCoachesData(migratedData);
         } else {
           // Fallback to original coaches data
           setCoachesData([...originalCoachesData.teamMembers]);

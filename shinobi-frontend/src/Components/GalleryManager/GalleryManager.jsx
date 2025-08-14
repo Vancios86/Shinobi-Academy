@@ -261,7 +261,7 @@ const GalleryManager = () => {
       <main className='manager-main'>
         <div className='manager-container'>
           {/* Add New Image Section */}
-          <div className='add-image-section shadowed-box'>
+          <div className='add-image-section'>
             <h2 className='section-title text-red'>Add New Image</h2>
             
             {/* Drag & Drop Upload Area */}
@@ -390,7 +390,7 @@ const GalleryManager = () => {
                 {localGalleryData.map((image, index) => (
                   <div
                     key={image.id}
-                    className={`image-card shadowed-box ${
+                    className={`image-card ${
                       draggedImageId === image.id ? 'dragging' : ''
                     }`}
                     onDragOver={handleDragOverImage}

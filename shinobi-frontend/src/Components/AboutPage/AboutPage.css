@@ -81,6 +81,22 @@
   padding: 0.5rem;
   text-shadow: 0 1px 0 hsl(var(--clr-dark));
 }
+
+.team-member .coach-specialty {
+  font-size: var(--fs-200);
+  color: hsl(var(--clr-silver));
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.5rem;
+  padding-bottom: 2.5rem;
+  text-shadow: 0 1px 0 hsl(var(--clr-dark));
+  font-style: italic;
+  opacity: 0.9;
+}
 .team-member > .coach-photo {
   position: absolute;
   background-size: cover;
@@ -159,4 +175,113 @@
   color: hsl(var(--clr-dark) / 0.7);
   font-size: var(--fs-400);
   grid-column: 1 / -1;
+}
+
+/* Coaches Description Section */
+.coaches-description {
+  margin-top: 2rem;
+}
+
+.coaches-description p {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: hsl(var(--clr-white) / 0.8);
+  border-left: 4px solid hsl(var(--clr-red));
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px hsl(var(--clr-dark) / 0.1);
+  transition: all 0.3s ease;
+}
+
+.coaches-description p:hover {
+  background: hsl(var(--clr-white));
+  box-shadow: 0 4px 12px hsl(var(--clr-dark) / 0.15);
+  transform: translateY(-2px);
+}
+
+.coaches-description p:last-child {
+  margin-bottom: 0;
+}
+
+.coach-description-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.coach-description-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-direction: row-reverse;
+}
+
+.coach-description-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid hsl(var(--clr-red));
+  box-shadow: 0 2px 8px hsl(var(--clr-dark) / 0.2);
+  flex-shrink: 0;
+}
+
+.coach-description-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.coach-description-text {
+  margin-right: 116px; /* 100px photo width + 16px gap */
+  padding-top: 0.5rem;
+  border-top: 1px solid hsl(var(--clr-dark) / 0.1);
+}
+
+/* Responsive design for coach descriptions */
+@media screen and (max-width: 768px) {
+  .coach-description-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .coach-description-photo {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .coach-description-text {
+    margin-right: 0;
+    text-align: center;
+    padding-top: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .coach-description-photo {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .coaches-description p {
+    padding: 0.75rem;
+  }
+  
+  .coach-description-item {
+    gap: 0.75rem;
+  }
+}
+
+.coaches-description strong {
+  color: hsl(var(--clr-red));
+  font-size: var(--fs-400);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.coaches-description em {
+  color: hsl(var(--clr-dark) / 0.8);
+  font-style: italic;
+  display: block;
+  margin-bottom: 0.75rem;
 }

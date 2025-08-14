@@ -2,7 +2,7 @@ import { memo } from 'react';
 import Tilt from 'react-parallax-tilt';
 
 const TeamMemberCard = ({ props }) => {
-  const { id, name, imgSrc } = { ...props };
+  const { id, name, imgSrc, specialty } = { ...props };
 
   return (
     <Tilt
@@ -16,6 +16,9 @@ const TeamMemberCard = ({ props }) => {
       <div className='team-member'>
         <img src={imgSrc} alt='coach' loading='lazy' className='coach-photo' />
         <p className='coach-description'>{name}</p>
+        {specialty && (
+          <p className='coach-specialty'>{specialty}</p>
+        )}
       </div>
     </Tilt>
   );

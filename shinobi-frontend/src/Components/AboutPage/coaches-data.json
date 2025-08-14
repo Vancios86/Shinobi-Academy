@@ -3,22 +3,30 @@
     {
       "id": 1,
       "name": "Colin Byrne",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1YSWqasYCxSyFwuxsyGL8_Vybb2Yx5Y94"
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1YSWqasYCxSyFwuxsyGL8_Vybb2Yx5Y94",
+      "specialty": "Founder & Head Coach",
+      "description": "Founder of Shinobi Academy, Brazilian Jiu-Jitsu brown belt, medalist in European Jiu-Jitsu Championships, MMA fighter and coach for over 20 years, 3rd Dan Black Belt in Ninjustu under Brian McCarthy, corner man and part of Team Conor McGregor, founding member of McGregor Fast"
     },
     {
       "id": 2,
       "name": "Antonio Souza",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1BxkPRgwnuxSGy6BM1GF6aZJQwbCUxBOk"
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1BxkPRgwnuxSGy6BM1GF6aZJQwbCUxBOk",
+      "specialty": "MMA & Jiu-Jitsu Coach",
+      "description": "MMA fighter and Jiu-Jitsu Purple belt. Souza has a vast experience in various styles of Martial Arts and is a dedicated coach at the academy."
     },
     {
       "id": 3,
       "name": "Jeff Knight",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1nY9dwDVAZXQK6BrpxwtV3txuXUhEzOmp"
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1nY9dwDVAZXQK6BrpxwtV3txuXUhEzOmp",
+      "specialty": "Brazilian Jiu-Jitsu Black Belt",
+      "description": "Brazilian Jiu-Jitsu black belt under John Danaher. Trained for 12 years in Renzo Grecie's Academy in New York city. Jeff is an excellent practitioner in Gi and also No Gi and has coached all over the world, including GlobeTrotters"
     },
     {
       "id": 4,
       "name": "Ivo Guerreiro",
-      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O"
+      "imgSrc": "http://drive.google.com/uc?export=view&id=1lFjWgbjeZugYauyGXJ47_rwi0IpUVP0O",
+      "specialty": "MMA & Jiu-Jitsu Coach",
+      "description": "MMA fighter and Jiu-Jitsu Purple belt. Ivo is training over 12 years, great coach and a huge part of the academy"
     }
   ]
 }

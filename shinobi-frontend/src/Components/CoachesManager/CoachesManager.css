@@ -138,6 +138,35 @@
   min-height: 80px;
 }
 
+.char-count {
+  display: block;
+  font-size: var(--fs-200);
+  color: hsl(var(--clr-dark) / 0.6);
+  margin-top: 0.25rem;
+  text-align: right;
+  font-style: italic;
+}
+
+.char-count-warning {
+  color: hsl(var(--clr-red));
+  font-weight: 600;
+}
+
+.char-count-max {
+  color: hsl(var(--clr-red));
+  font-weight: 700;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
 .add-btn {
   padding: 0.875rem 2rem;
   background: hsl(var(--clr-red));

@@ -4,7 +4,6 @@ import Tilt from 'react-parallax-tilt';
 import { useCoaches } from '../../contexts/CoachesContext';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
-import TeamMemberCard from './TeamMemberCard';
 
 const AboutPage = () => {
   const { coachesData, isLoaded } = useCoaches();
@@ -78,50 +77,52 @@ const AboutPage = () => {
           <div className='team-title flex'>
             <h3>SHINOBI COACHES</h3>
           </div>
-          <div className='coaches-wrapper container grid'>
-            {!isLoaded ? (
-              <div className='loading-coaches'>
-                <p>Loading coaches...</p>
-              </div>
-            ) : coachesData.length === 0 ? (
-              <div className='empty-coaches-display'>
-                <p>No coaches available yet.</p>
-              </div>
+          <div className='coaches-description text-dark text-content'>
+            {coachesData.length === 0 ? (
+              <p><em>No coaches available yet.</em></p>
             ) : (
-              coachesData.map((member, idx) => (
-                <TeamMemberCard props={member} key={idx} />
+              coachesData.map((coach) => (
+                <p key={coach.id} className='coach-description-item'>
+                  <div className='coach-description-header'>
+                    <Tilt
+                      className='parallax-effect-glare-scale'
+                      perspective={500}
+                      glareEnable={true}
+                      glareMaxOpacity={0.5}
+                      scale={1.02}
+                    >
+                      <img 
+                        src={coach.imgSrc} 
+                        alt={coach.name} 
+                        className='coach-description-photo'
+                        onError={(e) => {
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
+                        }}
+                      />
+                    </Tilt>
+                    <div className='coach-description-info'>
+                      <strong>{coach.name}</strong>
+                      {coach.specialty && (
+                        <>
+                          <br />
+                          <em>{coach.specialty}</em>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {coach.description && (
+                    <div className='coach-description-text'>
+                      {coach.description}
+                    </div>
+                  )}
+                  {!coach.description && !coach.specialty && (
+                    <div className='coach-description-text'>
+                      <em>Coach information will be updated soon.</em>
+                    </div>
+                  )}
+                </p>
               ))
             )}
-          </div>
-          <div className='coaches-description text-dark text-content'>
-            <p>
-              <strong>Colin Byrne</strong>
-              <br />
-              Founder of Shinobi Academy, Brazilian Jiu-Jitsu brown belt,
-              medalist in European Jiu-Jitsu Championships, MMA fighter and
-              coach for over 20 years, 3rd Dan Black Belt in Ninjustu under
-              Brian McCarthy, corner man and part of Team Conor McGregor,
-              founding member of McGregor Fast
-            </p>
-            <p>
-              <strong>Jeff Knight</strong>
-              <br />
-              Brazilian Jiu-Jitsu black belt under John Danaher. Trained for 12
-              years in Renzo Grecie’s Academy in New York city. Jeff is an
-              excellent practitioner in Gi and also No Gi. and has coached all
-              over the world, including GlobeTrotters
-            </p>
-            <p>
-              <strong>Ivo Guerreiro</strong>
-              <br />
-              MMA fighter and Jiu-Jitsu Purple belt. Ivo is training over 12
-              year , great coach and a huge part of the academy
-            </p>
-             <p>
-              <strong>Antonio Souza</strong>
-              <br />
-              MMA fighter and Jiu-Jitsu Purple belt. Souza has a vast experience in various styles of Martial Arts ...description ...
-            </p>
           </div>
         </section>
       </div>

@@ -67,6 +67,22 @@ const CoachesManager = () => {
       return;
     }
 
+    // Validate character limits
+    if (newCoach.name.length > 25) {
+      alert('Coach name cannot exceed 25 characters');
+      return;
+    }
+    
+    if (newCoach.specialty && newCoach.specialty.length > 25) {
+      alert('Specialty cannot exceed 25 characters');
+      return;
+    }
+    
+    if (newCoach.description && newCoach.description.length > 1000) {
+      alert('Description cannot exceed 1000 characters');
+      return;
+    }
+
     // Improved ID generation to avoid conflicts after deletions
     const existingIds = localCoachesData.map(coach => coach.id);
     const newId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
@@ -210,8 +226,30 @@ const CoachesManager = () => {
   };
 
   const handleSaveEdit = (id) => {
-    const updatedData = localCoachesData.map(coach => 
-      coach.id === id ? { ...coach, name: coach.name, description: coach.description, specialty: coach.specialty } : coach
+    const coach = localCoachesData.find(c => c.id === id);
+    if (!coach) {
+      alert('Coach not found. Please refresh the page and try again.');
+      return;
+    }
+
+    // Validate character limits
+    if (coach.name.length > 25) {
+      alert('Coach name cannot exceed 25 characters');
+      return;
+    }
+    
+    if (coach.specialty && coach.specialty.length > 25) {
+      alert('Specialty cannot exceed 25 characters');
+      return;
+    }
+    
+    if (coach.description && coach.description.length > 1000) {
+      alert('Description cannot exceed 1000 characters');
+      return;
+    }
+
+    const updatedData = localCoachesData.map(c => 
+      c.id === id ? { ...c, name: coach.name, description: coach.description, specialty: coach.specialty } : c
     );
     setLocalCoachesData(updatedData);
     setEditingId(null);
@@ -376,7 +414,7 @@ const CoachesManager = () => {
       <main className='manager-main'>
         <div className='manager-container'>
           {/* Add New Coach Section */}
-          <div className='add-coach-section shadowed-box'>
+          <div className='add-coach-section'>
             <h2 className='section-title text-red'>Add New Coach</h2>
             
             {/* Drag & Drop Upload Area */}
@@ -440,7 +478,11 @@ const CoachesManager = () => {
                     onChange={(e) => handleNewCoachChange('name', e.target.value)}
                     className='form-input'
                     placeholder='Enter coach name'
+                    maxLength={25}
                   />
+                  <small className={`char-count ${newCoach.name.length > 20 ? 'char-count-warning' : ''} ${newCoach.name.length === 25 ? 'char-count-max' : ''}`}>
+                    {newCoach.name.length}/25
+                  </small>
                 </div>
                 <div className='form-group'>
                   <label htmlFor='new-url' className='form-label text-dark'>
@@ -468,7 +510,11 @@ const CoachesManager = () => {
                     onChange={(e) => handleNewCoachChange('specialty', e.target.value)}
                     className='form-input'
                     placeholder='e.g., BJJ, MMA, Wrestling'
+                    maxLength={25}
                   />
+                  <small className={`char-count ${newCoach.specialty.length > 20 ? 'char-count-warning' : ''} ${newCoach.specialty.length === 25 ? 'char-count-max' : ''}`}>
+                    {newCoach.specialty.length}/25
+                  </small>
                 </div>
                 <div className='form-group'>
                   <label htmlFor='new-description' className='form-label text-dark'>
@@ -481,7 +527,11 @@ const CoachesManager = () => {
                     className='form-textarea'
                     placeholder='Enter coach description'
                     rows='3'
+                    maxLength={1000}
                   />
+                  <small className={`char-count ${newCoach.description.length > 800 ? 'char-count-warning' : ''} ${newCoach.description.length === 1000 ? 'char-count-max' : ''}`}>
+                    {newCoach.description.length}/1000
+                  </small>
                 </div>
               </div>
               <button onClick={handleAddCoach} className='add-btn'>
@@ -520,7 +570,7 @@ const CoachesManager = () => {
                 {localCoachesData.map((coach, index) => (
                   <div
                     key={coach.id}
-                    className={`coach-card shadowed-box ${
+                    className={`coach-card ${
                       draggedCoachId === coach.id ? 'dragging' : ''
                     }`}
                     onDragOver={handleDragOverCoach}
@@ -550,21 +600,33 @@ const CoachesManager = () => {
                             onChange={(e) => handleInputChange(coach.id, 'name', e.target.value)}
                             className='edit-input'
                             placeholder='Coach name'
+                            maxLength={25}
                           />
+                          <small className={`char-count ${coach.name.length > 20 ? 'char-count-warning' : ''} ${coach.name.length === 25 ? 'char-count-max' : ''}`}>
+                            {coach.name.length}/25
+                          </small>
                           <input
                             type='text'
                             value={coach.specialty || ''}
                             onChange={(e) => handleInputChange(coach.id, 'specialty', e.target.value)}
                             className='edit-input'
                             placeholder='Specialty'
+                            maxLength={25}
                           />
+                          <small className={`char-count ${(coach.specialty || '').length > 20 ? 'char-count-warning' : ''} ${(coach.specialty || '').length === 25 ? 'char-count-max' : ''}`}>
+                            {(coach.specialty || '').length}/25
+                          </small>
                           <textarea
                             value={coach.description || ''}
                             onChange={(e) => handleInputChange(coach.id, 'description', e.target.value)}
                             className='edit-textarea'
                             placeholder='Add description...'
                             rows='2'
+                            maxLength={1000}
                           />
+                          <small className={`char-count ${(coach.description || '').length > 800 ? 'char-count-warning' : ''} ${(coach.description || '').length === 1000 ? 'char-count-max' : ''}`}>
+                            {(coach.description || '').length}/1000
+                          </small>
                           <div className='edit-actions'>
                             <button onClick={() => handleSaveEdit(coach.id)} className='save-btn'>
                               Save
