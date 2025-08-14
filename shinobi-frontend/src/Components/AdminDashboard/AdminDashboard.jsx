@@ -21,6 +21,10 @@ const AdminDashboard = () => {
     navigate('/admin/coaches-manager');
   };
 
+  const handleUpdateContact = () => {
+    navigate('/admin/contact-manager');
+  };
+
   return (
     <div className='admin-dashboard'>
       <header className='dashboard-header'>
@@ -66,6 +70,18 @@ const AdminDashboard = () => {
               <h3 className='action-title text-dark'>Update Coaches</h3>
               <p className='action-description text-dark'>
                 Manage coach profiles, information, and team details.
+              </p>
+            </div>
+
+            <div className='action-card shadowed-box' onClick={handleUpdateContact}>
+              <div className='action-icon'>
+                <svg viewBox="0 0 24 24" fill="currentColor" className='icon-svg'>
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
+                </svg>
+              </div>
+              <h3 className='action-title text-dark'>Update Contact</h3>
+              <p className='action-description text-dark'>
+                Manage contact details, address, and social media links.
               </p>
             </div>
           </div>

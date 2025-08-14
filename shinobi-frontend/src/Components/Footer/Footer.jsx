@@ -5,8 +5,21 @@ import { AiFillInstagram } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
 import logoMask from '../../assets/logos/logo-mask.png';
 import Tilt from 'react-parallax-tilt';
+import { useContact } from '../../contexts/ContactContext';
 
 const Footer = () => {
+  const { contactData, isLoaded } = useContact();
+
+  if (!isLoaded) {
+    return (
+      <div className='footer container grid text-dark'>
+        <div className='section footer-top shadowed-box'>
+          <p>Loading contact information...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='footer container grid text-dark'>
       <div className='section footer-top shadowed-box'>
@@ -30,19 +43,21 @@ const Footer = () => {
                 <span>
                   <MdPhone />
                 </span>{' '}
-                (+351) 977 777 777
-              </li>
-              <li>
-                <a
-                  href='mailto:shinobiacademy@gmail.com?&subject=From Shinobi Academy website'
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <MdEmail /> shinobiacademy@gmail.com
+                <a href={`tel:${contactData.phone.value}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {contactData.phone.display}
                 </a>
               </li>
               <li>
-                <MdLocationPin /> R.Convento da Trindade 15
-                <br /> &emsp;8600-613 Lagos
+                <a
+                  href={`mailto:${contactData.email.value}?&subject=From Shinobi Academy website`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <MdEmail /> {contactData.email.display}
+                </a>
+              </li>
+              <li>
+                <MdLocationPin /> {contactData.address.street}
+                <br /> &emsp;{contactData.address.postalCode} {contactData.address.city}
               </li>
             </ul>
           </div>
@@ -61,21 +76,20 @@ const Footer = () => {
             <ul className='flex'>
               <li>
                 <AiFillInstagram
-                  onClick={() =>
-                    window.open('https://instagram.com/shinobiacademylagos')
-                  }
+                  onClick={() => window.open(contactData.socialMedia.instagram.url)}
+                  title={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
                 />
               </li>
               <li>
                 <SiFacebook
-                  onClick={() => window.open('https://www.facebook.com/')}
+                  onClick={() => window.open(contactData.socialMedia.facebook.url)}
+                  title={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
                 />
               </li>
               <li>
                 <SiYoutube
-                  onClick={() =>
-                    window.open('https://www.youtube.com/c/ShinobiVlog')
-                  }
+                  onClick={() => window.open(contactData.socialMedia.youtube.url)}
+                  title={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
                 />
               </li>
             </ul>
