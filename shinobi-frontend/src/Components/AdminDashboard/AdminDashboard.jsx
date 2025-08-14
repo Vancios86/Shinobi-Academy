@@ -25,6 +25,10 @@ const AdminDashboard = () => {
     navigate('/admin/contact-manager');
   };
 
+  const handleUpdateContent = () => {
+    navigate('/admin/content-manager');
+  };
+
   return (
     <div className='admin-dashboard'>
       <header className='dashboard-header'>
@@ -82,6 +86,18 @@ const AdminDashboard = () => {
               <h3 className='action-title text-dark'>Update Contact</h3>
               <p className='action-description text-dark'>
                 Manage contact details, address, and social media links.
+              </p>
+            </div>
+
+            <div className='action-card shadowed-box' onClick={handleUpdateContent}>
+              <div className='action-icon'>
+                <svg viewBox="0 0 24 24" fill="currentColor" className='icon-svg'>
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+              </div>
+              <h3 className='action-title text-dark'>Update Content</h3>
+              <p className='action-description text-dark'>
+                Edit website text content, descriptions, and information.
               </p>
             </div>
           </div>

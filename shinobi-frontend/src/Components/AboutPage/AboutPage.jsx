@@ -3,11 +3,13 @@ import React, { memo, useMemo } from 'react';
 import './AboutPage.css';
 import Tilt from 'react-parallax-tilt';
 import { useCoaches } from '../../contexts/CoachesContext';
+import { useContent } from '../../contexts/ContentContext';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 
 const AboutPage = memo(() => {
   const { coachesData, isLoaded } = useCoaches();
+  const { contentData, isLoaded: contentLoaded } = useContent();
   
   // Memoize the coaches data processing to avoid unnecessary re-renders
   const processedCoachesData = useMemo(() => {
@@ -18,10 +20,23 @@ const AboutPage = memo(() => {
     }));
   }, [coachesData]);
 
+  if (!contentLoaded) {
+    return (
+      <div className='about-page grid'>
+        <div className='page-title' id='about-page'>
+          <h3>Loading...</h3>
+        </div>
+        <div className='about-page-content shadowed-box'>
+          <p>Loading content...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='about-page grid'>
       <div className='page-title' id='about-page'>
-        <h3>About us</h3>
+        <h3>{contentData.about.pageTitle}</h3>
       </div>
       <div className='about-page-content shadowed-box'>
         <section className='container flow'>
@@ -34,50 +49,34 @@ const AboutPage = memo(() => {
                 glareMaxOpacity={0.5}
                 scale={1.01}
               >
-                <img src={colin} loading='lazy' alt='Colin Byrne - Founder' />
+                <img src={colin} loading='lazy' alt={`${contentData.about.founderSection.title} - ${contentData.about.founderSection.subtitle}`} />
               </Tilt>
             </div>
+            <div className='team-title flex'>
+              <h3>{contentData.about.founderSection.title}</h3>
+            </div>
             <p className='text-dark text-content'>
-              Colin Byrne is a martial artist. Started training in 1997 in
-              Ninjutsu and became a 3rd Dan Black Belt under Brian McCarthy. He
-              has trained with Brian McCarthy with the US Marine corp and Police
-              in arrest and constraint. As well he trained and fought Muay Thai
-              in Thailand, has a brown belt in Brazilian Jiu Jitsu, obtained a
-              silver medal in the European Jiu-Jitsu championships and has
-              trained and fought in MMA since 2001. He is part of Team Conor
-              McGregor for the last 7 years and has been a corner man for his
-              last 3 fights. He is a founding member of McGregor FAST. He
-              established Shinobi Academy in 2001 in Lagos Portugal and over the
-              years he has welcomed several BJJ, MMA and Kick boxing teams. Many
-              great names have trained and coached here: <br />
-              &emsp;Conor McGregor chose Shinobi to host his 10 week camp for
-              the Justin Porrier 2 fight <br />
-              &emsp;Andy Ryan brings a squad of over 50 people every year from
-              Team Ryano <br /> &emsp;Silverback Jiu-Jitsu with Mario <br />
-              &emsp;Paddy Holohan and Holohan Martial Arts <br />
-              &emsp;Mike Russell with MMA Clinic <br />
-              &emsp;Dawid Blaszke with Naas Kickboxing <br />
-              &emsp;Gunnar Nelson with Mjolnir <br />
-              &emsp;Team Kaobon with Mike Melby and Tom Aspinall <br />
-              &emsp;ISI running strength and condition camps...and I appologise
-              to those whom I might've forgot about when wrighting this
-              description. <br />
-              The Facility has 2 large matted rooms for martial arts as well as
-              an assortment of bags for striking. The strength and conditioning
-              room has 2 Olympic lifting platforms , 2 lifting racks, hack squat
-              machine, reverse hyper machine, sleds, Wattbike, Concept 2 rower ,
-              inversion table and more.
+              {contentData.about.founderSection.description}
+              {contentData.about.founderSection.achievements.map((achievement, index) => (
+                <React.Fragment key={index}>
+                  <br />
+                  &emsp;• {achievement}
+                </React.Fragment>
+              ))}
             </p>
             <div className='aside text-dark text-content'>
               <img src={view} loading='lazy' alt='Shinobi Academy view' />
+              <div className='team-title flex'>
+                <h3>{contentData.about.asideSection.title}</h3>
+              </div>
               <p>
-                The Dojo is available for training camps for teams and clubs.
-                The strength and conditioning room is also available for small
-                groups . We also run our own training camps. MMA and Grappling
-                with guest coaches throughout the year. <br />
-                Shinobi Academy is as well known for having one the best views
-                in the entire world. If you don't believe me, check out this
-                capture and I dare you to prove me wrong:).
+                {contentData.about.asideSection.description}
+                {contentData.about.founderSection.facilityDescription && (
+                  <>
+                    <br />
+                    {contentData.about.founderSection.facilityDescription}
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -85,7 +84,7 @@ const AboutPage = memo(() => {
 
         <section className='container flow'>
           <div className='team-title flex'>
-            <h3>SHINOBI COACHES</h3>
+            <h3>{contentData.about.coachesSection.title}</h3>
           </div>
           <div className='coaches-description text-dark text-content'>
             {!isLoaded ? (
