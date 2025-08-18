@@ -41,7 +41,9 @@ const ClassesPage = () => {
                 key={classItem.id} 
                 className='classes'
                 style={{
-                  backgroundImage: `url(/assets/classes-assets/${classItem.image})`,
+                  backgroundImage: classItem.imageType === 'predefined' 
+                    ? `url(/assets/classes-assets/${classItem.image})`
+                    : `url(${classItem.image})`,
                   backgroundPositionY: classItem.imagePosition,
                   justifySelf: isRightPositioned ? 'flex-end' : 'flex-start',
                   width: '88%',

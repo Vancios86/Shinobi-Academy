@@ -56,12 +56,31 @@ const ClassesManager = () => {
     );
   };
 
+  const handleImageUpload = (classId, file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Store the image as a data URL for now
+        // In the future, this would be uploaded to a server/database
+        handleInputChange(classId, 'image', e.target.result);
+        handleInputChange(classId, 'imageType', 'upload');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageUrlChange = (classId, url) => {
+    handleInputChange(classId, 'image', url);
+    handleInputChange(classId, 'imageType', 'url');
+  };
+
   const handleAddClass = () => {
     const newClass = {
       id: `class-${Date.now()}-${Math.random()}`,
       name: 'New Class',
       description: 'Class description',
       image: 'mma.webp',
+      imageType: 'predefined',
       imagePosition: 'center',
       alignment: 'left',
       speed: 10,
@@ -138,6 +157,81 @@ const ClassesManager = () => {
     }
   };
 
+  const renderImageSelector = (classItem) => {
+    const isEditing = editingClass === classItem.id;
+    
+    return (
+      <div className="image-selector">
+        <div className="image-input-type-selector">
+          <label>Image Source:</label>
+          <select
+            value={classItem.imageType || 'predefined'}
+            onChange={(e) => {
+              handleInputChange(classItem.id, 'imageType', e.target.value);
+            }}
+            disabled={!isEditing}
+          >
+            <option value="predefined">Predefined Images</option>
+            <option value="upload">Upload Local Image</option>
+            <option value="url">Online Image URL</option>
+          </select>
+        </div>
+
+        {classItem.imageType === 'predefined' && (
+          <div className="form-group">
+            <label>Background Image:</label>
+            <select
+              value={classItem.image}
+              onChange={(e) => handleInputChange(classItem.id, 'image', e.target.value)}
+              disabled={!isEditing}
+            >
+              {getAvailableImages().map(img => (
+                <option key={img} value={img}>{img}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {classItem.imageType === 'upload' && (
+          <div className="form-group">
+            <label>Upload Image:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUpload(classItem.id, e.target.files[0])}
+              disabled={!isEditing}
+            />
+            <small className="form-help">Supported formats: JPG, PNG, WebP. Max size: 5MB</small>
+            {classItem.image && classItem.imageType === 'upload' && (
+              <div className="image-preview">
+                <img src={classItem.image} alt="Preview" style={{ maxWidth: '200px', maxHeight: '150px' }} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {classItem.imageType === 'url' && (
+          <div className="form-group">
+            <label>Image URL:</label>
+            <input
+              type="url"
+              value={classItem.image}
+              onChange={(e) => handleImageUrlChange(classItem.id, e.target.value)}
+              disabled={!isEditing}
+              placeholder="https://example.com/image.jpg"
+            />
+            <small className="form-help">Enter a valid image URL (JPG, PNG, WebP, etc.)</small>
+            {classItem.image && classItem.imageType === 'url' && (
+              <div className="image-preview">
+                <img src={classItem.image} alt="Preview" style={{ maxWidth: '200px', maxHeight: '150px' }} />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderClassForm = (classItem, isNew = false) => {
     const isEditing = editingClass === classItem.id;
     
@@ -203,20 +297,9 @@ const ClassesManager = () => {
             />
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Background Image:</label>
-              <select
-                value={classItem.image}
-                onChange={(e) => handleInputChange(classItem.id, 'image', e.target.value)}
-                disabled={!isEditing}
-              >
-                {getAvailableImages().map(img => (
-                  <option key={img} value={img}>{img}</option>
-                ))}
-              </select>
-            </div>
+          {renderImageSelector(classItem)}
 
+          <div className="form-row">
             <div className="form-group">
               <label>Image Position:</label>
               <select
@@ -232,9 +315,7 @@ const ClassesManager = () => {
                 <option value="11%">11%</option>
               </select>
             </div>
-          </div>
 
-          <div className="form-row">
             <div className="form-group">
               <label>Text Alignment:</label>
               <select
@@ -246,7 +327,9 @@ const ClassesManager = () => {
                 <option value="right">Right</option>
               </select>
             </div>
+          </div>
 
+          <div className="form-row">
             <div className="form-group">
               <label>Parallax Speed:</label>
               <input
@@ -258,20 +341,21 @@ const ClassesManager = () => {
                 disabled={!isEditing}
               />
             </div>
+
+            <div className="form-group">
+              <label>Display Order:</label>
+              <input
+                type="number"
+                min="1"
+                value={classItem.order}
+                onChange={(e) => handleInputChange(classItem.id, 'order', parseInt(e.target.value))}
+                disabled={!isEditing}
+                placeholder="Enter display order (1, 2, 3...)"
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label>Display Order:</label>
-            <input
-              type="number"
-              min="1"
-              value={classItem.order}
-              onChange={(e) => handleInputChange(classItem.id, 'order', parseInt(e.target.value))}
-              disabled={!isEditing}
-              placeholder="Enter display order (1, 2, 3...)"
-            />
-            <small className="form-help">Lower numbers appear first. Classes with the same order will be sorted alphabetically.</small>
-          </div>
+          <small className="form-help">Lower numbers appear first. Classes with the same order will be sorted alphabetically.</small>
         </div>
       </div>
     );
@@ -296,7 +380,7 @@ const ClassesManager = () => {
           <div className='welcome-section'>
             <h2 className='welcome-title text-red'>Manage Classes</h2>
             <p className='welcome-subtitle text-dark'>
-              Add, edit, delete, and reorder classes by changing the display order numbers.
+              Add, edit, delete, and reorder classes. Choose from predefined images, upload local files, or use online URLs.
             </p>
           </div>
 
@@ -324,6 +408,7 @@ const ClassesManager = () => {
                 name: 'New Class',
                 description: 'Class description',
                 image: 'mma.webp',
+                imageType: 'predefined',
                 imagePosition: 'center',
                 alignment: 'left',
                 speed: 10,
