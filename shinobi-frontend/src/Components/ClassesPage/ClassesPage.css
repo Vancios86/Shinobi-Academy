@@ -2,10 +2,19 @@
   width: 100%;
   min-height: 100vh;
 }
+
 .classes-content {
   border-radius: 0.33rem;
   margin: 0.33rem;
 }
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: hsl(var(--clr-dark));
+  font-size: var(--fs-300);
+}
+
 .classes {
   height: 11.1rem;
   max-height: 450px;
@@ -17,12 +26,14 @@
   padding: 1rem;
   overflow: hidden;
 }
+
 .classes-name {
   font-size: var(--fs-500);
   padding: 0 5% 0 0;
   -webkit-text-stroke: 0.5px hsl(var(--clr-dark));
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
+
 .classes-text-right {
   font-size: var(--fs-100);
   display: flex;
@@ -44,35 +55,7 @@
   max-width: 36rem;
   text-shadow: 0 0.1rem 0.1rem hsl(var(--clr-dark));
 }
-.class-s {
-  background-image: url('../../assets/classes-assets/mma.webp');
-  background-position-y: 18%;
-  width: 88%;
-}
-.class-jj {
-  background-image: url('../../assets/classes-assets/bjj.webp');
-  background-position-y: 66%;
-  justify-self: flex-end;
-  width: 88%;
-  flex-direction: row-reverse;
-}
-.class-w {
-  background-image: url('../../assets/classes-assets/wj.webp');
-  background-position-y: 11%;
-  width: 88%;
-}
-.class-c {
-  background-image: url('../../assets/classes-assets/sc.webp');
-  background-position-y: center;
-  justify-self: flex-end;
-  width: 88%;
-  flex-direction: row-reverse;
-}
-.class-private {
-  background-image: url('../../assets/classes-assets/private.webp');
-  background-position-y: 18%;
-  width: 88%;
-}
+
 .schedule-button {
   width: 100%;
   height: auto;
@@ -80,7 +63,8 @@
   display: flex;
   justify-content: center;
 }
-/* Media Querries */
+
+/* Media Queries */
 
 @media screen and (min-width: 600px) {
   .classes {
@@ -99,6 +83,7 @@
     padding: 1rem;
   }
 }
+
 @media screen and (min-width: 800px) {
   .classes {
     height: 44vh;
