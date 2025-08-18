@@ -374,8 +374,7 @@ ul {
   transition: all 0.33s ease-in-out;
 }
 .back-button b {
-  position: absolute;
-  bottom: -2px;
+  position: static;
 }
 .back-button:hover {
   cursor: pointer;
