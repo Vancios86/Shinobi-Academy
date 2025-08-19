@@ -288,20 +288,62 @@ ul {
   padding: 1rem;
 }
 
+/* Enhanced button-large with modern design and animations */
 .button-large {
-  border: 0.125rem solid hsl(var(--clr-red));
-  border-radius: 0.33rem;
-  background-color: hsl(var(--clr-dark));
+  /* Layout & Sizing */
   width: 50%;
-  height: 3rem;
-  margin: 1rem;
-  transition: linear 0.33s;
-  cursor: pointer;
-  text-transform: uppercase;
+  height: 3.5rem;
   max-width: 20rem;
-  color: hsl(var(--clr-white));
+  margin: 1rem;
   position: relative;
+  overflow: hidden;
+  
+  /* Visual Design */
+  background: linear-gradient(135deg, 
+    hsl(var(--clr-dark)) 0%, 
+    hsl(260 14% 8%) 50%, 
+    hsl(var(--clr-dark)) 100%);
+  border: 0.125rem solid hsl(var(--clr-red));
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(220, 38, 38, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  
+  /* Typography */
+  color: hsl(var(--clr-white));
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: var(--fs-400);
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow, background;
+  
+  /* Ensure proper stacking */
+  z-index: 1;
 }
+
+/* Shimmer effect overlay */
+.button-large::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
 .button-large > a {
   text-decoration: none;
   position: absolute;
@@ -313,11 +355,103 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  z-index: 2;
 }
+
+/* Enhanced hover and focus states */
 .button-large:hover,
-.button-large:focus {
-  box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
-  color: hsl(var(--clr-red));
+.button-large:focus-visible {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, 
+    hsl(260 14% 8%) 0%, 
+    hsl(260 14% 12%) 50%, 
+    hsl(260 14% 8%) 100%);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 4px 15px rgba(220, 38, 38, 0.2),
+    0 0 20px rgba(220, 38, 38, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: hsl(357 95% 50%);
+}
+
+/* Shimmer animation on hover */
+.button-large:hover::before {
+  left: 100%;
+}
+
+/* Active/pressed state */
+.button-large:active {
+  transform: translateY(-1px) scale(0.98);
+  transition-duration: 0.1s;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(220, 38, 38, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Focus outline for accessibility */
+.button-large:focus-visible {
+  outline: 2px solid hsl(var(--clr-red));
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.button-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.button-large:disabled:hover {
+  transform: none;
+  background: linear-gradient(135deg, 
+    hsl(var(--clr-dark)) 0%, 
+    hsl(260 14% 8%) 50%, 
+    hsl(var(--clr-dark)) 100%);
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .button-large {
+    width: 70%;
+    height: 3.2rem;
+    font-size: var(--fs-300);
+    margin: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .button-large {
+    width: 85%;
+    height: 3rem;
+    font-size: var(--fs-300);
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .button-large:hover {
+    transform: none;
+    background: linear-gradient(135deg, 
+      hsl(var(--clr-dark)) 0%, 
+      hsl(260 14% 8%) 50%, 
+      hsl(var(--clr-dark)) 100%);
+  }
+  
+  .button-large:active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, 
+      hsl(260 14% 8%) 0%, 
+      hsl(260 14% 12%) 50%, 
+      hsl(260 14% 8%) 100%);
+  }
 }
 .go-to-top-button {
   background-color: hsl(var(--clr-dark));
