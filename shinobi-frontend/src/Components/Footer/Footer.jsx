@@ -74,21 +74,51 @@ const Footer = () => {
         <div className='section footer-bottom'>
           <div className='social-media clr-red'>
             <ul className='flex'>
-              <li>
+              <li
+                tabIndex="0"
+                role="button"
+                onClick={() => window.open(contactData.socialMedia.instagram.url)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.open(contactData.socialMedia.instagram.url);
+                  }
+                }}
+                aria-label={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+              >
                 <AiFillInstagram
-                  onClick={() => window.open(contactData.socialMedia.instagram.url)}
                   title={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
                 />
               </li>
-              <li>
+              <li
+                tabIndex="0"
+                role="button"
+                onClick={() => window.open(contactData.socialMedia.facebook.url)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.open(contactData.socialMedia.facebook.url);
+                  }
+                }}
+                aria-label={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+              >
                 <SiFacebook
-                  onClick={() => window.open(contactData.socialMedia.facebook.url)}
                   title={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
                 />
               </li>
-              <li>
+              <li
+                tabIndex="0"
+                role="button"
+                onClick={() => window.open(contactData.socialMedia.youtube.url)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.open(contactData.socialMedia.youtube.url);
+                  }
+                }}
+                aria-label={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+              >
                 <SiYoutube
-                  onClick={() => window.open(contactData.socialMedia.youtube.url)}
                   title={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
                 />
               </li>
