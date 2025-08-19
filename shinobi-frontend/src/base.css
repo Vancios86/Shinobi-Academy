@@ -37,8 +37,8 @@
   --ls-2: 0.18rem;
   --ls-3: 0.24rem;
 
-  /* Box Shadow */
-  --bs: 0 0 0.33rem 0.15rem hsl(var(--clr-dark));
+  /* Box Shadow - Enhanced Layered + Drama */
+  --bs: 0 3px 12px rgba(0, 0, 0, 0.22), 0 1px 6px rgba(0, 0, 0, 0.38);
 }
 
 /* ----------------- */
