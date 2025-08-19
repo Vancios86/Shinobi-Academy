@@ -40,21 +40,54 @@ const ContactPage = () => {
           <div className='social-media-container shadowed-box flex clr-red'>
             <div className='social-media '>
               <ul className='flex'>
-                <li className='sm-item'>
+                <li 
+                  className='sm-item'
+                  tabIndex="0"
+                  role="button"
+                  onClick={() => window.open(contactData.socialMedia.instagram.url)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      window.open(contactData.socialMedia.instagram.url);
+                    }
+                  }}
+                  aria-label={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+                >
                   <AiFillInstagram
-                    onClick={() => window.open(contactData.socialMedia.instagram.url)}
                     title={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
                   />
                 </li>
-                <li className='sm-item'>
+                <li 
+                  className='sm-item'
+                  tabIndex="0"
+                  role="button"
+                  onClick={() => window.open(contactData.socialMedia.youtube.url)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      window.open(contactData.socialMedia.youtube.url);
+                    }
+                  }}
+                  aria-label={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+                >
                   <SiYoutube
-                    onClick={() => window.open(contactData.socialMedia.youtube.url)}
                     title={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
                   />
                 </li>
-                <li className='sm-item'>
+                <li 
+                  className='sm-item'
+                  tabIndex="0"
+                  role="button"
+                  onClick={() => window.open(contactData.socialMedia.facebook.url)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      window.open(contactData.socialMedia.facebook.url);
+                    }
+                  }}
+                  aria-label={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+                >
                   <SiFacebook
-                    onClick={() => window.open(contactData.socialMedia.facebook.url)}
                     title={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
                   />
                 </li>
