@@ -29,16 +29,30 @@ const WelcomePage = () => {
       )}
 
       <div className='presentation-text'>
-        <h1>MMA</h1>
-        <h1>Box</h1>
-        <h1>Muay-Thai</h1>
-        <h1>Kick-Box</h1>
-        <h1>JiuJitsu</h1>
-        <h1>Wrestling</h1>
-        <h1>Grappling</h1>
-        <h1>Ninjutsu</h1>
-        <h1>Strength&amp;Conditioning</h1>
-        <h1>Private Classes</h1>
+        <div className='text-scroll-content'>
+          <h1>MMA</h1>
+          <h1>Box</h1>
+          <h1>Muay-Thai</h1>
+          <h1>Kick-Box</h1>
+          <h1>JiuJitsu</h1>
+          <h1>Wrestling</h1>
+          <h1>Grappling</h1>
+          <h1>Ninjutsu</h1>
+          <h1>Strength&amp;Conditioning</h1>
+          <h1>Private Classes</h1>
+        </div>
+        <div className='text-scroll-content' aria-hidden="true">
+          <h1>MMA</h1>
+          <h1>Box</h1>
+          <h1>Muay-Thai</h1>
+          <h1>Kick-Box</h1>
+          <h1>JiuJitsu</h1>
+          <h1>Wrestling</h1>
+          <h1>Grappling</h1>
+          <h1>Ninjutsu</h1>
+          <h1>Strength&amp;Conditioning</h1>
+          <h1>Private Classes</h1>
+        </div>
       </div>
       <video
         width={'100%'}

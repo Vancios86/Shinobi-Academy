@@ -42,24 +42,57 @@
   cursor: pointer;
 }
 
+/* CSS Custom Properties for the presentation text */
 .presentation-text {
-  display: flex;
-  gap: 6rem;
-  font-size: var(--fs-800);
+  --scroll-duration: 20s;
+  --text-gap: 6rem;
+  
+  position: relative;
+  overflow: hidden;
+  width: 100%;
   padding-top: 6rem;
-  -webkit-text-stroke: 0.1rem hsl(var(--clr-red));
-  -webkit-text-fill-color: transparent;
-  overflow-x: hidden;
-  width: max-content;
-  animation: infinite-loop 18s infinite linear;
+  white-space: nowrap;
 }
 
-@keyframes infinite-loop {
+.text-scroll-content {
+  display: inline-flex;
+  gap: var(--text-gap);
+  font-size: var(--fs-800);
+  -webkit-text-stroke: 0.1rem hsl(var(--clr-red));
+  -webkit-text-fill-color: transparent;
+  animation: scroll-text var(--scroll-duration) infinite linear;
+  will-change: transform;
+}
+
+/* Smooth infinite scroll using transform */
+@keyframes scroll-text {
   0% {
-    margin-right: -300%;
+    transform: translateX(100%);
   }
   100% {
-    margin-right: 300%;
+    transform: translateX(-100%);
+  }
+}
+
+/* Pause animation on hover for better UX */
+.presentation-text:hover .text-scroll-content {
+  animation-play-state: paused;
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .text-scroll-content {
+    animation: none;
+    transform: translateX(0);
+  }
+  
+  .presentation-text {
+    text-align: center;
+    overflow: visible;
+  }
+  
+  .text-scroll-content:nth-child(2) {
+    display: none;
   }
 }
 
@@ -69,47 +102,33 @@
   bottom: 3rem;
 }
 
+/* Responsive font sizes */
 @media screen and (max-width: 480px) {
-  .presentation-text {
+  .text-scroll-content {
     font-size: var(--fs-500);
-    animation: infinite-loops 18s infinite linear;
   }
-  @keyframes infinite-loops {
-    0% {
-      margin-right: -1000%;
-    }
-    100% {
-      margin-right: 1000%;
-    }
+  .presentation-text {
+    --text-gap: 3rem;
+    --scroll-duration: 15s;
   }
 }
 
 @media screen and (max-width: 999px) {
-  .presentation-text {
+  .text-scroll-content {
     font-size: var(--fs-600);
-    animation: infinite-loop 18s infinite linear;
   }
-  @keyframes infinite-loop {
-    0% {
-      margin-right: -600%;
-    }
-    100% {
-      margin-right: 600%;
-    }
+  .presentation-text {
+    --text-gap: 4rem;
+    --scroll-duration: 17s;
   }
 }
 
 @media screen and (max-width: 1450px) {
-  .presentation-text {
+  .text-scroll-content {
     font-size: var(--fs-700);
-    animation: infinite-loop 18s infinite linear;
   }
-  @keyframes infinite-loop {
-    0% {
-      margin-right: -450%;
-    }
-    100% {
-      margin-right: 450%;
-    }
+  .presentation-text {
+    --text-gap: 5rem;
+    --scroll-duration: 18s;
   }
 }
