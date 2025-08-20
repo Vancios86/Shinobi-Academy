@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { classesAPI } from '../services/api';
 
 const ClassesContext = createContext();
 
@@ -70,49 +71,48 @@ const defaultClasses = [
 ];
 
 export const ClassesProvider = ({ children }) => {
-  const [classesData, setClassesData] = useState(defaultClasses);
+  const [classesData, setClassesData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Load classes data from backend
+  const loadClasses = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const classes = await classesAPI.getClasses();
+      setClassesData(classes);
+    } catch (error) {
+      console.error('Error loading classes:', error);
+      setError(error.message);
+      // Fallback to localStorage if backend fails
+      const savedClasses = localStorage.getItem('shinobi-classes-data');
+      if (savedClasses) {
+        try {
+          const parsedData = JSON.parse(savedClasses);
+          setClassesData(parsedData);
+        } catch (parseError) {
+          console.error('Error parsing saved classes:', parseError);
+          setClassesData(defaultClasses);
+        }
+      } else {
+        setClassesData(defaultClasses);
+      }
+    } finally {
+      setIsLoading(false);
+      setIsLoaded(true);
+    }
+  };
 
   // Load classes data on mount
   useEffect(() => {
-    const loadClassesData = () => {
-      try {
-        // Try to load from localStorage first
-        const savedClasses = localStorage.getItem('shinobi-classes-data');
-        
-        if (savedClasses) {
-          const parsedData = JSON.parse(savedClasses);
-          // Ensure all required fields exist
-          const validatedData = parsedData.map(classItem => ({
-            id: classItem.id || `class-${Date.now()}-${Math.random()}`,
-            name: classItem.name || 'New Class',
-            description: classItem.description || 'Class description',
-            image: classItem.image || 'default.webp',
-            imageType: classItem.imageType || 'predefined',
-            imagePosition: classItem.imagePosition || 'center',
-            alignment: classItem.alignment || 'left',
-            speed: classItem.speed || 10,
-            order: classItem.order || parsedData.length + 1
-          }));
-          setClassesData(validatedData);
-        } else {
-          // Use default classes data
-          setClassesData(defaultClasses);
-        }
-      } catch (error) {
-        console.error('Error loading classes data:', error);
-        // Fallback to default classes data
-        setClassesData(defaultClasses);
-      }
-      setIsLoaded(true);
-    };
-
-    loadClassesData();
+    loadClasses();
   }, []);
 
-  // Save classes data to localStorage whenever it changes
+  // Save classes data to localStorage whenever it changes (backup)
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && classesData.length > 0) {
       try {
         localStorage.setItem('shinobi-classes-data', JSON.stringify(classesData));
       } catch (error) {
@@ -122,37 +122,75 @@ export const ClassesProvider = ({ children }) => {
   }, [classesData, isLoaded]);
 
   // Add new class
-  const addClass = (newClass) => {
-    const classWithId = {
-      ...newClass,
-      id: newClass.id || `class-${Date.now()}-${Math.random()}`,
-      order: newClass.order || classesData.length + 1
-    };
-    setClassesData(prev => [...prev, classWithId]);
+  const addClass = async (newClass) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const createdClass = await classesAPI.createClass(newClass);
+      setClassesData(prev => [...prev, createdClass]);
+      return { success: true, data: createdClass };
+    } catch (error) {
+      console.error('Error adding class:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Update existing class
-  const updateClass = (id, updatedData) => {
-    setClassesData(prev => 
-      prev.map(classItem => 
-        classItem.id === id ? { ...classItem, ...updatedData } : classItem
-      )
-    );
+  const updateClass = async (id, updatedData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const updatedClass = await classesAPI.updateClass(id, updatedData);
+      setClassesData(prev => 
+        prev.map(classItem => 
+          classItem.id === id ? updatedClass : classItem
+        )
+      );
+      return { success: true, data: updatedClass };
+    } catch (error) {
+      console.error('Error updating class:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Delete class
-  const deleteClass = (id) => {
-    setClassesData(prev => prev.filter(classItem => classItem.id !== id));
+  const deleteClass = async (id) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await classesAPI.deleteClass(id);
+      setClassesData(prev => prev.filter(classItem => classItem.id !== id));
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting class:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Reorder classes
-  const reorderClasses = (newOrder) => {
-    const reorderedClasses = newOrder.map((id, index) => {
-      const classItem = classesData.find(c => c.id === id);
-      return classItem ? { ...classItem, order: index + 1 } : null;
-    }).filter(Boolean);
-    
-    setClassesData(reorderedClasses);
+  const reorderClasses = async (newOrder) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const reorderedClasses = await classesAPI.reorderClasses(newOrder);
+      setClassesData(reorderedClasses);
+      return { success: true, data: reorderedClasses };
+    } catch (error) {
+      console.error('Error reordering classes:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Get class by ID
@@ -192,7 +230,10 @@ export const ClassesProvider = ({ children }) => {
     getAllClasses,
     resetToDefault,
     getAvailableImages,
-    isLoaded
+    loadClasses,
+    isLoaded,
+    isLoading,
+    error
   };
 
   return (

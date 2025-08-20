@@ -5,21 +5,20 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [loginAttempts, setLoginAttempts] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
 
-  // Security configuration
-  const MAX_LOGIN_ATTEMPTS = 3;
-  const LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
-  const CORRECT_USERNAME = 'Colin';
-  const CORRECT_PASSWORD = 'IamBack2025';
+  // Redirect if already authenticated
+  React.useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      navigate('/admin/dashboard');
+    }
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,54 +30,24 @@ const AdminPage = () => {
     if (error) setError('');
   };
 
-  const validateCredentials = (username, password) => {
-    // Case-sensitive comparison
-    return username === CORRECT_USERNAME && password === CORRECT_PASSWORD;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if account is locked
-    if (isLocked) {
-      setError('Account temporarily locked. Please try again later.');
-      return;
-    }
-
     setIsLoading(true);
     setError('');
 
-    // Simulate network delay for security
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     try {
-      if (validateCredentials(formData.username, formData.password)) {
-        // Successful login
-        setLoginAttempts(0);
+      const result = await login(formData.username, formData.password);
+      
+      if (result.success) {
+        // Successful login - navigation will happen via useEffect
         setError('');
-        // Set authentication and navigate to dashboard
-        login();
-        navigate('/admin/dashboard');
       } else {
         // Failed login
-        const newAttempts = loginAttempts + 1;
-        setLoginAttempts(newAttempts);
-        
-        if (newAttempts >= MAX_LOGIN_ATTEMPTS) {
-          setIsLocked(true);
-          setError('Too many failed attempts. Account locked for 5 minutes.');
-          
-          // Auto-unlock after lockout duration
-          setTimeout(() => {
-            setIsLocked(false);
-            setLoginAttempts(0);
-            setError('');
-          }, LOCKOUT_DURATION);
-        } else {
-          setError(`Invalid credentials. ${MAX_LOGIN_ATTEMPTS - newAttempts} attempts remaining.`);
-        }
+        setError(result.message || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -111,7 +80,7 @@ const AdminPage = () => {
                   onChange={handleInputChange}
                   className='form-input'
                   required
-                  disabled={isLoading || isLocked}
+                  disabled={isLoading}
                   autoComplete='username'
                 />
               </div>
@@ -128,7 +97,7 @@ const AdminPage = () => {
                   onChange={handleInputChange}
                   className='form-input'
                   required
-                  disabled={isLoading || isLocked}
+                  disabled={isLoading}
                   autoComplete='current-password'
                 />
               </div>
@@ -136,7 +105,7 @@ const AdminPage = () => {
               <button 
                 type='submit' 
                 className='admin-login-btn'
-                disabled={isLoading || isLocked}
+                disabled={isLoading}
               >
                 {isLoading ? 'Logging in...' : 'Login'}
               </button>

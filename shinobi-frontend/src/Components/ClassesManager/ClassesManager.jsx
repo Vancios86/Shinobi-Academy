@@ -12,7 +12,9 @@ const ClassesManager = () => {
     updateClass, 
     deleteClass, 
     resetToDefault,
-    getAvailableImages 
+    getAvailableImages,
+    isLoading,
+    error
   } = useClasses();
   
   const [localClassesData, setLocalClassesData] = useState(classesData);
@@ -74,9 +76,8 @@ const ClassesManager = () => {
     handleInputChange(classId, 'imageType', 'url');
   };
 
-  const handleAddClass = () => {
+  const handleAddClass = async () => {
     const newClass = {
-      id: `class-${Date.now()}-${Math.random()}`,
       name: 'New Class',
       description: 'Class description',
       image: 'mma.webp',
@@ -87,25 +88,52 @@ const ClassesManager = () => {
       order: localClassesData.length + 1
     };
     
-    setLocalClassesData(prev => [...prev, newClass]);
-    setShowAddForm(false);
+    try {
+      const result = await addClass(newClass);
+      if (result.success) {
+        setShowAddForm(false);
+        // Local data will be updated via context
+      } else {
+        alert(`Failed to add class: ${result.message}`);
+      }
+    } catch (error) {
+      alert(`Error adding class: ${error.message}`);
+    }
   };
 
-  const handleUpdateClass = (classId) => {
+  const handleUpdateClass = async (classId) => {
     const classToUpdate = localClassesData.find(c => c.id === classId);
     if (classToUpdate) {
-      updateClass(classId, classToUpdate);
+      try {
+        const result = await updateClass(classId, classToUpdate);
+        if (result.success) {
+          setEditingClass(null);
+          // Local data will be updated via context
+        } else {
+          alert(`Failed to update class: ${result.message}`);
+        }
+      } catch (error) {
+        alert(`Error updating class: ${error.message}`);
+      }
     }
-    setEditingClass(null);
   };
 
-  const handleDeleteClass = (classId) => {
+  const handleDeleteClass = async (classId) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this class? This action cannot be undone.'
     );
     
     if (confirmDelete) {
-      setLocalClassesData(prev => prev.filter(c => c.id !== classId));
+      try {
+        const result = await deleteClass(classId);
+        if (result.success) {
+          // Local data will be updated via context
+        } else {
+          alert(`Failed to delete class: ${result.message}`);
+        }
+      } catch (error) {
+        alert(`Error deleting class: ${error.message}`);
+      }
     }
   };
 
@@ -377,6 +405,33 @@ const ClassesManager = () => {
 
       <main className='manager-main'>
         <div className='manager-container'>
+          {error && (
+            <div className='error-message' style={{ 
+              background: '#ffebee', 
+              color: '#c62828', 
+              padding: '1rem', 
+              borderRadius: '0.5rem', 
+              marginBottom: '1rem',
+              border: '1px solid #ffcdd2'
+            }}>
+              <strong>Error:</strong> {error}
+            </div>
+          )}
+
+          {isLoading && (
+            <div className='loading-message' style={{ 
+              background: '#e3f2fd', 
+              color: '#1565c0', 
+              padding: '1rem', 
+              borderRadius: '0.5rem', 
+              marginBottom: '1rem',
+              border: '1px solid #bbdefb',
+              textAlign: 'center'
+            }}>
+              Loading classes...
+            </div>
+          )}
+
           <div className='welcome-section'>
             <h2 className='welcome-title text-red'>Manage Classes</h2>
             <p className='welcome-subtitle text-dark'>

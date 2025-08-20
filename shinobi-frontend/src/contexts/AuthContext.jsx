@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -11,59 +12,114 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check authentication status on mount
+  // Initialize authentication state
   useEffect(() => {
-    const checkAuthStatus = () => {
+    const initializeAuth = async () => {
       try {
-        const authStatus = localStorage.getItem('shinobi-admin-auth');
-        if (authStatus) {
-          const { isAuthenticated: auth, timestamp } = JSON.parse(authStatus);
-          // Check if the session is still valid (24 hours)
-          const now = Date.now();
-          const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-          
-          if (auth && (now - timestamp) < sessionDuration) {
+        const token = authAPI.getAuthToken();
+        const storedUser = authAPI.getStoredUser();
+
+        if (token && storedUser) {
+          // Verify token is still valid by making a request
+          try {
+            const response = await authAPI.getCurrentUser();
+            setUser(response.user);
             setIsAuthenticated(true);
-          } else {
-            // Session expired, clear it
-            localStorage.removeItem('shinobi-admin-auth');
+          } catch (error) {
+            console.warn('Token verification failed:', error);
+            // Token is invalid, clear auth
+            authAPI.clearAuth();
+            setUser(null);
             setIsAuthenticated(false);
           }
-        } else {
-          setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error('Error checking auth status:', error);
+        console.error('Auth initialization failed:', error);
+        setUser(null);
         setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
-    checkAuthStatus();
+    initializeAuth();
   }, []);
 
-  const login = () => {
-    setIsAuthenticated(true);
-    const authData = {
-      isAuthenticated: true,
-      timestamp: Date.now()
-    };
-    localStorage.setItem('shinobi-admin-auth', JSON.stringify(authData));
+  // Login function
+  const login = async (username, password) => {
+    setIsLoading(true);
+    try {
+      const response = await authAPI.login(username, password);
+      
+      if (response.success) {
+        setUser(response.user);
+        setIsAuthenticated(true);
+        return { success: true, user: response.user };
+      } else {
+        return { success: false, message: response.message || 'Login failed' };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        message: error.message || 'Login failed. Please try again.' 
+      };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('shinobi-admin-auth');
+  // Logout function
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await authAPI.logout();
+    } catch (error) {
+      console.warn('Logout request failed:', error);
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+    }
+  };
+
+  // Change password function
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      const response = await authAPI.changePassword(currentPassword, newPassword);
+      return { success: true, message: response.message };
+    } catch (error) {
+      console.error('Change password error:', error);
+      return { 
+        success: false, 
+        message: error.message || 'Password change failed' 
+      };
+    }
+  };
+
+  // Check if user has admin role
+  const isAdmin = () => {
+    return user && (user.role === 'admin' || user.role === 'super-admin');
+  };
+
+  // Check if user has super admin role
+  const isSuperAdmin = () => {
+    return user && user.role === 'super-admin';
   };
 
   const value = {
+    user,
     isAuthenticated,
     isLoading,
     login,
-    logout
+    logout,
+    changePassword,
+    isAdmin,
+    isSuperAdmin,
   };
 
   return (
@@ -72,3 +128,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthContext;
