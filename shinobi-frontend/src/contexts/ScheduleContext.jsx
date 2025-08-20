@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { scheduleAPI } from '../services/api';
 
 const ScheduleContext = createContext();
 
@@ -162,46 +163,64 @@ const defaultSchedule = {
 };
 
 export const ScheduleProvider = ({ children }) => {
-  const [scheduleData, setScheduleData] = useState(defaultSchedule);
+  const [scheduleData, setScheduleData] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Load schedule data from backend
+  const loadSchedule = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const schedule = await scheduleAPI.getSchedule();
+      if (schedule) {
+        setScheduleData({ weeklySchedule: schedule });
+      } else {
+        // Fallback to localStorage if backend fails
+        const savedSchedule = localStorage.getItem('shinobi-schedule-data');
+        if (savedSchedule) {
+          try {
+            const parsedData = JSON.parse(savedSchedule);
+            setScheduleData(parsedData);
+          } catch (parseError) {
+            console.error('Error parsing saved schedule:', parseError);
+            setScheduleData(defaultSchedule);
+          }
+        } else {
+          setScheduleData(defaultSchedule);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading schedule:', error);
+      setError(error.message);
+      // Fallback to localStorage or default
+      const savedSchedule = localStorage.getItem('shinobi-schedule-data');
+      if (savedSchedule) {
+        try {
+          const parsedData = JSON.parse(savedSchedule);
+          setScheduleData(parsedData);
+        } catch (parseError) {
+          console.error('Error parsing saved schedule:', parseError);
+          setScheduleData(defaultSchedule);
+        }
+      } else {
+        setScheduleData(defaultSchedule);
+      }
+    } finally {
+      setIsLoading(false);
+      setIsLoaded(true);
+    }
+  }, []);
 
   // Load schedule data on mount
   useEffect(() => {
-    const loadScheduleData = () => {
-      try {
-        // Try to load from localStorage first
-        const savedSchedule = localStorage.getItem('shinobi-schedule-data');
-        
-        if (savedSchedule) {
-          const parsedData = JSON.parse(savedSchedule);
-          // Merge with default data to ensure all fields exist
-          const mergedData = {
-            ...defaultSchedule,
-            ...parsedData,
-            weeklySchedule: {
-              ...defaultSchedule.weeklySchedule,
-              ...parsedData.weeklySchedule
-            }
-          };
-          setScheduleData(mergedData);
-        } else {
-          // Use default schedule data
-          setScheduleData(defaultSchedule);
-        }
-      } catch (error) {
-        console.error('Error loading schedule data:', error);
-        // Fallback to default schedule data
-        setScheduleData(defaultSchedule);
-      }
-      setIsLoaded(true);
-    };
+    loadSchedule();
+  }, [loadSchedule]);
 
-    loadScheduleData();
-  }, []);
-
-  // Save schedule data to localStorage whenever it changes
+  // Save schedule data to localStorage whenever it changes (backup)
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && scheduleData.weeklySchedule) {
       try {
         localStorage.setItem('shinobi-schedule-data', JSON.stringify(scheduleData));
       } catch (error) {
@@ -211,43 +230,58 @@ export const ScheduleProvider = ({ children }) => {
   }, [scheduleData, isLoaded]);
 
   // Add new schedule entry
-  const addScheduleEntry = (day, entry) => {
-    const newEntry = {
-      ...entry,
-      id: entry.id || `${day}-${Date.now()}-${Math.random()}`
-    };
-    
-    setScheduleData(prev => ({
-      ...prev,
-      weeklySchedule: {
-        ...prev.weeklySchedule,
-        [day]: [...(prev.weeklySchedule[day] || []), newEntry]
-      }
-    }));
+  const addScheduleEntry = async (day, entry) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const updatedSchedule = await scheduleAPI.addClassToSchedule(day, entry);
+      setScheduleData({ weeklySchedule: updatedSchedule });
+      return { success: true, data: updatedSchedule };
+    } catch (error) {
+      console.error('Error adding schedule entry:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Update existing schedule entry
-  const updateScheduleEntry = (day, entryId, updatedData) => {
-    setScheduleData(prev => ({
-      ...prev,
-      weeklySchedule: {
-        ...prev.weeklySchedule,
-        [day]: prev.weeklySchedule[day].map(entry => 
-          entry.id === entryId ? { ...entry, ...updatedData } : entry
-        )
-      }
-    }));
+  const updateScheduleEntry = async (day, entryId, updatedData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const updatedSchedule = await scheduleAPI.updateClassInSchedule(day, entryId, updatedData);
+      setScheduleData({ weeklySchedule: updatedSchedule });
+      return { success: true, data: updatedSchedule };
+    } catch (error) {
+      console.error('Error updating schedule entry:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Delete schedule entry
-  const deleteScheduleEntry = (day, entryId) => {
-    setScheduleData(prev => ({
-      ...prev,
-      weeklySchedule: {
-        ...prev.weeklySchedule,
-        [day]: prev.weeklySchedule[day].filter(entry => entry.id !== entryId)
+  const deleteScheduleEntry = async (day, entryId) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await scheduleAPI.removeClassFromSchedule(day, entryId);
+      if (response.success) {
+        const updatedSchedule = response.data;
+        setScheduleData({ weeklySchedule: updatedSchedule });
+        return { success: true, data: updatedSchedule };
       }
-    }));
+      return { success: false, message: 'Failed to delete schedule entry' };
+    } catch (error) {
+      console.error('Error deleting schedule entry:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Reorder schedule entries for a specific day
@@ -353,7 +387,10 @@ export const ScheduleProvider = ({ children }) => {
     resetToDefault,
     getAvailableTimeSlots,
     getDaysOfWeek,
-    isLoaded
+    loadSchedule,
+    isLoaded,
+    isLoading,
+    error
   };
 
   return (

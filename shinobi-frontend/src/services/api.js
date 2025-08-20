@@ -48,8 +48,15 @@ class ApiService {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    
+
     try {
       const response = await fetch(url, config);
+      
+      if (!response.ok) {
+        console.error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      
       const data = await response.json();
 
       // Handle authentication errors
@@ -65,6 +72,9 @@ class ApiService {
 
       return data;
     } catch (error) {
+      if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        throw new Error('Unable to connect to server. Please check your connection.');
+      }
       console.error(`API request failed: ${endpoint}`, error);
       throw error;
     }
@@ -196,9 +206,54 @@ export class ClassesAPI extends ApiService {
   }
 }
 
+// Schedule API
+export class ScheduleAPI extends ApiService {
+  // Get schedule (public)
+  async getSchedule() {
+    const response = await this.get('/schedule');
+    return response.data;
+  }
+
+  // Get full schedule for admin
+  async getAdminSchedule() {
+    const response = await this.get('/schedule/admin');
+    return response.data;
+  }
+
+  // Get classes for specific day
+  async getDaySchedule(day) {
+    const response = await this.get(`/schedule/day/${day}`);
+    return response.data || [];
+  }
+
+  // Add class to schedule
+  async addClassToSchedule(day, classData) {
+    const response = await this.post('/schedule/class', { day, ...classData });
+    return response.data;
+  }
+
+  // Update class in schedule
+  async updateClassInSchedule(day, entryId, classData) {
+    const response = await this.put(`/schedule/class/${day}/${entryId}`, classData);
+    return response.data;
+  }
+
+  // Remove class from schedule
+  async removeClassFromSchedule(day, entryId) {
+    return this.delete(`/schedule/class/${day}/${entryId}`);
+  }
+
+  // Update schedule settings
+  async updateScheduleSettings(settings) {
+    const response = await this.put('/schedule/settings', settings);
+    return response.data;
+  }
+}
+
 // Create singleton instances
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
+export const scheduleAPI = new ScheduleAPI();
 
 // Default export
 export default ApiService;

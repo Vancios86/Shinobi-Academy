@@ -4,6 +4,7 @@ import './ScheduleManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
+import { scheduleAPI } from '../../services/api';
 
 const ScheduleManager = () => {
   const navigate = useNavigate();
@@ -15,7 +16,10 @@ const ScheduleManager = () => {
     resetToDefault,
     getAvailableTimeSlots,
     getDaysOfWeek,
-    isLoaded: scheduleLoaded
+    loadSchedule,
+    isLoaded: scheduleLoaded,
+    isLoading: scheduleLoading,
+    error: scheduleError
   } = useSchedule();
   
   const { getAllClasses, isLoaded: classesLoaded } = useClasses();
@@ -27,6 +31,7 @@ const ScheduleManager = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedDay, setSelectedDay] = useState('monday');
   const [selectedTime, setSelectedTime] = useState('09:00');
+  const [selectedClassId, setSelectedClassId] = useState('');
 
   const classes = getAllClasses();
   const daysOfWeek = getDaysOfWeek();
@@ -36,6 +41,13 @@ const ScheduleManager = () => {
   useEffect(() => {
     setLocalScheduleData(scheduleData);
   }, [scheduleData]);
+
+  // Force reload schedule data on component mount
+  useEffect(() => {
+    loadSchedule();
+  }, []); // Remove dependencies to avoid infinite loops
+
+
 
   // Check for changes
   useEffect(() => {
@@ -71,51 +83,77 @@ const ScheduleManager = () => {
     }));
   };
 
-  const handleAddScheduleEntry = () => {
+  const handleAddScheduleEntry = async () => {
+    if (!selectedClassId) {
+      alert('Please select a class');
+      return;
+    }
+
+    const selectedClass = classes.find(c => c.id === selectedClassId);
+    if (!selectedClass) {
+      alert('Selected class not found');
+      return;
+    }
+
     const newEntry = {
-      id: `${selectedDay}-${Date.now()}-${Math.random()}`,
       time: selectedTime,
       endTime: calculateEndTime(selectedTime, 60), // Default 60 minutes
-      classId: '',
-      className: '',
-      instructor: 'Colin Byrne',
-      level: 'All Levels',
+      classId: selectedClassId,
+      className: selectedClass.name,
+      instructor: 'Colin Byrne', // Default instructor
+      level: 'All Levels', // Default level
       maxStudents: 20,
       isActive: true
     };
     
-    setLocalScheduleData(prev => ({
-      ...prev,
-      weeklySchedule: {
-        ...prev.weeklySchedule,
-        [selectedDay]: [...(prev.weeklySchedule[selectedDay] || []), newEntry]
+    try {
+      const result = await addScheduleEntry(selectedDay, newEntry);
+      if (result.success) {
+        setShowAddForm(false);
+        setSelectedClassId(''); // Reset form
+        // Data will be updated via context
+      } else {
+        alert(`Failed to add schedule entry: ${result.message}`);
       }
-    }));
-    
-    setShowAddForm(false);
-  };
-
-  const handleUpdateScheduleEntry = (day, entryId) => {
-    const entryToUpdate = localScheduleData.weeklySchedule[day].find(e => e.id === entryId);
-    if (entryToUpdate) {
-      updateScheduleEntry(day, entryId, entryToUpdate);
+    } catch (error) {
+      alert(`Error adding schedule entry: ${error.message}`);
     }
-    setEditingEntry(null);
   };
 
-  const handleDeleteScheduleEntry = (day, entryId) => {
+  const handleUpdateScheduleEntry = async (day, entryId) => {
+    const dayEntries = (localScheduleData.weeklySchedule && localScheduleData.weeklySchedule[day]) || [];
+    const entryToUpdate = dayEntries.find(e => e.id === entryId);
+    if (entryToUpdate) {
+      try {
+        const result = await updateScheduleEntry(day, entryId, entryToUpdate);
+        if (result.success) {
+          setEditingEntry(null);
+          // Data will be updated via context
+        } else {
+          alert(`Failed to update schedule entry: ${result.message}`);
+        }
+      } catch (error) {
+        alert(`Error updating schedule entry: ${error.message}`);
+      }
+    }
+  };
+
+  const handleDeleteScheduleEntry = async (day, entryId) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this schedule entry? This action cannot be undone.'
     );
     
     if (confirmDelete) {
-      setLocalScheduleData(prev => ({
-        ...prev,
-        weeklySchedule: {
-          ...prev.weeklySchedule,
-          [day]: prev.weeklySchedule[day].filter(e => e.id !== entryId)
+      try {
+        const result = await deleteScheduleEntry(day, entryId);
+        if (result.success) {
+          // Data will be updated via context
+        } else {
+          alert(`Failed to delete schedule entry: ${result.message}`);
         }
-      }));
+      } catch (error) {
+        alert(`Error deleting schedule entry: ${error.message}`);
+      }
     }
   };
 
@@ -181,7 +219,15 @@ const ScheduleManager = () => {
 
   const renderScheduleEntry = (entry, day) => {
     const isEditing = editingEntry === entry.id;
-    const selectedClass = classes.find(c => c.id === entry.classId);
+    // Try to find class by ID first, then by slug/name match
+    let selectedClass = classes.find(c => c.id === entry.classId);
+    if (!selectedClass) {
+      // Fallback: try to match by slug or name
+      selectedClass = classes.find(c => {
+        const classSlug = c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        return classSlug === entry.classId || c.name === entry.className;
+      });
+    }
     
     return (
       <div key={entry.id} className={`schedule-entry ${isEditing ? 'editing' : ''}`}>
@@ -357,6 +403,39 @@ const ScheduleManager = () => {
 
       <main className='manager-main'>
         <div className='manager-container'>
+          {scheduleError && (
+            <div className='error-message' style={{ 
+              background: '#ffebee', 
+              color: '#c62828', 
+              padding: '1rem', 
+              borderRadius: '0.5rem', 
+              marginBottom: '1rem',
+              border: '1px solid #ffcdd2'
+            }}>
+              <strong>Error:</strong> {scheduleError}
+              <button 
+                onClick={loadSchedule} 
+                style={{ marginLeft: '1rem', padding: '0.25rem 0.5rem' }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {scheduleLoading && (
+            <div className='loading-message' style={{ 
+              background: '#e3f2fd', 
+              color: '#1565c0', 
+              padding: '1rem', 
+              borderRadius: '0.5rem', 
+              marginBottom: '1rem',
+              border: '1px solid #bbdefb',
+              textAlign: 'center'
+            }}>
+              Loading schedule data...
+            </div>
+          )}
+
           <div className='welcome-section'>
             <h2 className='welcome-title text-red'>Manage Class Schedule</h2>
             <p className='welcome-subtitle text-dark'>
@@ -409,6 +488,22 @@ const ScheduleManager = () => {
                     ))}
                   </select>
                 </div>
+
+                <div className='form-group'>
+                  <label>Class:</label>
+                  <select
+                    value={selectedClassId}
+                    onChange={(e) => setSelectedClassId(e.target.value)}
+                    required
+                  >
+                    <option value="">Select a class...</option>
+                    {classes.map(classItem => (
+                      <option key={classItem.id} value={classItem.id}>
+                        {classItem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className='add-entry-actions'>
@@ -420,7 +515,10 @@ const ScheduleManager = () => {
                 </button>
                 <button 
                   className='btn-secondary'
-                  onClick={() => setShowAddForm(false)}
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setSelectedClassId(''); // Reset form
+                  }}
                 >
                   Cancel
                 </button>
@@ -432,7 +530,7 @@ const ScheduleManager = () => {
             <h3>Weekly Schedule Overview</h3>
             
             {daysOfWeek.map(day => {
-              const dayEntries = localScheduleData.weeklySchedule[day] || [];
+              const dayEntries = (localScheduleData.weeklySchedule && localScheduleData.weeklySchedule[day]) || [];
               const dayName = day.charAt(0).toUpperCase() + day.slice(1);
               
               return (
