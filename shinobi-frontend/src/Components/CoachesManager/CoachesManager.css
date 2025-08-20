@@ -865,3 +865,30 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Auto-save status */
+.auto-save-status {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.status-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.status-icon {
+  font-size: 1.2rem;
+}
+
+.status-text {
+  color: #0f766e;
+  font-weight: 500;
+  font-size: 0.95rem;
+}

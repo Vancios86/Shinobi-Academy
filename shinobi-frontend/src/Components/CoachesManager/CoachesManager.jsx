@@ -20,15 +20,10 @@ const CoachesManager = () => {
     error
   } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [isDeploying, setIsDeploying] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [coachesMarkedForDeletion, setCoachesMarkedForDeletion] = useState(new Set());
-  const [deletedCoaches, setDeletedCoaches] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
-  const [draggedCoachId, setDraggedCoachId] = useState(null);
   const fileInputRef = useRef(null);
   const [newCoach, setNewCoach] = useState({
     name: '',
@@ -47,34 +42,9 @@ const CoachesManager = () => {
     loadAdminCoaches();
   }, [loadAdminCoaches]);
 
-  // Check for changes
-  useEffect(() => {
-    const hasUnsavedChanges = JSON.stringify(localCoachesData) !== JSON.stringify(coachesData);
-    setHasChanges(hasUnsavedChanges);
-  }, [localCoachesData, coachesData]);
+
 
   const handleBackToDashboard = () => {
-    if (hasChanges) {
-      let message = 'You have unsaved changes.';
-      
-      if (deletedCoaches.length > 0) {
-        message += `\n\n⚠️ ${deletedCoaches.length} coach(es) are marked for deletion.`;
-        message += '\n\nIf you leave now, these deletions will be lost.';
-      }
-      
-      message += '\n\nAre you sure you want to leave?';
-      
-      const confirmLeave = window.confirm(message);
-      if (!confirmLeave) return;
-      
-      // Clear pending changes if user confirms leaving
-      if (deletedCoaches.length > 0) {
-        setDeletedCoaches([]);
-        setCoachesMarkedForDeletion(new Set());
-        setLocalCoachesData([...coachesData]);
-        setHasChanges(false);
-      }
-    }
     navigate('/admin/dashboard');
   };
 
@@ -210,38 +180,7 @@ const CoachesManager = () => {
     }
   };
 
-  // Drag & Drop Reordering Functions
-  const handleDragStart = (e, coachId) => {
-    setDraggedCoachId(coachId);
-    e.dataTransfer.effectAllowed = 'move';
-  };
 
-  const handleDragOverCoach = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDropCoach = (e, targetCoachId) => {
-    e.preventDefault();
-    
-    if (draggedCoachId === targetCoachId) return;
-
-    const draggedIndex = localCoachesData.findIndex(coach => coach.id === draggedCoachId);
-    const targetIndex = localCoachesData.findIndex(coach => coach.id === targetCoachId);
-    
-    if (draggedIndex === -1 || targetIndex === -1) return;
-
-    const newData = [...localCoachesData];
-    const [draggedItem] = newData.splice(draggedIndex, 1);
-    newData.splice(targetIndex, 0, draggedItem);
-    
-    setLocalCoachesData(newData);
-    setDraggedCoachId(null);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedCoachId(null);
-  };
 
   const handleEditCoach = (id) => {
     setEditingId(id);
@@ -351,45 +290,7 @@ const CoachesManager = () => {
     }
   };
 
-  const handleUndoDelete = (coachId) => {
-    const coachToRestore = deletedCoaches.find(coach => coach.id === coachId);
-    if (!coachToRestore) return;
 
-    // Remove from deleted coaches
-    setDeletedCoaches(prev => prev.filter(coach => coach.id !== coachId));
-    
-    // Remove from marked for deletion
-    setCoachesMarkedForDeletion(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(coachId);
-      return newSet;
-    });
-    
-    // Restore to local coaches data
-    setLocalCoachesData(prev => [...prev, coachToRestore]);
-    
-    alert(`Coach "${coachToRestore.name}" has been restored.`);
-  };
-
-  const handleClearAllDeletions = () => {
-    if (deletedCoaches.length === 0) return;
-    
-    const confirmClear = window.confirm(
-      `Are you sure you want to restore all ${deletedCoaches.length} deleted coaches?\n\n` +
-      `This will undo all pending deletions.`
-    );
-    
-    if (confirmClear) {
-      // Restore all deleted coaches
-      setLocalCoachesData(prev => [...prev, ...deletedCoaches]);
-      
-      // Clear all deletion tracking
-      setDeletedCoaches([]);
-      setCoachesMarkedForDeletion(new Set());
-      
-      alert(`All ${deletedCoaches.length} coaches have been restored.`);
-    }
-  };
 
   const handleMoveCoach = async (id, direction) => {
     const currentIndex = coachesData.findIndex(coach => coach.id === id);
@@ -417,28 +318,7 @@ const CoachesManager = () => {
     }
   };
 
-  const handleDeployChanges = async () => {
-    setIsDeploying(true);
-    
-    try {
-      // Simulate deployment process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Update the global coaches data
-      updateCoachesData(localCoachesData);
-      
-      // Clear the deletion tracking
-      setCoachesMarkedForDeletion(new Set());
-      setDeletedCoaches([]);
-      
-      alert('Coaches changes deployed successfully!');
-      setHasChanges(false);
-    } catch (error) {
-      alert('Error deploying changes. Please try again.');
-    } finally {
-      setIsDeploying(false);
-    }
-  };
+
 
   const handleNewCoachChange = (field, value) => {
     setNewCoach({ ...newCoach, [field]: value });
@@ -609,11 +489,7 @@ const CoachesManager = () => {
               <h2 className='section-title text-red'>
                 Coaches ({localCoachesData.length})
               </h2>
-              {localCoachesData.length > 0 && (
-                <div className='drag-instructions'>
-                  <span className='drag-hint'>💡 Drag coaches to reorder them</span>
-                </div>
-              )}
+
             </div>
             
             {localCoachesData.length === 0 ? (
@@ -633,9 +509,7 @@ const CoachesManager = () => {
                 {coachesData.map((coach, index) => (
                   <div
                     key={coach.id}
-                    className={`coach-card ${
-                      draggedCoachId === coach.id ? 'dragging' : ''
-                    }`}
+                    className='coach-card'
 
                   >
                     <div className='coach-preview'>
@@ -736,76 +610,14 @@ const CoachesManager = () => {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Deploy Changes Section */}
-          <div className='deploy-section'>
-            {deletedCoaches.length > 0 && (
-              <div className='deleted-coaches-section shadowed-box'>
-                <div className='deleted-coaches-header'>
-                  <h3 className='section-title text-red'>Coaches Marked for Deletion</h3>
-                  <button 
-                    onClick={handleClearAllDeletions}
-                    className='clear-all-deletions-btn'
-                    title='Restore all deleted coaches'
-                  >
-                    Restore All
-                  </button>
-                </div>
-                <p className='deletion-warning'>
-                  The following coaches will be permanently deleted when you deploy changes:
-                </p>
-                <div className='deleted-coaches-list'>
-                  {deletedCoaches.map(coach => (
-                    <div key={coach.id} className='deleted-coach-item'>
-                      <div className='deleted-coach-info'>
-                        <img 
-                          src={coach.imgSrc} 
-                          alt={coach.name} 
-                          className='deleted-coach-img'
-                          onError={(e) => {
-                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
-                          }}
-                        />
-                        <div className='deleted-coach-details'>
-                          <h4 className='deleted-coach-name'>{coach.name}</h4>
-                          {coach.specialty && (
-                            <p className='deleted-coach-specialty'>{coach.specialty}</p>
-                          )}
-                        </div>
-                      </div>
-                      <button 
-                        onClick={() => handleUndoDelete(coach.id)}
-                        className='restore-btn'
-                        title='Restore this coach'
-                      >
-                        Restore
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
             
-            <button 
-              onClick={handleDeployChanges}
-              disabled={!hasChanges || isDeploying}
-              className='deploy-btn'
-            >
-              {isDeploying ? 'Deploying Changes...' : 'Deploy Changes!'}
-            </button>
-            {hasChanges && (
-              <div className='changes-notice'>
-                <p className='changes-text'>
-                  You have unsaved changes. Click "Deploy Changes!" to save them.
-                </p>
-                {coachesMarkedForDeletion.size > 0 && (
-                  <p className='deletion-notice'>
-                    ⚠️ {coachesMarkedForDeletion.size} coach(es) marked for deletion
-                  </p>
-                )}
+            {/* Auto-save status */}
+            <div className='auto-save-status'>
+              <div className='status-message'>
+                <span className='status-icon'>✅</span>
+                <span className='status-text'>All changes are saved automatically</span>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </main>
