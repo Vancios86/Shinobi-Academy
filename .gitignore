@@ -1,1 +1,9 @@
 media
+
+# Backend specific
+shinobi-backend/.env
+shinobi-backend/node_modules/
+shinobi-backend/logs/
+shinobi-backend/*.log
+shinobi-backend/nohup.out
+shinobi-backend/setup-admin.js
