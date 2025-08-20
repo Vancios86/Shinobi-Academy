@@ -58,7 +58,8 @@
 }
 
 .back-btn:hover {
-  background: hsl(var(--clr-red) / 0.8);
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
   transform: translateY(-2px);
   box-shadow: 0 4px 12px hsl(var(--clr-red) / 0.3);
 }

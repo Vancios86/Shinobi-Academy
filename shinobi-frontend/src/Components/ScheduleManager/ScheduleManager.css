@@ -60,7 +60,9 @@
 }
 
 .back-btn:hover {
-  background: hsl(var(--clr-red) / 0.9);
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-red));
+  box-shadow: 0 0 0 0.2rem hsl(var(--clr-red) / 0.3);
 }
 
 .manager-main {
