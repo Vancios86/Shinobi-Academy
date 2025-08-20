@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import originalCoachesData from '../Components/AboutPage/coaches-data.json';
+import { coachesAPI } from '../services/api';
 
 const CoachesContext = createContext();
 
@@ -14,37 +15,70 @@ export const useCoaches = () => {
 export const CoachesProvider = ({ children }) => {
   const [coachesData, setCoachesData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Load coaches data on mount
-  useEffect(() => {
-    const loadCoachesData = () => {
-      try {
-        // Try to load from localStorage first
+  // Load coaches data from backend (public)
+  const loadCoaches = useCallback(async (useAdminAPI = false) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const coaches = useAdminAPI 
+        ? await coachesAPI.getAdminCoaches()
+        : await coachesAPI.getCoaches();
+      if (coaches) {
+        setCoachesData(coaches);
+      } else {
+        // Fallback to localStorage if backend returns null
         const savedCoaches = localStorage.getItem('shinobi-coaches-data');
-        
         if (savedCoaches) {
+          try {
+            const parsedData = JSON.parse(savedCoaches);
+            const migratedData = parsedData.map(coach => ({
+              ...coach,
+              description: coach.description || '',
+              specialty: coach.specialty || ''
+            }));
+            setCoachesData(migratedData);
+          } catch (parseError) {
+            console.error('Error parsing saved coaches:', parseError);
+            setCoachesData([...originalCoachesData.teamMembers]);
+          }
+        } else {
+          setCoachesData([...originalCoachesData.teamMembers]);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading coaches:', error);
+      setError(error.message);
+      // Fallback to localStorage or default on API error
+      const savedCoaches = localStorage.getItem('shinobi-coaches-data');
+      if (savedCoaches) {
+        try {
           const parsedData = JSON.parse(savedCoaches);
-          // Migrate existing data to include new fields if they don't exist
           const migratedData = parsedData.map(coach => ({
             ...coach,
             description: coach.description || '',
             specialty: coach.specialty || ''
           }));
           setCoachesData(migratedData);
-        } else {
-          // Fallback to original coaches data
+        } catch (parseError) {
+          console.error('Error parsing saved coaches:', parseError);
           setCoachesData([...originalCoachesData.teamMembers]);
         }
-      } catch (error) {
-        console.error('Error loading coaches data:', error);
-        // Fallback to original coaches data
+      } else {
         setCoachesData([...originalCoachesData.teamMembers]);
       }
+    } finally {
+      setIsLoading(false);
       setIsLoaded(true);
-    };
-
-    loadCoachesData();
+    }
   }, []);
+
+  // Load coaches data on mount
+  useEffect(() => {
+    loadCoaches();
+  }, [loadCoaches]);
 
   // Save coaches data to localStorage whenever it changes
   useEffect(() => {
@@ -62,15 +96,76 @@ export const CoachesProvider = ({ children }) => {
     setCoachesData(newData);
   };
 
-  // Delete a specific coach by ID
-  const deleteCoach = (coachId) => {
+  // Add new coach (async)
+  const addCoach = async (coachData) => {
+    setIsLoading(true);
+    setError(null);
     try {
+      const newCoach = await coachesAPI.createCoach(coachData);
+      const updatedCoaches = [...coachesData, newCoach];
+      setCoachesData(updatedCoaches);
+      return { success: true, data: newCoach };
+    } catch (error) {
+      console.error('Error adding coach:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Update existing coach (async)
+  const updateCoach = async (coachId, coachData) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const updatedCoach = await coachesAPI.updateCoach(coachId, coachData);
+      const updatedCoaches = coachesData.map(coach => 
+        coach.id === coachId ? updatedCoach : coach
+      );
+      setCoachesData(updatedCoaches);
+      return { success: true, data: updatedCoach };
+    } catch (error) {
+      console.error('Error updating coach:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Delete a specific coach by ID (async)
+  const deleteCoach = async (coachId) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await coachesAPI.deleteCoach(coachId);
       const updatedCoaches = coachesData.filter(coach => coach.id !== coachId);
       setCoachesData(updatedCoaches);
       return { success: true, message: 'Coach deleted successfully' };
     } catch (error) {
       console.error('Error deleting coach:', error);
+      setError(error.message);
       return { success: false, message: 'Failed to delete coach' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Reorder coaches (async)
+  const reorderCoaches = async (coachIds) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const reorderedCoaches = await coachesAPI.reorderCoaches(coachIds);
+      setCoachesData(reorderedCoaches);
+      return { success: true, data: reorderedCoaches };
+    } catch (error) {
+      console.error('Error reordering coaches:', error);
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,14 +194,26 @@ export const CoachesProvider = ({ children }) => {
     localStorage.removeItem('shinobi-coaches-data');
   };
 
+  // Load admin coaches data (for admin panel)
+  const loadAdminCoaches = useCallback(async () => {
+    return loadCoaches(true);
+  }, [loadCoaches]);
+
   const value = {
     coachesData,
     updateCoachesData,
+    addCoach,
+    updateCoach,
     deleteCoach,
+    reorderCoaches,
     canDeleteCoach,
     resetToOriginal,
     clearCoaches,
-    isLoaded
+    loadCoaches,
+    loadAdminCoaches,
+    isLoaded,
+    isLoading,
+    error
   };
 
   return (

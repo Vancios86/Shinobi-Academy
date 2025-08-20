@@ -6,7 +6,19 @@ import { useCoaches } from '../../contexts/CoachesContext';
 
 const CoachesManager = () => {
   const navigate = useNavigate();
-  const { coachesData, updateCoachesData, canDeleteCoach } = useCoaches();
+  const { 
+    coachesData, 
+    updateCoachesData, 
+    addCoach,
+    updateCoach,
+    deleteCoach,
+    reorderCoaches,
+    canDeleteCoach,
+    loadCoaches,
+    loadAdminCoaches,
+    isLoading,
+    error
+  } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -29,6 +41,11 @@ const CoachesManager = () => {
   useEffect(() => {
     setLocalCoachesData([...coachesData]);
   }, [coachesData]);
+
+  // Load admin coaches data on component mount
+  useEffect(() => {
+    loadAdminCoaches();
+  }, [loadAdminCoaches]);
 
   // Check for changes
   useEffect(() => {
@@ -61,7 +78,7 @@ const CoachesManager = () => {
     navigate('/admin/dashboard');
   };
 
-  const handleAddCoach = () => {
+  const handleAddCoach = async () => {
     if (!newCoach.name || !newCoach.imgSrc) {
       alert('Please fill in both name and image URL');
       return;
@@ -83,20 +100,25 @@ const CoachesManager = () => {
       return;
     }
 
-    // Improved ID generation to avoid conflicts after deletions
-    const existingIds = localCoachesData.map(coach => coach.id);
-    const newId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-    
     const coachToAdd = {
-      id: newId,
       name: newCoach.name,
       imgSrc: newCoach.imgSrc,
       description: newCoach.description || '',
-      specialty: newCoach.specialty || ''
+      specialty: newCoach.specialty || '',
+      order: coachesData.length // Set order to add at the end
     };
 
-    setLocalCoachesData([...localCoachesData, coachToAdd]);
-    setNewCoach({ name: '', imgSrc: '', description: '', specialty: '' });
+    try {
+      const result = await addCoach(coachToAdd);
+      if (result.success) {
+        setNewCoach({ name: '', imgSrc: '', description: '', specialty: '' });
+        // Data will be updated via context
+      } else {
+        alert(`Failed to add coach: ${result.message}`);
+      }
+    } catch (error) {
+      alert(`Error adding coach: ${error.message}`);
+    }
   };
 
   // Drag & Drop File Upload Functions
@@ -225,8 +247,9 @@ const CoachesManager = () => {
     setEditingId(id);
   };
 
-  const handleSaveEdit = (id) => {
-    const coach = localCoachesData.find(c => c.id === id);
+  const handleSaveEdit = async (id) => {
+    // Try to find coach in local data first, then fallback to context data
+    const coach = localCoachesData.find(c => c.id === id) || coachesData.find(c => c.id === id);
     if (!coach) {
       alert('Coach not found. Please refresh the page and try again.');
       return;
@@ -248,26 +271,50 @@ const CoachesManager = () => {
       return;
     }
 
-    const updatedData = localCoachesData.map(c => 
-      c.id === id ? { ...c, name: coach.name, description: coach.description, specialty: coach.specialty } : c
-    );
-    setLocalCoachesData(updatedData);
-    setEditingId(null);
+    const coachData = {
+      name: coach.name,
+      imgSrc: coach.imgSrc,
+      specialty: coach.specialty || '',
+      description: coach.description || '',
+      order: coach.order,
+      isActive: coach.isActive !== false
+    };
+
+    try {
+      const result = await updateCoach(id, coachData);
+      if (result.success) {
+        setEditingId(null);
+        // Data will be updated via context
+      } else {
+        alert(`Failed to update coach: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error updating coach:', error);
+      alert('An error occurred while updating the coach. Please try again.');
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingId(null);
+    // Reset local changes by reloading from context
+    setLocalCoachesData([...coachesData]);
   };
 
-  const handleDeleteCoach = (id) => {
-    const coachToDelete = localCoachesData.find(coach => coach.id === id);
+  const handleInputChange = (id, field, value) => {
+    setLocalCoachesData(localCoachesData.map(coach => 
+      coach.id === id ? { ...coach, [field]: value } : coach
+    ));
+  };
+
+  const handleDeleteCoach = async (id) => {
+    const coachToDelete = coachesData.find(coach => coach.id === id);
     if (!coachToDelete) {
       alert('Coach not found. Please refresh the page and try again.');
       return;
     }
 
     // Prevent deleting the last coach
-    if (localCoachesData.length === 1) {
+    if (coachesData.length === 1) {
       alert('Cannot delete the last coach. Your team must have at least one coach.');
       return;
     }
@@ -283,26 +330,20 @@ const CoachesManager = () => {
     const confirmDelete = window.confirm(
       `⚠️ WARNING: You are about to delete "${coachToDelete.name}"\n\n` +
       `This action will:\n` +
-      `• Remove the coach from your team\n` +
-      `• Cannot be undone\n` +
-      `• Will take effect after you deploy changes\n\n` +
+      `• Immediately remove the coach from your team\n` +
+      `• Cannot be undone\n\n` +
       `Are you absolutely sure you want to continue?`
     );
     
     if (confirmDelete) {
       try {
-        // Store the deleted coach for potential undo
-        setDeletedCoaches(prev => [...prev, coachToDelete]);
-        
-        // Mark coach for deletion
-        setCoachesMarkedForDeletion(prev => new Set(prev).add(id));
-        
-        // Remove the coach from local state
-        const updatedCoaches = localCoachesData.filter(coach => coach.id !== id);
-        setLocalCoachesData(updatedCoaches);
-        
-        // Show success message
-        alert(`Coach "${coachToDelete.name}" has been marked for deletion.\n\nRemember to click "Deploy Changes!" to save this change.`);
+        const result = await deleteCoach(id);
+        if (result.success) {
+          // Success - data will be updated via context
+          alert('Coach deleted successfully!');
+        } else {
+          alert(`Failed to delete coach: ${result.message}`);
+        }
       } catch (error) {
         console.error('Error deleting coach:', error);
         alert('An error occurred while deleting the coach. Please try again.');
@@ -350,16 +391,30 @@ const CoachesManager = () => {
     }
   };
 
-  const handleMoveCoach = (id, direction) => {
-    const currentIndex = localCoachesData.findIndex(coach => coach.id === id);
+  const handleMoveCoach = async (id, direction) => {
+    const currentIndex = coachesData.findIndex(coach => coach.id === id);
     if (currentIndex === -1) return;
 
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= localCoachesData.length) return;
+    if (newIndex < 0 || newIndex >= coachesData.length) return;
 
-    const newData = [...localCoachesData];
+    // Create new order array with swapped positions
+    const newData = [...coachesData];
     [newData[currentIndex], newData[newIndex]] = [newData[newIndex], newData[currentIndex]];
-    setLocalCoachesData(newData);
+    
+    // Extract just the IDs in the new order
+    const coachIds = newData.map(coach => coach.id);
+
+    try {
+      const result = await reorderCoaches(coachIds);
+      if (!result.success) {
+        alert(`Failed to reorder coaches: ${result.message}`);
+      }
+      // Data will be updated via context on success
+    } catch (error) {
+      console.error('Error reordering coaches:', error);
+      alert('An error occurred while reordering coaches. Please try again.');
+    }
   };
 
   const handleDeployChanges = async () => {
@@ -385,12 +440,6 @@ const CoachesManager = () => {
     }
   };
 
-  const handleInputChange = (id, field, value) => {
-    setLocalCoachesData(localCoachesData.map(coach => 
-      coach.id === id ? { ...coach, [field]: value } : coach
-    ));
-  };
-
   const handleNewCoachChange = (field, value) => {
     setNewCoach({ ...newCoach, [field]: value });
   };
@@ -413,6 +462,20 @@ const CoachesManager = () => {
 
       <main className='manager-main'>
         <div className='manager-container'>
+          {error && (
+            <div className='error-message'>
+              <p>❌ Error loading coaches: {error}</p>
+              <button onClick={loadAdminCoaches} className='retry-btn'>
+                Retry
+              </button>
+            </div>
+          )}
+          
+          {isLoading && (
+            <div className='loading-message'>
+              <p>🔄 Loading coaches...</p>
+            </div>
+          )}
           {/* Add New Coach Section */}
           <div className='add-coach-section'>
             <h2 className='section-title text-red'>Add New Coach</h2>
@@ -567,18 +630,13 @@ const CoachesManager = () => {
               </div>
             ) : (
               <div className='coaches-grid'>
-                {localCoachesData.map((coach, index) => (
+                {coachesData.map((coach, index) => (
                   <div
                     key={coach.id}
                     className={`coach-card ${
                       draggedCoachId === coach.id ? 'dragging' : ''
                     }`}
-                    onDragOver={handleDragOverCoach}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDropCoach(e, coach.id)}
-                    onDragEnd={handleDragEnd}
-                    draggable={true}
-                    onDragStart={(e) => handleDragStart(e, coach.id)}
+
                   >
                     <div className='coach-preview'>
                       <img 
@@ -596,36 +654,36 @@ const CoachesManager = () => {
                         <div className='edit-form'>
                           <input
                             type='text'
-                            value={coach.name}
+                            value={localCoachesData.find(c => c.id === coach.id)?.name || coach.name}
                             onChange={(e) => handleInputChange(coach.id, 'name', e.target.value)}
                             className='edit-input'
                             placeholder='Coach name'
                             maxLength={25}
                           />
-                          <small className={`char-count ${coach.name.length > 20 ? 'char-count-warning' : ''} ${coach.name.length === 25 ? 'char-count-max' : ''}`}>
-                            {coach.name.length}/25
+                          <small className={`char-count ${(localCoachesData.find(c => c.id === coach.id)?.name || coach.name).length > 20 ? 'char-count-warning' : ''} ${(localCoachesData.find(c => c.id === coach.id)?.name || coach.name).length === 25 ? 'char-count-max' : ''}`}>
+                            {(localCoachesData.find(c => c.id === coach.id)?.name || coach.name).length}/25
                           </small>
                           <input
                             type='text'
-                            value={coach.specialty || ''}
+                            value={localCoachesData.find(c => c.id === coach.id)?.specialty || coach.specialty || ''}
                             onChange={(e) => handleInputChange(coach.id, 'specialty', e.target.value)}
                             className='edit-input'
                             placeholder='Specialty'
                             maxLength={25}
                           />
-                          <small className={`char-count ${(coach.specialty || '').length > 20 ? 'char-count-warning' : ''} ${(coach.specialty || '').length === 25 ? 'char-count-max' : ''}`}>
-                            {(coach.specialty || '').length}/25
+                          <small className={`char-count ${(localCoachesData.find(c => c.id === coach.id)?.specialty || coach.specialty || '').length > 20 ? 'char-count-warning' : ''} ${(localCoachesData.find(c => c.id === coach.id)?.specialty || coach.specialty || '').length === 25 ? 'char-count-max' : ''}`}>
+                            {(localCoachesData.find(c => c.id === coach.id)?.specialty || coach.specialty || '').length}/25
                           </small>
                           <textarea
-                            value={coach.description || ''}
+                            value={localCoachesData.find(c => c.id === coach.id)?.description || coach.description || ''}
                             onChange={(e) => handleInputChange(coach.id, 'description', e.target.value)}
                             className='edit-textarea'
                             placeholder='Add description...'
                             rows='2'
                             maxLength={1000}
                           />
-                          <small className={`char-count ${(coach.description || '').length > 800 ? 'char-count-warning' : ''} ${(coach.description || '').length === 1000 ? 'char-count-max' : ''}`}>
-                            {(coach.description || '').length}/1000
+                          <small className={`char-count ${(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length > 800 ? 'char-count-warning' : ''} ${(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length === 1000 ? 'char-count-max' : ''}`}>
+                            {(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length}/1000
                           </small>
                           <div className='edit-actions'>
                             <button onClick={() => handleSaveEdit(coach.id)} className='save-btn'>
@@ -663,7 +721,7 @@ const CoachesManager = () => {
                               </button>
                               <button 
                                 onClick={() => handleMoveCoach(coach.id, 'down')}
-                                disabled={index === localCoachesData.length - 1}
+                                disabled={index === coachesData.length - 1}
                                 className='move-btn'
                                 title='Move Down'
                               >

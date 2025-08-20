@@ -10,6 +10,7 @@ require('dotenv').config();
 const authRoutes = require('./src/routes/auth');
 const classesRoutes = require('./src/routes/classes');
 const scheduleRoutes = require('./src/routes/schedule');
+const coachesRoutes = require('./src/routes/coaches');
 const contactRoutes = require('./src/routes/contact');
 const galleryRoutes = require('./src/routes/gallery');
 const contentRoutes = require('./src/routes/content');
@@ -89,6 +90,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/classes', classesRoutes);
 app.use('/api/schedule', scheduleRoutes);
+app.use('/api/coaches', coachesRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/content', contentRoutes);

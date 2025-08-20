@@ -250,10 +250,43 @@ export class ScheduleAPI extends ApiService {
   }
 }
 
+// Coaches API
+export class CoachesAPI extends ApiService {
+  async getCoaches() {
+    const response = await this.get('/coaches');
+    return response.data;
+  }
+
+  async getAdminCoaches() {
+    const response = await this.get('/coaches/admin');
+    return response.data;
+  }
+
+  async createCoach(coachData) {
+    const response = await this.post('/coaches', coachData);
+    return response.data;
+  }
+
+  async updateCoach(coachId, coachData) {
+    const response = await this.put(`/coaches/${coachId}`, coachData);
+    return response.data;
+  }
+
+  async deleteCoach(coachId) {
+    return this.delete(`/coaches/${coachId}`);
+  }
+
+  async reorderCoaches(coachIds) {
+    const response = await this.put('/coaches/reorder', { coachIds });
+    return response.data;
+  }
+}
+
 // Create singleton instances
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
 export const scheduleAPI = new ScheduleAPI();
+export const coachesAPI = new CoachesAPI();
 
 // Default export
 export default ApiService;
