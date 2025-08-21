@@ -101,6 +101,52 @@ class ApiService {
     });
   }
 
+  // Upload file (multipart/form-data)
+  async uploadFile(endpoint, formData) {
+    const url = `${this.baseURL}${endpoint}`;
+    const token = this.getAuthToken();
+
+    const config = {
+      method: 'POST',
+      headers: {},
+      body: formData,
+    };
+
+    // Add authorization header if token exists
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    try {
+      const response = await fetch(url, config);
+      
+      if (!response.ok) {
+        console.error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+
+      // Handle authentication errors
+      if (response.status === 401) {
+        this.clearAuth();
+        throw new Error('Authentication failed. Please login again.');
+      }
+
+      // Handle other errors
+      if (!response.ok) {
+        throw new Error(data.message || data.error || 'Request failed');
+      }
+
+      return data;
+    } catch (error) {
+      if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        throw new Error('Unable to connect to server. Please check your connection.');
+      }
+      console.error(`API upload failed: ${endpoint}`, error);
+      throw error;
+    }
+  }
+
   // DELETE request
   async delete(endpoint) {
     return this.request(endpoint, { method: 'DELETE' });
@@ -279,6 +325,13 @@ export class CoachesAPI extends ApiService {
   async reorderCoaches(coachIds) {
     const response = await this.put('/coaches/reorder', { coachIds });
     return response.data;
+  }
+
+  // Upload coach image
+  async uploadImage(imageFile) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    return this.uploadFile('/coaches/upload', formData);
   }
 }
 

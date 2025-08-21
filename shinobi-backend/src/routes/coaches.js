@@ -1,9 +1,81 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const Coach = require('../models/Coach');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = 'uploads/coaches';
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename with timestamp
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'coach-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    // Check file type
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
+
 const router = express.Router();
+
+// POST /api/coaches/upload - Upload coach image
+router.post('/upload', 
+  authenticateToken, 
+  requireAdmin,
+  upload.single('image'),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: 'No image file provided'
+        });
+      }
+
+      // Return the file path that can be used as imgSrc
+      const imagePath = `/uploads/coaches/${req.file.filename}`;
+      
+      res.json({
+        success: true,
+        message: 'Image uploaded successfully',
+        data: {
+          filename: req.file.filename,
+          path: imagePath,
+          size: req.file.size,
+          mimetype: req.file.mimetype
+        }
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to upload image'
+      });
+    }
+  }
+);
 
 // GET /api/coaches - Get all coaches (public)
 router.get('/', async (req, res) => {
@@ -46,8 +118,8 @@ router.post('/',
   [
     body('name').notEmpty().withMessage('Coach name is required'),
     body('imgSrc').notEmpty().withMessage('Coach image is required'),
-    body('specialty').notEmpty().withMessage('Coach specialty is required'),
-    body('description').notEmpty().withMessage('Coach description is required')
+    body('specialty').optional().trim(),
+    body('description').optional().trim()
   ],
   async (req, res) => {
     try {

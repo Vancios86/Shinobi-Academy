@@ -1,30 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CoachesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useCoaches } from '../../contexts/CoachesContext';
+import { coachesAPI } from '../../services/api';
 
 const CoachesManager = () => {
   const navigate = useNavigate();
   const { 
     coachesData, 
-    updateCoachesData, 
     addCoach,
     updateCoach,
     deleteCoach,
     reorderCoaches,
     canDeleteCoach,
-    loadCoaches,
     loadAdminCoaches,
     isLoading,
     error
   } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef(null);
   const [newCoach, setNewCoach] = useState({
     name: '',
     imgSrc: '',
@@ -91,94 +86,90 @@ const CoachesManager = () => {
     }
   };
 
-  // Drag & Drop File Upload Functions
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-  };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    handleFiles(files);
-  };
+  const handleImageFileSelect = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    handleFiles(files);
-  };
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
 
-  const handleFiles = async (files) => {
-    if (files.length === 0) return;
-
-    setIsUploading(true);
-    setUploadProgress(0);
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File is too large. Maximum size is 10MB.');
+      return;
+    }
 
     try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-          alert(`File ${file.name} is not an image. Please upload only image files.`);
-          continue;
-        }
-
-        // Validate file size (max 10MB)
-        if (file.size > 10 * 1024 * 1024) {
-          alert(`File ${file.name} is too large. Maximum size is 10MB.`);
-          continue;
-        }
-
-        // Simulate upload progress
-        await new Promise(resolve => {
-          const interval = setInterval(() => {
-            setUploadProgress(prev => {
-              const newProgress = prev + Math.random() * 20;
-              if (newProgress >= 100) {
-                clearInterval(interval);
-                resolve();
-                return 100;
-              }
-              return newProgress;
-            });
-          }, 200);
-        });
-
-        // Create coach object from file
-        const existingIds = localCoachesData.map(coach => coach.id);
-        const newId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-        
-        const coachToAdd = {
-          id: newId,
-          name: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for name
-          imgSrc: URL.createObjectURL(file),
-          description: `Coach uploaded on ${new Date().toLocaleDateString()}`,
-          specialty: ''
-        };
-
-        setLocalCoachesData(prev => [...prev, coachToAdd]);
+      // Upload image to backend
+      const uploadResult = await coachesAPI.uploadImage(file);
+      
+      if (uploadResult.success) {
+        // Update the form with the uploaded image URL
+        const imageUrl = `http://localhost:5000${uploadResult.data.path}`;
+        setNewCoach(prev => ({
+          ...prev,
+          imgSrc: imageUrl
+        }));
+        alert('Image uploaded successfully!');
+      } else {
+        alert(`Failed to upload image: ${uploadResult.message}`);
       }
-
-      alert(`${files.length} coach image(s) uploaded successfully!`);
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('An error occurred during upload. Please try again.');
+      console.error('Error uploading image:', error);
+      alert(`Error uploading image: ${error.message}`);
     } finally {
-      setIsUploading(false);
-      setUploadProgress(0);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      // Clear the file input
+      event.target.value = '';
     }
   };
+
+  const handleEditImageSelect = async (coachId, event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File is too large. Maximum size is 10MB.');
+      return;
+    }
+
+    try {
+      // Upload image to backend
+      const uploadResult = await coachesAPI.uploadImage(file);
+      
+      if (uploadResult.success) {
+        // Update the local coach data with the new image URL
+        const imageUrl = `http://localhost:5000${uploadResult.data.path}`;
+        setLocalCoachesData(prev => prev.map(coach => 
+          coach.id === coachId 
+            ? { ...coach, imgSrc: imageUrl }
+            : coach
+        ));
+        alert('New image uploaded successfully! It will be applied when you save the changes.');
+      } else {
+        alert(`Failed to upload image: ${uploadResult.message}`);
+      }
+    } catch (error) {
+      console.error('Error uploading image for edit:', error);
+      alert(`Error uploading image: ${error.message}`);
+    } finally {
+      // Clear the file input
+      event.target.value = '';
+    }
+  };
+
+
 
 
 
@@ -360,52 +351,7 @@ const CoachesManager = () => {
           <div className='add-coach-section'>
             <h2 className='section-title text-red'>Add New Coach</h2>
             
-            {/* Drag & Drop Upload Area */}
-            <div className='upload-section'>
-              <div 
-                className={`upload-area ${dragOver ? 'drag-over' : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <div className='upload-content'>
-                  <div className='upload-icon'>
-                    <svg viewBox="0 0 24 24" fill="currentColor" className='upload-icon-svg'>
-                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                    </svg>
-                  </div>
-                  <h3 className='upload-title'>Drop coach images here or click to browse</h3>
-                  <p className='upload-subtitle'>
-                    Supports: JPG, PNG, GIF, WebP • Max size: 10MB
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type='file'
-                    multiple
-                    accept='image/*'
-                    onChange={handleFileSelect}
-                    className='file-input'
-                  />
-                </div>
-              </div>
 
-              {isUploading && (
-                <div className='upload-progress'>
-                  <div className='progress-bar'>
-                    <div 
-                      className='progress-fill' 
-                      style={{ width: `${uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <p className='progress-text'>Uploading... {Math.round(uploadProgress)}%</p>
-                </div>
-              )}
-            </div>
-
-            <div className='upload-divider'>
-              <span>OR</span>
-            </div>
 
             {/* Manual Form */}
             <div className='add-coach-form'>
@@ -429,18 +375,50 @@ const CoachesManager = () => {
                 </div>
                 <div className='form-group'>
                   <label htmlFor='new-url' className='form-label text-dark'>
-                    Image URL
+                    Image URL or File
                   </label>
-                  <input
-                    type='url'
-                    id='new-url'
-                    value={newCoach.imgSrc}
-                    onChange={(e) => handleNewCoachChange('imgSrc', e.target.value)}
-                    className='form-input'
-                    placeholder='Enter image URL'
-                  />
+                  <div className='image-input-group'>
+                    <input
+                      type='url'
+                      id='new-url'
+                      value={newCoach.imgSrc}
+                      onChange={(e) => handleNewCoachChange('imgSrc', e.target.value)}
+                      className='form-input'
+                      placeholder='Enter image URL'
+                    />
+                    <span className='image-input-divider'>OR</span>
+                    <input
+                      type='file'
+                      id='new-image-file'
+                      accept='image/*'
+                      onChange={(e) => handleImageFileSelect(e)}
+                      className='form-file-input'
+                    />
+                    <label htmlFor='new-image-file' className='form-file-label'>
+                      Choose File
+                    </label>
+                  </div>
                 </div>
               </div>
+              
+              {/* Image Preview */}
+              {newCoach.imgSrc && (
+                <div className='image-preview-section'>
+                  <label className='form-label text-dark'>Image Preview:</label>
+                  <div className='image-preview-container'>
+                    <img 
+                      src={newCoach.imgSrc} 
+                      alt="Coach preview" 
+                      className='form-image-preview'
+                      onError={(e) => {
+                        console.error('Image failed to load:', newCoach.imgSrc);
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              
               <div className='form-row'>
                 <div className='form-group'>
                   <label htmlFor='new-specialty' className='form-label text-dark'>
@@ -559,6 +537,44 @@ const CoachesManager = () => {
                           <small className={`char-count ${(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length > 800 ? 'char-count-warning' : ''} ${(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length === 1000 ? 'char-count-max' : ''}`}>
                             {(localCoachesData.find(c => c.id === coach.id)?.description || coach.description || '').length}/1000
                           </small>
+                          
+                          {/* Image Upload Section for Edit */}
+                          <div className='edit-image-section'>
+                            <label className='edit-image-label'>Current Image:</label>
+                            <div className='current-image-display'>
+                              <img 
+                                src={coach.imgSrc} 
+                                alt={`Current ${coach.name} image`} 
+                                className='current-image-img'
+                              />
+                            </div>
+                            
+                            <label className='edit-image-label'>Change Image:</label>
+                            <div className='edit-image-input-group'>
+                              <input
+                                type='file'
+                                id={`edit-image-${coach.id}`}
+                                accept='image/*'
+                                onChange={(e) => handleEditImageSelect(coach.id, e)}
+                                className='edit-file-input'
+                              />
+                              <label htmlFor={`edit-image-${coach.id}`} className='edit-file-label'>
+                                Choose New Image
+                              </label>
+                            </div>
+                            
+                            {localCoachesData.find(c => c.id === coach.id)?.imgSrc && localCoachesData.find(c => c.id === coach.id)?.imgSrc !== coach.imgSrc && (
+                              <div className='edit-image-preview'>
+                                <label className='edit-image-preview-label'>New Image Preview:</label>
+                                <img 
+                                  src={localCoachesData.find(c => c.id === coach.id)?.imgSrc} 
+                                  alt="New image preview" 
+                                  className='edit-image-preview-img'
+                                />
+                                <small className='edit-image-note'>New image will be applied when saved</small>
+                              </div>
+                            )}
+                          </div>
                           <div className='edit-actions'>
                             <button onClick={() => handleSaveEdit(coach.id)} className='save-btn'>
                               Save
