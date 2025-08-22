@@ -2,28 +2,28 @@ import { useState, useEffect } from 'react';
 import './GalleryComponent.css';
 import { Parallax } from 'react-scroll-parallax';
 import { Link } from 'react-router-dom';
-import prev1 from '../../../assets/gallery-assets/gallery-preview-images/prev1.webp';
-import prev2 from '../../../assets/gallery-assets/gallery-preview-images/prev2.webp';
-import prev3 from '../../../assets/gallery-assets/gallery-preview-images/prev3.webp';
-import prev4 from '../../../assets/gallery-assets/gallery-preview-images/prev4.webp';
+import { useGallery } from '../../../contexts/GalleryContext';
 
 const GalleryComponent = () => {
-  const [imgSrc, setImgSrc] = useState(prev1);
-  //change the background image every 7 seconds
+  const { galleryData, isLoaded } = useGallery();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Change the background image every 7 seconds using gallery images
   useEffect(() => {
+    if (!isLoaded || galleryData.length === 0) return;
+    
     const interval = setInterval(() => {
-      if (imgSrc === prev1) {
-        setImgSrc(prev2);
-      } else if (imgSrc === prev2) {
-        setImgSrc(prev3);
-      } else if (imgSrc === prev3) {
-        setImgSrc(prev4);
-      } else if (imgSrc === prev4) {
-        setImgSrc(prev1);
-      }
+      setCurrentImageIndex(prev => (prev + 1) % galleryData.length);
     }, 7000);
+    
     return () => clearInterval(interval);
-  }, [imgSrc]);
+  }, [isLoaded, galleryData.length]);
+  
+  // Get current image source
+  const currentImage = galleryData[currentImageIndex];
+  const imgSrc = currentImage ? 
+    (currentImage.src.startsWith('http') ? currentImage.src : `http://localhost:5000${currentImage.src}`) : 
+    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkdhbGxlcnkgSW1hZ2VzPC90ZXh0Pjwvc3ZnPg==';
 
   return (
     <Parallax opacity={[3, 0]}>

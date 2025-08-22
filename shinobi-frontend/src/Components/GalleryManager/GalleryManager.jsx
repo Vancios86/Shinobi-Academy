@@ -169,7 +169,7 @@ const GalleryManager = () => {
         const imageData = {
           title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for title
           src: uploadResult.data.path,
-          description: `Uploaded on ${new Date().toLocaleDateString()}`,
+          description: '', // No default description
           category: 'General',
           tags: [],
           order: 0 // Set to 0 to place at the top
