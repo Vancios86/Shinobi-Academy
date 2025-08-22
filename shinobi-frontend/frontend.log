@@ -1,0 +1,473 @@
+nohup: ignoring input
+
+> shinobi-frontend@0.1.0 start
+> react-scripts start
+
+(node:82234) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:82234) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled with warnings.
+
+src/Components/GalleryManager/GalleryManager.jsx
+  Line 463:19:  Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words `image`, `photo,` or `picture` (or any specified custom words) in the alt prop  jsx-a11y/img-redundant-alt
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in src/Components/GalleryManager/GalleryManager.jsx
+  Line 463:19:  Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words `image`, `photo,` or `picture` (or any specified custom words) in the alt prop  jsx-a11y/img-redundant-alt
+
+webpack compiled with 1 warning
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+Syntax error: Unterminated JSX contents. (652:10) (652:10)
+ERROR in ./src/Components/GalleryManager/GalleryManager.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/src/Components/GalleryManager/GalleryManager.jsx: Unterminated JSX contents. (652:10)
+
+  650 |         )}
+  651 |       </div>
+> 652 |     </div>
+      |           ^
+  653 |   );
+  654 | };
+  655 |
+    at constructor (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:363:19)
+    at FlowParserMixin.raise (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6612:19)
+    at FlowParserMixin.jsxReadToken (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4463:20)
+    at FlowParserMixin.getTokenFromCode (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4789:12)
+    at FlowParserMixin.getTokenFromCode (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:3210:13)
+    at FlowParserMixin.nextToken (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5795:10)
+    at FlowParserMixin.next (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5705:10)
+    at FlowParserMixin.eat (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5709:12)
+    at FlowParserMixin.expect (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6911:15)
+    at FlowParserMixin.jsxParseClosingElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4695:10)
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 652:10:  Parsing error: Unterminated JSX contents. (652:10)
+
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+Syntax error: Unterminated JSX contents. (652:10) (652:10)
+ERROR in ./src/Components/GalleryManager/GalleryManager.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/src/Components/GalleryManager/GalleryManager.jsx: Unterminated JSX contents. (652:10)
+
+  650 |         )}
+  651 |       </div>
+> 652 |     </div>
+      |           ^
+  653 |   );
+  654 | };
+  655 |
+    at constructor (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:363:19)
+    at FlowParserMixin.raise (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6612:19)
+    at FlowParserMixin.jsxReadToken (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4463:20)
+    at FlowParserMixin.getTokenFromCode (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4789:12)
+    at FlowParserMixin.getTokenFromCode (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:3210:13)
+    at FlowParserMixin.nextToken (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5795:10)
+    at FlowParserMixin.next (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5705:10)
+    at FlowParserMixin.eat (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:5709:12)
+    at FlowParserMixin.expect (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6911:15)
+    at FlowParserMixin.jsxParseClosingElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4695:10)
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 652:10:  Parsing error: Unterminated JSX contents. (652:10)
+
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+Syntax error: Expected corresponding JSX closing tag for <div>. (652:6) (652:6)
+ERROR in ./src/Components/GalleryManager/GalleryManager.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/src/Components/GalleryManager/GalleryManager.jsx: Expected corresponding JSX closing tag for <div>. (652:6)
+
+  650 |         )}
+  651 |         </div>
+> 652 |       </main>
+      |       ^
+  653 |     </div>
+  654 |   );
+  655 | };
+    at constructor (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:363:19)
+    at FlowParserMixin.raise (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6612:19)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4742:16)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElement (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4764:17)
+    at FlowParserMixin.parseExprAtom (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4774:19)
+    at FlowParserMixin.parseExprSubscripts (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11026:23)
+    at FlowParserMixin.parseUpdate (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11011:21)
+    at FlowParserMixin.parseMaybeUnary (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:10991:23)
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 652:6:  Parsing error: Expected corresponding JSX closing tag for <div>. (652:6)
+
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+Syntax error: Expected corresponding JSX closing tag for <div>. (652:6) (652:6)
+ERROR in ./src/Components/GalleryManager/GalleryManager.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/src/Components/GalleryManager/GalleryManager.jsx: Expected corresponding JSX closing tag for <div>. (652:6)
+
+  650 |         )}
+  651 |         </div>
+> 652 |       </main>
+      |       ^
+  653 |     </div>
+  654 |   );
+  655 | };
+    at constructor (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:363:19)
+    at FlowParserMixin.raise (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6612:19)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4742:16)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElement (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4764:17)
+    at FlowParserMixin.parseExprAtom (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4774:19)
+    at FlowParserMixin.parseExprSubscripts (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11026:23)
+    at FlowParserMixin.parseUpdate (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11011:21)
+    at FlowParserMixin.parseMaybeUnary (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:10991:23)
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 652:6:  Parsing error: Expected corresponding JSX closing tag for <div>. (652:6)
+
+webpack compiled with 2 errors
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+Syntax error: Expected corresponding JSX closing tag for <div>. (652:6) (652:6)
+ERROR in ./src/Components/GalleryManager/GalleryManager.jsx
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/src/Components/GalleryManager/GalleryManager.jsx: Expected corresponding JSX closing tag for <div>. (652:6)
+
+  650 |         )}
+  651 |         </div>
+> 652 |       </main>
+      |       ^
+  653 |
+  654 |     </div>
+  655 |   );
+    at constructor (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:363:19)
+    at FlowParserMixin.raise (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:6612:19)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4742:16)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElementAt (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4713:32)
+    at FlowParserMixin.jsxParseElement (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4764:17)
+    at FlowParserMixin.parseExprAtom (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:4774:19)
+    at FlowParserMixin.parseExprSubscripts (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11026:23)
+    at FlowParserMixin.parseUpdate (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:11011:21)
+    at FlowParserMixin.parseMaybeUnary (/home/johny/Documents/repos/Shinobi-Academy/shinobi-frontend/node_modules/@babel/parser/lib/index.js:10991:23)
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 652:6:  Parsing error: Expected corresponding JSX closing tag for <div>. (652:6)
+
+webpack compiled with 2 errors
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled with warnings.
+
+src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+src/Components/GalleryManager/GalleryManager.jsx
+  Line 269:9:   'tagInput' is not defined     no-undef
+  Line 269:52:  'tagInput' is not defined     no-undef
+  Line 272:30:  'tagInput' is not defined     no-undef
+  Line 274:7:   'setTagInput' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in src/Components/GalleryManager/GalleryManager.jsx
+  Line 268:9:  'handleAddTag' is assigned a value but never used     no-unused-vars
+  Line 278:9:  'handleRemoveTag' is assigned a value but never used  no-unused-vars
+
+ERROR in src/Components/GalleryManager/GalleryManager.jsx
+  Line 269:9:   'tagInput' is not defined     no-undef
+  Line 269:52:  'tagInput' is not defined     no-undef
+  Line 272:30:  'tagInput' is not defined     no-undef
+  Line 274:7:   'setTagInput' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully
+Compiling...
+Compiled successfully!
+webpack compiled successfully

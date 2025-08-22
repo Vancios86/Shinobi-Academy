@@ -3,60 +3,118 @@ import { useNavigate } from 'react-router-dom';
 import './GalleryManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useGallery } from '../../contexts/GalleryContext';
+import { galleryAPI } from '../../services/api';
 
 const GalleryManager = () => {
   const navigate = useNavigate();
-  const { galleryData, updateGalleryData } = useGallery();
+  const { 
+    galleryData, 
+    isLoading, 
+    error, 
+    loadAdminGalleryData,
+    createImage,
+    updateImage,
+    deleteImage,
+    reorderImages
+  } = useGallery();
+  
   const [localGalleryData, setLocalGalleryData] = useState([]);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [isDeploying, setIsDeploying] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [draggedImageId, setDraggedImageId] = useState(null);
-  const fileInputRef = useRef(null);
   const [newImage, setNewImage] = useState({
     title: '',
     src: '',
-    description: ''
+    category: 'General',
+    file: null
   });
 
+  const fileInputRef = useRef(null);
+
+  // Handle image file selection for new images
+  const handleImageFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File is too large. Maximum size is 10MB.');
+      return;
+    }
+
+    // Create local preview immediately
+    const localPreviewUrl = URL.createObjectURL(file);
+    setNewImage(prev => ({ 
+      ...prev, 
+      src: localPreviewUrl,
+      file: file // Store the file for later upload
+    }));
+  };
+
   // Load initial gallery data from global context
+  useEffect(() => {
+    loadAdminGalleryData();
+  }, [loadAdminGalleryData]);
+
+  // Update local data when global data changes
   useEffect(() => {
     setLocalGalleryData([...galleryData]);
   }, [galleryData]);
 
-  // Check for changes
-  useEffect(() => {
-    const hasUnsavedChanges = JSON.stringify(localGalleryData) !== JSON.stringify(galleryData);
-    setHasChanges(hasUnsavedChanges);
-  }, [localGalleryData, galleryData]);
-
   const handleBackToDashboard = () => {
-    if (hasChanges) {
-      const confirmLeave = window.confirm('You have unsaved changes. Are you sure you want to leave?');
-      if (!confirmLeave) return;
-    }
     navigate('/admin/dashboard');
   };
 
-  const handleAddImage = () => {
-    if (!newImage.title || !newImage.src) {
-      alert('Please fill in both title and image URL');
+  const handleAddImage = async () => {
+    if (!newImage.src) {
+      alert('Please select an image');
       return;
     }
 
-    const newId = Math.max(...localGalleryData.map(img => img.id), 0) + 1;
-    const imageToAdd = {
-      id: newId,
-      title: newImage.title,
-      src: newImage.src,
-      description: newImage.description || ''
-    };
+    try {
+      let finalImageData = { ...newImage };
+      
+      // If we have a file to upload, upload it first
+      if (newImage.file) {
+        setIsUploading(true);
+        const uploadResult = await galleryAPI.uploadImage(newImage.file);
+        finalImageData.src = uploadResult.data.path;
+      }
 
-    setLocalGalleryData([...localGalleryData, imageToAdd]);
-    setNewImage({ title: '', src: '', description: '' });
+      // Create the image in the database with default values for missing fields
+      const imageDataToCreate = {
+        title: finalImageData.title || 'Untitled Image',
+        src: finalImageData.src,
+        description: '',
+        category: finalImageData.category || 'General',
+        tags: [],
+        order: 0 // Set to 0 to place at the top
+      };
+      
+      await createImage(imageDataToCreate);
+      
+      // Refresh the gallery data to show the new image at the top
+      await loadAdminGalleryData();
+      
+      // Reset form
+      setNewImage({ title: '', src: '', category: 'General', file: null });
+      
+      // Clean up the local preview URL
+      if (newImage.src && newImage.src.startsWith('blob:')) {
+        URL.revokeObjectURL(newImage.src);
+      }
+      
+      alert('Image added successfully!');
+    } catch (error) {
+      alert(`Error adding image: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Drag & Drop File Upload Functions
@@ -87,7 +145,6 @@ const GalleryManager = () => {
     if (files.length === 0) return;
 
     setIsUploading(true);
-    setUploadProgress(0);
 
     try {
       for (let i = 0; i < files.length; i++) {
@@ -105,43 +162,31 @@ const GalleryManager = () => {
           continue;
         }
 
-        // Simulate upload progress
-        await new Promise(resolve => {
-          const interval = setInterval(() => {
-            setUploadProgress(prev => {
-              const newProgress = prev + Math.random() * 20;
-              if (newProgress >= 100) {
-                clearInterval(interval);
-                resolve();
-                return 100;
-              }
-              return newProgress;
-            });
-          }, 200);
-        });
-
-        // Create image object from file
-        const newId = Math.max(...localGalleryData.map(img => img.id), 0) + 1;
-        const imageToAdd = {
-          id: newId,
+        // Upload image
+        const uploadResult = await galleryAPI.uploadImage(file);
+        
+        // Create image object
+        const imageData = {
           title: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for title
-          src: URL.createObjectURL(file),
-          description: `Uploaded on ${new Date().toLocaleDateString()}`
+          src: uploadResult.data.path,
+          description: `Uploaded on ${new Date().toLocaleDateString()}`,
+          category: 'General',
+          tags: [],
+          order: 0 // Set to 0 to place at the top
         };
 
-        setLocalGalleryData(prev => [...prev, imageToAdd]);
+        await createImage(imageData);
       }
 
       alert(`${files.length} image(s) uploaded successfully!`);
+      
+      // Refresh the gallery data to show the new images at the top
+      await loadAdminGalleryData();
     } catch (error) {
       console.error('Upload error:', error);
       alert('An error occurred during upload. Please try again.');
     } finally {
       setIsUploading(false);
-      setUploadProgress(0);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
     }
   };
 
@@ -156,7 +201,7 @@ const GalleryManager = () => {
     e.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDropImage = (e, targetImageId) => {
+  const handleDropImage = async (e, targetImageId) => {
     e.preventDefault();
     
     if (draggedImageId === targetImageId) return;
@@ -172,6 +217,36 @@ const GalleryManager = () => {
     
     setLocalGalleryData(newData);
     setDraggedImageId(null);
+
+    // Update order in backend
+    try {
+      const imageIds = newData.map(img => img.id);
+      
+      // Validate imageIds array
+      if (!imageIds || imageIds.length === 0) {
+        throw new Error('No valid image IDs found for reordering');
+      }
+      
+      // Check if all IDs are valid
+      if (imageIds.some(id => !id)) {
+        throw new Error('Invalid image IDs found in the array');
+      }
+      
+      console.log('Reordering images with IDs:', imageIds);
+      await reorderImages(imageIds);
+      console.log('Images reordered successfully');
+    } catch (error) {
+      console.error('Error reordering images:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        response: error.response
+      });
+      alert(`Error saving new order: ${error.message}. Please try again.`);
+      
+      // Revert the local state change on error
+      setLocalGalleryData([...galleryData]);
+    }
   };
 
   const handleDragEnd = () => {
@@ -182,318 +257,407 @@ const GalleryManager = () => {
     setEditingId(id);
   };
 
-  const handleSaveEdit = (id) => {
-    const updatedData = localGalleryData.map(img => 
-      img.id === id ? { ...img, title: img.title, description: img.description } : img
-    );
-    setLocalGalleryData(updatedData);
-    setEditingId(null);
+  const handleSaveEdit = async (id) => {
+    const imageToUpdate = localGalleryData.find(img => img.id === id);
+    if (!imageToUpdate) return;
+
+    try {
+      await updateImage(id, {
+        title: imageToUpdate.title,
+        description: imageToUpdate.description,
+        category: imageToUpdate.category,
+        tags: imageToUpdate.tags
+      });
+      setEditingId(null);
+      alert('Image updated successfully!');
+    } catch (error) {
+      alert(`Error updating image: ${error.message}`);
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingId(null);
   };
 
-  const handleDeleteImage = (id) => {
+  const handleDeleteImage = async (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this image?');
     if (confirmDelete) {
-      setLocalGalleryData(localGalleryData.filter(img => img.id !== id));
-    }
-  };
-
-  const handleMoveImage = (id, direction) => {
-    const currentIndex = localGalleryData.findIndex(img => img.id === id);
-    if (currentIndex === -1) return;
-
-    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= localGalleryData.length) return;
-
-    const newData = [...localGalleryData];
-    [newData[currentIndex], newData[newIndex]] = [newData[newIndex], newData[currentIndex]];
-    setLocalGalleryData(newData);
-  };
-
-  const handleDeployChanges = async () => {
-    setIsDeploying(true);
-    
-    try {
-      // Simulate deployment process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Update the global gallery data
-      updateGalleryData(localGalleryData);
-      
-      alert('Gallery changes deployed successfully!');
-      setHasChanges(false);
-    } catch (error) {
-      alert('Error deploying changes. Please try again.');
-    } finally {
-      setIsDeploying(false);
+      try {
+        await deleteImage(id);
+        alert('Image deleted successfully!');
+      } catch (error) {
+        alert(`Error deleting image: ${error.message}`);
+      }
     }
   };
 
   const handleInputChange = (id, field, value) => {
-    setLocalGalleryData(localGalleryData.map(img => 
-      img.id === id ? { ...img, [field]: value } : img
-    ));
+    setLocalGalleryData(prev => 
+      prev.map(img => 
+        img.id === id ? { ...img, [field]: value } : img
+      )
+    );
   };
 
   const handleNewImageChange = (field, value) => {
-    setNewImage({ ...newImage, [field]: value });
+    setNewImage(prev => ({ ...prev, [field]: value }));
   };
 
+
+
+  const handleEditImageSelect = async (imageId, event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File is too large. Maximum size is 10MB.');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const uploadResult = await galleryAPI.uploadImage(file);
+      
+      // Update the image source in local data
+      setLocalGalleryData(prev => 
+        prev.map(img => 
+          img.id === imageId ? { ...img, src: uploadResult.data.path } : img
+        )
+      );
+      
+      alert('Image updated successfully!');
+    } catch (error) {
+      alert(`Error updating image: ${error.message}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="gallery-manager">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading gallery...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="gallery-manager">
+        <div className="error-container">
+          <h3>Error Loading Gallery</h3>
+          <p>{error}</p>
+          <button onClick={loadAdminGalleryData} className="retry-button">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className='gallery-manager'>
-      <header className='manager-header'>
-        <div className='manager-header-content'>
-          <div className='manager-logo'>
-            <img src={logo} alt='Shinobi Academy Logo' className='manager-logo-img' />
-            <h1 className='manager-title'>Gallery Manager</h1>
+    <div className="gallery-manager">
+      <header className="manager-header">
+        <div className="manager-header-content">
+          <div className="manager-logo">
+            <img src={logo} alt="Shinobi Academy Logo" className="manager-logo-img" />
+            <h1 className="manager-title">Gallery Manager</h1>
           </div>
-          <div className='manager-actions'>
-            <button onClick={handleBackToDashboard} className='back-btn'>
+          <div className="manager-actions">
+            <button onClick={handleBackToDashboard} className="back-btn">
               Back to Dashboard
             </button>
           </div>
         </div>
       </header>
 
-      <main className='manager-main'>
-        <div className='manager-container'>
-          {/* Add New Image Section */}
-          <div className='add-image-section'>
-            <h2 className='section-title text-red'>Add New Image</h2>
-            
-            {/* Drag & Drop Upload Area */}
-            <div className='upload-section'>
-              <div 
-                className={`upload-area ${dragOver ? 'drag-over' : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <div className='upload-content'>
-                  <div className='upload-icon'>
-                    <svg viewBox="0 0 24 24" fill="currentColor" className='upload-icon-svg'>
-                      <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                    </svg>
-                  </div>
-                  <h3 className='upload-title'>Drop images here or click to browse</h3>
-                  <p className='upload-subtitle'>
-                    Supports: JPG, PNG, GIF, WebP • Max size: 10MB
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type='file'
-                    multiple
-                    accept='image/*'
-                    onChange={handleFileSelect}
-                    className='file-input'
-                  />
-                </div>
-              </div>
+            <main className="manager-main">
+        <div className="manager-container">
 
-              {isUploading && (
-                <div className='upload-progress'>
-                  <div className='progress-bar'>
-                    <div 
-                      className='progress-fill' 
-                      style={{ width: `${uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <p className='progress-text'>Uploading... {Math.round(uploadProgress)}%</p>
-                </div>
-              )}
-            </div>
-
-            <div className='upload-divider'>
-              <span>OR</span>
-            </div>
-
-            {/* Manual Form */}
-            <div className='add-image-form'>
-              <div className='form-row'>
-                <div className='form-group'>
-                  <label htmlFor='new-title' className='form-label text-dark'>
-                    Image Title
-                  </label>
-                  <input
-                    type='text'
-                    id='new-title'
-                    value={newImage.title}
-                    onChange={(e) => handleNewImageChange('title', e.target.value)}
-                    className='form-input'
-                    placeholder='Enter image title'
-                  />
-                </div>
-                <div className='form-group'>
-                  <label htmlFor='new-url' className='form-label text-dark'>
-                    Image URL
-                  </label>
-                  <input
-                    type='url'
-                    id='new-url'
-                    value={newImage.src}
-                    onChange={(e) => handleNewImageChange('src', e.target.value)}
-                    className='form-input'
-                    placeholder='Enter image URL'
-                  />
-                </div>
-              </div>
-              <div className='form-group'>
-                <label htmlFor='new-description' className='form-label text-dark'>
-                  Description (Optional)
-                </label>
-                <textarea
-                  id='new-description'
-                  value={newImage.description}
-                  onChange={(e) => handleNewImageChange('description', e.target.value)}
-                  className='form-textarea'
-                  placeholder='Enter image description'
-                  rows='3'
-                />
-              </div>
-              <button onClick={handleAddImage} className='add-btn'>
-                Add Image
-              </button>
-            </div>
+                {/* Add New Image Section */}
+          <div className="add-image-section">
+        <h3>Add New Image</h3>
+        <div className="add-image-form">
+          <div className="form-group">
+            <label htmlFor="new-title" className="form-label text-dark">
+              Image Title (Optional)
+            </label>
+            <input
+              type="text"
+              id="new-title"
+              value={newImage.title}
+              onChange={(e) => handleNewImageChange('title', e.target.value)}
+              className="form-input"
+              placeholder="Enter image title (optional)"
+            />
           </div>
 
-          {/* Gallery Images Section */}
-          <div className='gallery-images-section'>
-            <div className='section-header'>
-              <h2 className='section-title text-red'>
-                Gallery Images ({localGalleryData.length})
-              </h2>
-              {localGalleryData.length > 0 && (
-                <div className='drag-instructions'>
-                  <span className='drag-hint'>💡 Drag images to reorder them</span>
-                </div>
-              )}
+          <div className="form-group">
+            <label htmlFor="new-category" className="form-label text-dark">
+              Category *
+            </label>
+            <select
+              id="new-category"
+              value={newImage.category}
+              onChange={(e) => handleNewImageChange('category', e.target.value)}
+              className="form-select"
+            >
+              <option value="General">General</option>
+              <option value="Training">Training</option>
+              <option value="Classes">Classes</option>
+              <option value="Events">Events</option>
+              <option value="Competitions">Competitions</option>
+              <option value="Camps">Camps</option>
+              <option value="Connor">Connor</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="new-url" className="form-label text-dark">
+              Image URL or File
+            </label>
+            <div className="image-input-group">
+              <input
+                type="url"
+                id="new-url"
+                value={newImage.src}
+                onChange={(e) => handleNewImageChange('src', e.target.value)}
+                className="form-input"
+                placeholder="Enter image URL"
+              />
+              <span className="image-input-divider">OR</span>
+              <input
+                type="file"
+                id="new-image-file"
+                accept="image/*"
+                onChange={(e) => handleImageFileSelect(e)}
+                className="form-file-input"
+              />
+              <label htmlFor="new-image-file" className="form-file-label">
+                Choose File
+              </label>
             </div>
-            
-            {localGalleryData.length === 0 ? (
-              <div className='empty-gallery shadowed-box'>
-                <div className='empty-gallery-icon'>
-                  <svg viewBox="0 0 24 24" fill="currentColor" className='empty-icon-svg'>
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                  </svg>
+            {newImage.src && (
+              <div className="image-preview-section">
+                <label className="form-label text-dark">Image Preview:</label>
+                <div className="image-preview-container">
+                  <img 
+                    src={newImage.src} 
+                    alt="Preview" 
+                    className="form-image-preview"
+                    onError={(e) => {
+                      console.error('Image failed to load:', newImage.src);
+                      e.target.style.display = 'none';
+                    }}
+                  />
                 </div>
-                <h3 className='empty-gallery-title text-dark'>Your Gallery is Empty</h3>
-                <p className='empty-gallery-text text-dark'>
-                  Start building your gallery by adding your first photo above!
-                </p>
-              </div>
-            ) : (
-              <div className='images-grid'>
-                {localGalleryData.map((image, index) => (
-                  <div
-                    key={image.id}
-                    className={`image-card ${
-                      draggedImageId === image.id ? 'dragging' : ''
-                    }`}
-                    onDragOver={handleDragOverImage}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDropImage(e, image.id)}
-                    onDragEnd={handleDragEnd}
-                    draggable={true}
-                    onDragStart={(e) => handleDragStart(e, image.id)}
-                  >
-                    <div className='image-preview'>
-                      <img 
-                        src={image.src} 
-                        alt={image.title} 
-                        className='preview-img'
-                        onError={(e) => {
-                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
-                        }}
-                      />
-                    </div>
-                    
-                    <div className='image-info'>
-                      {editingId === image.id ? (
-                        <div className='edit-form'>
-                          <input
-                            type='text'
-                            value={image.title}
-                            onChange={(e) => handleInputChange(image.id, 'title', e.target.value)}
-                            className='edit-input'
-                          />
-                          <textarea
-                            value={image.description || ''}
-                            onChange={(e) => handleInputChange(image.id, 'description', e.target.value)}
-                            className='edit-textarea'
-                            placeholder='Add description...'
-                            rows='2'
-                          />
-                          <div className='edit-actions'>
-                            <button onClick={() => handleSaveEdit(image.id)} className='save-btn'>
-                              Save
-                            </button>
-                            <button onClick={handleCancelEdit} className='cancel-btn'>
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className='image-details'>
-                          <h3 className='image-title'>{image.title}</h3>
-                          {image.description && (
-                            <p className='image-description'>{image.description}</p>
-                          )}
-                          <div className='image-actions'>
-                            <button onClick={() => handleEditImage(image.id)} className='edit-btn'>
-                              Edit
-                            </button>
-                            <button onClick={() => handleDeleteImage(image.id)} className='delete-btn'>
-                              Delete
-                            </button>
-                            <div className='move-buttons'>
-                              <button 
-                                onClick={() => handleMoveImage(image.id, 'up')}
-                                disabled={index === 0}
-                                className='move-btn'
-                                title='Move Up'
-                              >
-                                ↑
-                              </button>
-                              <button 
-                                onClick={() => handleMoveImage(image.id, 'down')}
-                                disabled={index === localGalleryData.length - 1}
-                                className='move-btn'
-                                title='Move Down'
-                              >
-                                ↓
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>
 
-          {/* Deploy Changes Section */}
-          <div className='deploy-section'>
-            <button 
-              onClick={handleDeployChanges}
-              disabled={!hasChanges || isDeploying}
-              className='deploy-btn'
-            >
-              {isDeploying ? 'Deploying Changes...' : 'Deploy Changes!'}
-            </button>
-            {hasChanges && (
-              <p className='changes-notice'>
-                You have unsaved changes. Click "Deploy Changes!" to save them.
-              </p>
+          <button 
+            onClick={handleAddImage} 
+            className="add-button"
+            disabled={isUploading}
+          >
+            {isUploading ? 'Adding Image...' : 'Add Image'}
+          </button>
+        </div>
+      </div>
+
+      {/* Drag & Drop Upload Section */}
+      <div className="upload-section">
+        <h3>Bulk Upload Images</h3>
+        <div 
+          className={`upload-area ${dragOver ? 'drag-over' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <div className="upload-content">
+            <div className="upload-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <h4 className="upload-title">Drag & Drop Images Here</h4>
+            <p className="upload-subtitle">or click to select files</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="file-input"
+            />
+            {isUploading && (
+              <div className="upload-progress">
+                <div className="progress-bar">
+                  <div className="progress-fill"></div>
+                </div>
+                <p className="progress-text">Uploading...</p>
+              </div>
             )}
           </div>
         </div>
+      </div>
+
+      {/* Gallery Images Display */}
+      <div className="gallery-images-section">
+        <h3>Gallery Images ({localGalleryData.length})</h3>
+        {localGalleryData.length === 0 ? (
+          <div className="empty-gallery">
+            <p>No images in the gallery yet. Add some images to get started!</p>
+          </div>
+        ) : (
+          <div className="gallery-grid">
+            {localGalleryData
+              .sort((a, b) => (a.order || 0) - (b.order || 0))
+              .map((image) => (
+              <div 
+                key={image.id} 
+                className={`gallery-image-card ${draggedImageId === image.id ? 'dragging' : ''}`}
+                draggable
+                onDragStart={(e) => handleDragStart(e, image.id)}
+                onDragOver={handleDragOverImage}
+                onDrop={(e) => handleDropImage(e, image.id)}
+                onDragEnd={handleDragEnd}
+              >
+                <div className="image-container">
+                  <img 
+                    src={image.src.startsWith('http') ? image.src : `http://localhost:5000${image.src}`}
+                    alt={image.title || 'Gallery image'}
+                    className="gallery-image"
+                    onError={(e) => {
+                      console.error('Image failed to load:', image.src);
+                      e.target.style.display = 'none';
+                      e.target.style.border = '2px solid red';
+                      e.target.style.backgroundColor = '#ffe6e6';
+                    }}
+                  />
+                  <div className="image-overlay">
+                    <div className="overlay-buttons">
+                      <button 
+                        onClick={() => handleEditImage(image.id)}
+                        className="edit-button"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteImage(image.id)}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {editingId === image.id ? (
+                  <div className="edit-form">
+                    <input
+                      type="text"
+                      value={localGalleryData.find(img => img.id === image.id)?.title || ''}
+                      onChange={(e) => handleInputChange(image.id, 'title', e.target.value)}
+                      className="edit-input"
+                      placeholder="Image title"
+                    />
+                    <textarea
+                      value={localGalleryData.find(img => img.id === image.id)?.description || ''}
+                      onChange={(e) => handleInputChange(image.id, 'description', e.target.value)}
+                      className="edit-textarea"
+                      placeholder="Image description"
+                      rows="2"
+                    />
+                    <select
+                      value={localGalleryData.find(img => img.id === image.id)?.category || 'General'}
+                      onChange={(e) => handleInputChange(image.id, 'category', e.target.value)}
+                      className="edit-select"
+                    >
+                      <option value="General">General</option>
+                      <option value="Training">Training</option>
+                      <option value="Classes">Classes</option>
+                      <option value="Events">Events</option>
+                      <option value="Competitions">Competitions</option>
+                      <option value="Camps">Camps</option>
+                      <option value="Connor">Connor</option>
+                    </select>
+                    <div className="edit-buttons">
+                      <button 
+                        onClick={() => handleSaveEdit(image.id)}
+                        className="save-button"
+                      >
+                        Save
+                      </button>
+                      <button 
+                        onClick={handleCancelEdit}
+                        className="cancel-button"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="image-info">
+                    <h4 className="image-title">{image.title}</h4>
+                    {image.description && (
+                      <p className="image-description">{image.description}</p>
+                    )}
+                    {image.category && (
+                      <span className="image-category">{image.category}</span>
+                    )}
+                    {image.tags && image.tags.length > 0 && (
+                      <div className="image-tags">
+                        {image.tags.map((tag, index) => (
+                          <span key={index} className="tag">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Image Upload Section for Edit */}
+                <div className="edit-image-section">
+                  <label className="edit-image-label">Change Image:</label>
+                  <div className="edit-image-input-group">
+                    <input
+                      type="file"
+                      id={`edit-image-${image.id}`}
+                      accept="image/*"
+                      onChange={(e) => handleEditImageSelect(image.id, e)}
+                      className="edit-file-input"
+                    />
+                    <label htmlFor={`edit-image-${image.id}`} className="edit-file-label">
+                      Choose New Image
+                    </label>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Status Message */}
+        <div className="auto-save-status">
+          <div className="status-message">
+            <span className="status-icon">✓</span>
+            <span className="status-text">All changes are saved automatically</span>
+          </div>
+        </div>
+        </div>
+        </div>
       </main>
+
     </div>
   );
 };

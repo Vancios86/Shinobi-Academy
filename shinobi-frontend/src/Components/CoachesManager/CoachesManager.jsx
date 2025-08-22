@@ -544,7 +544,7 @@ const CoachesManager = () => {
                             <div className='current-image-display'>
                               <img 
                                 src={coach.imgSrc} 
-                                alt={`Current ${coach.name} image`} 
+                                alt={`Current ${coach.name}`} 
                                 className='current-image-img'
                               />
                             </div>
@@ -566,11 +566,11 @@ const CoachesManager = () => {
                             {localCoachesData.find(c => c.id === coach.id)?.imgSrc && localCoachesData.find(c => c.id === coach.id)?.imgSrc !== coach.imgSrc && (
                               <div className='edit-image-preview'>
                                 <label className='edit-image-preview-label'>New Image Preview:</label>
-                                <img 
-                                  src={localCoachesData.find(c => c.id === coach.id)?.imgSrc} 
-                                  alt="New image preview" 
-                                  className='edit-image-preview-img'
-                                />
+                                                            <img 
+                              src={localCoachesData.find(c => c.id === coach.id)?.imgSrc} 
+                              alt="New preview" 
+                              className='edit-image-preview-img'
+                            />
                                 <small className='edit-image-note'>New image will be applied when saved</small>
                               </div>
                             )}

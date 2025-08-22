@@ -335,11 +335,76 @@ export class CoachesAPI extends ApiService {
   }
 }
 
+// Gallery API
+export class GalleryAPI extends ApiService {
+  // Get all gallery images (public)
+  async getGalleryImages(category = null, tags = null, limit = 50) {
+    let endpoint = '/gallery';
+    const params = new URLSearchParams();
+    
+    if (category) params.append('category', category);
+    if (tags) params.append('tags', tags);
+    if (limit) params.append('limit', limit);
+    
+    if (params.toString()) {
+      endpoint += `?${params.toString()}`;
+    }
+    
+    const response = await this.get(endpoint);
+    return response.data || [];
+  }
+
+  // Get all gallery images for admin (including inactive)
+  async getAdminGalleryImages() {
+    const response = await this.get('/gallery/admin');
+    return response.data || [];
+  }
+
+  // Get available categories
+  async getCategories() {
+    const response = await this.get('/gallery/categories');
+    return response.data || [];
+  }
+
+  // Create gallery image
+  async createImage(imageData) {
+    const response = await this.post('/gallery', imageData);
+    return response.data;
+  }
+
+  // Update gallery image
+  async updateImage(imageId, imageData) {
+    const response = await this.put(`/gallery/${imageId}`, imageData);
+    return response.data;
+  }
+
+  // Delete gallery image
+  async deleteImage(imageId) {
+    return this.delete(`/gallery/${imageId}`);
+  }
+
+  // Reorder gallery images
+  async reorderImages(imageIds) {
+    console.log('API: Reordering images with IDs:', imageIds);
+    const response = await this.put('/gallery/reorder', { imageIds });
+    console.log('API: Reorder response:', response);
+    return response.data;
+  }
+
+  // Upload gallery image
+  async uploadImage(imageFile) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    return this.uploadFile('/gallery/upload', formData);
+  }
+}
+
 // Create singleton instances
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
 export const scheduleAPI = new ScheduleAPI();
 export const coachesAPI = new CoachesAPI();
+export const galleryAPI = new GalleryAPI();
 
 // Default export
 export default ApiService;
