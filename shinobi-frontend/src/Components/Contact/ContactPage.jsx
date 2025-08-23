@@ -13,7 +13,7 @@ const ContactPage = () => {
   if (!isLoaded) {
     return (
       <div className='contact-page container flex'>
-        <div className='page-title' id='contact'>
+        <div className='page-title variation-3' id='contact'>
           <h3>Contact</h3>
         </div>
         <div className='inline-elements inline-elements-top'>
@@ -25,9 +25,9 @@ const ContactPage = () => {
 
   return (
     <div className='contact-page container flex'>
-      <div className='page-title' id='contact'>
-        <h3>Contact</h3>
-      </div>
+              <div className='page-title variation-3' id='contact'>
+          <h3>Contact</h3>
+        </div>
 
       <div className='inline-elements inline-elements-top'>
         <IconContext.Provider

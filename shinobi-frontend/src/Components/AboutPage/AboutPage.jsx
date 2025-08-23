@@ -23,9 +23,9 @@ const AboutPage = memo(() => {
   if (!contentLoaded) {
     return (
       <div className='about-page grid'>
-        <div className='page-title' id='about-page'>
-          <h3>Loading...</h3>
-        </div>
+                 <div className='page-title variation-3' id='about-page'>
+           <h3>Loading...</h3>
+         </div>
         <div className='about-page-content shadowed-box'>
           <p>Loading content...</p>
         </div>
@@ -35,9 +35,9 @@ const AboutPage = memo(() => {
 
   return (
     <div className='about-page grid'>
-      <div className='page-title' id='about-page'>
-        <h3>{contentData.about.pageTitle}</h3>
-      </div>
+                             <div className='page-title variation-3' id='about-page'>
+           <h3>{contentData.about.pageTitle}</h3>
+         </div>
       <div className='about-page-content shadowed-box'>
         <section className='container flow'>
           <div className='container'>

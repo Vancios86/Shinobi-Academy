@@ -110,7 +110,7 @@ const CoachesManager = () => {
       
       if (uploadResult.success) {
         // Update the form with the uploaded image URL
-        const imageUrl = `http://localhost:5000${uploadResult.data.path}`;
+        const imageUrl = `http://localhost:5001${uploadResult.data.path}`;
         setNewCoach(prev => ({
           ...prev,
           imgSrc: imageUrl
@@ -150,7 +150,7 @@ const CoachesManager = () => {
       
       if (uploadResult.success) {
         // Update the local coach data with the new image URL
-        const imageUrl = `http://localhost:5000${uploadResult.data.path}`;
+        const imageUrl = `http://localhost:5001${uploadResult.data.path}`;
         setLocalCoachesData(prev => prev.map(coach => 
           coach.id === coachId 
             ? { ...coach, imgSrc: imageUrl }

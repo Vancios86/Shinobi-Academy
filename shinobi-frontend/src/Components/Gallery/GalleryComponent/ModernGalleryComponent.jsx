@@ -192,8 +192,8 @@ const ModernGalleryComponent = () => {
               {filteredImages.map((image) => (
                 <div key={image.id} className="gallery-item">
                   <div className="image-container">
-                    <img
-                      src={image.src.startsWith('http') ? image.src : `http://localhost:5000${image.src}`}
+                                      <img
+                    src={image.src.startsWith('http') ? image.src : `http://localhost:5001${image.src}`}
                       alt={image.title || 'Gallery image'}
                       className="gallery-image"
                       onClick={() => handleImageClick(image)}
@@ -236,7 +236,7 @@ const ModernGalleryComponent = () => {
             
             <div className="modal-image-container">
               <img
-                src={selectedImage.src.startsWith('http') ? selectedImage.src : `http://localhost:5000${selectedImage.src}`}
+                src={selectedImage.src.startsWith('http') ? selectedImage.src : `http://localhost:5001${selectedImage.src}`}
                 alt={selectedImage.title || 'Gallery image'}
                 className="modal-image"
               />

@@ -245,14 +245,106 @@ ul {
   box-shadow: var(--bs);
 }
 
+/* =========================================== */
+/* MINIMALIST PAGE TITLE SYSTEM */
+/* =========================================== */
+
+/* Base page-title with minimalist design */
 .page-title {
-  font-size: var(--fs-600);
+  /* Layout & Positioning */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 6rem 0.3rem 3rem 0.3rem;
-  color: hsl(var(--clr-dark));
+  margin: 0 auto;
+  position: relative;
+  
+  /* Typography */
+  font-size: var(--fs-600);
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: hsl(var(--clr-dark));
+  
+  /* Smooth transitions */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, color;
+}
+
+/* Minimalist variation with animated underline */
+.page-title.variation-3 {
+  /* Clean minimal design */
+  padding: 5rem 1rem 2rem 1rem;
+  margin: 1rem auto;
+  
+  /* Typography focus */
+  font-size: var(--fs-700);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: hsl(var(--clr-dark));
+  
+  /* Subtle underline animation */
+  position: relative;
+}
+
+.page-title.variation-3::after {
+  content: '';
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    hsl(var(--clr-red)), 
+    hsl(var(--clr-dark)));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(-50%);
+}
+
+.page-title.variation-3:hover::after {
+  width: 80px;
+}
+
+.page-title.variation-3:hover {
+  transform: translateY(-2px);
+  color: hsl(var(--clr-red));
+}
+
+/* =========================================== */
+/* RESPONSIVE DESIGN */
+/* =========================================== */
+
+@media screen and (max-width: 335px) {
+  .page-title,
+  .page-title.variation-3 {
+    font-size: var(--fs-500);
+    padding: 3rem 0.5rem 1.5rem 0.5rem;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .page-title,
+  .page-title.variation-3 {
+    font-size: var(--fs-700);
+    letter-spacing: var(--ls-1);
+  }
+}
+
+@media screen and (min-width: 630px) {
+  .page-title,
+  .page-title.variation-3 {
+    font-size: var(--fs-800);
+    letter-spacing: var(--ls-2);
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .page-title,
+  .page-title.variation-3 {
+    font-size: var(--fs-900);
+    padding: 5rem 0.6rem;
+  }
 }
 
 .component-title {

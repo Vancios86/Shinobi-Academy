@@ -22,7 +22,7 @@ const GalleryComponent = () => {
   // Get current image source
   const currentImage = galleryData[currentImageIndex];
   const imgSrc = currentImage ? 
-    (currentImage.src.startsWith('http') ? currentImage.src : `http://localhost:5000${currentImage.src}`) : 
+    (currentImage.src.startsWith('http') ? currentImage.src : `http://localhost:5001${currentImage.src}`) : 
     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkdhbGxlcnkgSW1hZ2VzPC90ZXh0Pjwvc3ZnPg==';
 
   return (

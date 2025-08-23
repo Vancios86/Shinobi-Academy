@@ -8,6 +8,7 @@ import ClassesPage from './Components/ClassesPage/ClassesPage';
 import CampsComponent from './Components/Camps/CampsComponent/CampsComponent';
 import GalleryComponent from './Components/Gallery/GalleryComponent/GalleryComponent';
 import ContactPage from './Components/Contact/ContactPage';
+
 import Footer from './Components/Footer/Footer';
 
 // import { neon } from '@netlify/neon';
