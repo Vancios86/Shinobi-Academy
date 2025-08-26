@@ -1,8 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ClassesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useClasses } from '../../contexts/ClassesContext';
+
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
 
 const ClassesManager = () => {
   const navigate = useNavigate();
@@ -14,7 +39,8 @@ const ClassesManager = () => {
     reorderClasses,
     resetToDefault,
     isLoading,
-    error
+    error,
+    loadClasses
   } = useClasses();
   
   const [localClassesData, setLocalClassesData] = useState(classesData);
@@ -29,6 +55,17 @@ const ClassesManager = () => {
     imageType: 'upload',
     order: 0
   });
+  const [toasts, setToasts] = useState([]);
+
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
 
   // Load classes data from context
   useEffect(() => {
@@ -205,19 +242,54 @@ const ClassesManager = () => {
           order: 0
         });
         // Local data will be updated via context
+        addToast('Class added successfully!', 'success');
       } else {
-        alert(`Failed to add class: ${result.message}`);
+        addToast(`Failed to add class: ${result.message}`, 'error');
       }
     } catch (error) {
-      alert(`Error adding class: ${error.message}`);
+      addToast(`Error adding class: ${error.message}`, 'error');
     }
   };
 
   const handleUpdateClass = async (classId) => {
-    const classToUpdate = localClassesData.find(c => c.id === classId);
+    let classToUpdate;
+    
+    // Handle new class creation
+    if (classId === 'new-class') {
+      classToUpdate = {
+        id: 'new-class',
+        ...newClassData,
+        order: localClassesData.length + 1
+      };
+    } else {
+      // Handle existing class updates
+      classToUpdate = localClassesData.find(c => c.id === classId);
+    }
+    
     if (classToUpdate) {
       try {
-        // Check if this is an order change that might cause conflicts
+        // Handle new class creation
+        if (classId === 'new-class') {
+          const result = await addClass(classToUpdate);
+          if (result.success) {
+            setShowAddForm(false);
+            setEditingClass(null);
+            // Reset new class form data
+            setNewClassData({
+              name: 'New Class',
+              description: 'Class description',
+              image: '',
+              imageType: 'upload',
+              order: 0
+            });
+            addToast('Class added successfully!', 'success');
+          } else {
+            addToast(`Failed to add class: ${result.message}`, 'error');
+          }
+          return;
+        }
+
+        // Handle existing class updates
         const originalClass = classesData.find(c => c.id === classId);
         const isOrderChange = originalClass && originalClass.order !== classToUpdate.order;
         
@@ -244,7 +316,7 @@ const ClassesManager = () => {
           });
           
           setEditingClass(null);
-          alert('Class order updated successfully!');
+          addToast('Class order updated successfully!', 'success');
         } else {
           // If it's not an order change, just update the single class
           const result = await updateClass(classId, classToUpdate);
@@ -252,11 +324,11 @@ const ClassesManager = () => {
             setEditingClass(null);
             // Local data will be updated via context
           } else {
-            alert(`Failed to update class: ${result.message}`);
+            addToast(`Failed to update class: ${result.message}`, 'error');
           }
         }
       } catch (error) {
-        alert(`Error updating class: ${error.message}`);
+        addToast(`Error updating class: ${error.message}`, 'error');
       }
     }
   };
@@ -271,11 +343,12 @@ const ClassesManager = () => {
         const result = await deleteClass(classId);
         if (result.success) {
           // Local data will be updated via context
+          addToast('Class deleted successfully!', 'success');
         } else {
-          alert(`Failed to delete class: ${result.message}`);
+          addToast(`Failed to delete class: ${result.message}`, 'error');
         }
       } catch (error) {
-        alert(`Error deleting class: ${error.message}`);
+        addToast(`Error deleting class: ${error.message}`, 'error');
       }
     }
   };
@@ -329,10 +402,10 @@ const ClassesManager = () => {
       }
       
       setHasChanges(false);
-      alert('Classes updated successfully!');
+      addToast('Classes updated successfully!', 'success');
     } catch (error) {
       console.error('Error updating classes data:', error);
-      alert(`Failed to update classes: ${error.message}`);
+      addToast(`Failed to update classes: ${error.message}`, 'error');
     } finally {
       setIsDeploying(false);
     }
@@ -349,6 +422,7 @@ const ClassesManager = () => {
       setHasChanges(false);
       setEditingClass(null);
       setShowAddForm(false);
+      addToast('Classes reset to default!', 'info');
     }
   };
 
@@ -661,6 +735,15 @@ const ClassesManager = () => {
               </button>
             </div>
           )}
+
+          {toasts.map(toast => (
+            <Toast
+              key={toast.id}
+              message={toast.message}
+              type={toast.type}
+              onClose={() => removeToast(toast.id)}
+            />
+          ))}
         </div>
       </main>
     </div>

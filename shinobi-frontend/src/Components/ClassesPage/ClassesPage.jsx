@@ -33,7 +33,8 @@ const ClassesPage = () => {
 
         <div className='classes-content shadowed-box grid text-silver'>
           {classes.map((classItem, index) => {
-            // Determine if this class should be positioned on the right (even indices)
+            // Automatic alternating layout: even indices (0, 2, 4...) = image left, text right
+            // odd indices (1, 3, 5...) = image right, text left
             const isRightPositioned = index % 2 === 1;
             
             return (
@@ -44,7 +45,7 @@ const ClassesPage = () => {
                   backgroundImage: classItem.imageType === 'predefined' 
                     ? `url(/assets/classes-assets/${classItem.image})`
                     : `url(${classItem.image})`,
-                  backgroundPositionY: classItem.imagePosition,
+                  backgroundPositionY: 'center', // Standard position
                   justifySelf: isRightPositioned ? 'flex-end' : 'flex-start',
                   width: '88%',
                   flexDirection: isRightPositioned ? 'row-reverse' : 'row'
@@ -53,8 +54,8 @@ const ClassesPage = () => {
                 <div className='classes-name'>
                   <h3>{classItem.name}</h3>
                 </div>
-                <Parallax speed={classItem.speed}>
-                  <p className={`classes-text-${classItem.alignment}`}>
+                <Parallax speed={10}>
+                  <p className={`classes-text-${isRightPositioned ? 'right' : 'left'}`}>
                     {classItem.description}
                   </p>
                 </Parallax>
