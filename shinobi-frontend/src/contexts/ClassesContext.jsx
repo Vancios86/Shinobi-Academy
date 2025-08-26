@@ -209,16 +209,7 @@ export const ClassesProvider = ({ children }) => {
     localStorage.removeItem('shinobi-classes-data');
   };
 
-  // Get available image options
-  const getAvailableImages = () => {
-    return [
-      'mma.webp',
-      'bjj.webp', 
-      'wj.webp',
-      'sc.webp',
-      'private.webp'
-    ];
-  };
+
 
   const value = {
     classesData,
@@ -229,7 +220,6 @@ export const ClassesProvider = ({ children }) => {
     getClassById,
     getAllClasses,
     resetToDefault,
-    getAvailableImages,
     loadClasses,
     isLoaded,
     isLoading,

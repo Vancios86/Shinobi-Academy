@@ -13,7 +13,6 @@ const ClassesManager = () => {
     deleteClass, 
     reorderClasses,
     resetToDefault,
-    getAvailableImages,
     isLoading,
     error
   } = useClasses();
@@ -26,11 +25,8 @@ const ClassesManager = () => {
   const [newClassData, setNewClassData] = useState({
     name: 'New Class',
     description: 'Class description',
-    image: 'mma.webp',
-    imageType: 'predefined',
-    imagePosition: 'center',
-    alignment: 'left',
-    speed: 10,
+    image: '',
+    imageType: 'upload',
     order: 0
   });
 
@@ -204,11 +200,8 @@ const ClassesManager = () => {
         setNewClassData({
           name: 'New Class',
           description: 'Class description',
-          image: 'mma.webp',
-          imageType: 'predefined',
-          imagePosition: 'center',
-          alignment: 'left',
-          speed: 10,
+          image: '',
+          imageType: 'upload',
           order: 0
         });
         // Local data will be updated via context
@@ -368,33 +361,18 @@ const ClassesManager = () => {
           <label>Image Source:</label>
           <select
             name="imageType"
-            value={classItem.imageType || 'predefined'}
+            value={classItem.imageType || 'upload'}
             onChange={(e) => {
               handleInputChange(classItem.id, 'imageType', e.target.value);
             }}
             disabled={!isEditing}
           >
-            <option value="predefined">Predefined Images</option>
             <option value="upload">Upload Local Image</option>
             <option value="url">Online Image URL</option>
           </select>
         </div>
 
-        {classItem.imageType === 'predefined' && (
-          <div className="form-group">
-            <label>Background Image:</label>
-            <select
-              name="image"
-              value={classItem.image}
-              onChange={(e) => handleInputChange(classItem.id, 'image', e.target.value)}
-              disabled={!isEditing}
-            >
-              {getAvailableImages().map(img => (
-                <option key={img} value={img}>{img}</option>
-              ))}
-            </select>
-          </div>
-        )}
+
 
         {classItem.imageType === 'upload' && (
           <div className="form-group">
@@ -508,51 +486,6 @@ const ClassesManager = () => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Image Position:</label>
-              <select
-                name="imagePosition"
-                value={classItem.imagePosition}
-                onChange={(e) => handleInputChange(classItem.id, 'imagePosition', e.target.value)}
-                disabled={!isEditing}
-              >
-                <option value="center">Center</option>
-                <option value="top">Top</option>
-                <option value="bottom">Bottom</option>
-                <option value="18%">18%</option>
-                <option value="66%">66%</option>
-                <option value="11%">11%</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Text Alignment:</label>
-              <select
-                name="alignment"
-                value={classItem.alignment}
-                onChange={(e) => handleInputChange(classItem.id, 'alignment', e.target.value)}
-                disabled={!isEditing}
-              >
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Parallax Speed:</label>
-              <input
-                name="speed"
-                type="number"
-                min="1"
-                max="20"
-                value={classItem.speed}
-                onChange={(e) => handleInputChange(classItem.id, 'speed', parseInt(e.target.value))}
-                disabled={!isEditing}
-              />
-            </div>
-
-            <div className="form-group">
               <label>Display Order:</label>
               <input
                 name="order"
@@ -637,7 +570,7 @@ const ClassesManager = () => {
           <div className='welcome-section'>
             <h2 className='welcome-title text-red'>Manage Classes</h2>
             <p className='welcome-subtitle text-dark'>
-              Add, edit, delete, and reorder classes. Choose from predefined images, upload local files, or use online URLs.
+              Add, edit, delete, and reorder classes. Upload local images or use online URLs.
             </p>
           </div>
 
@@ -680,11 +613,8 @@ const ClassesManager = () => {
                     setNewClassData({
                       name: 'New Class',
                       description: 'Class description',
-                      image: 'mma.webp',
-                      imageType: 'predefined',
-                      imagePosition: 'center',
-                      alignment: 'left',
-                      speed: 10,
+                      image: '',
+                      imageType: 'upload',
                       order: 0
                     });
                   }}

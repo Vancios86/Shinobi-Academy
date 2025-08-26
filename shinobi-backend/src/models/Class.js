@@ -19,25 +19,9 @@ const classSchema = new mongoose.Schema({
   },
   imageType: {
     type: String,
-    enum: ['predefined', 'upload', 'url'],
+    enum: ['upload', 'url'],
     required: [true, 'Image type is required'],
-    default: 'predefined'
-  },
-  imagePosition: {
-    type: String,
-    default: 'center',
-    maxlength: [50, 'Image position cannot exceed 50 characters']
-  },
-  alignment: {
-    type: String,
-    enum: ['left', 'right', 'center'],
-    default: 'left'
-  },
-  speed: {
-    type: Number,
-    min: [-10, 'Speed cannot be less than -10'],
-    max: [10, 'Speed cannot be greater than 10'],
-    default: 0
+    default: 'upload'
   },
   order: {
     type: Number,

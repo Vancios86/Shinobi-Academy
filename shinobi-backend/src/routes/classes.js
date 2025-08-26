@@ -103,16 +103,8 @@ router.post('/', [
     .notEmpty()
     .withMessage('Class image is required'),
   body('imageType')
-    .isIn(['predefined', 'upload', 'url'])
+    .isIn(['upload', 'url'])
     .withMessage('Invalid image type'),
-  body('alignment')
-    .optional()
-    .isIn(['left', 'right', 'center'])
-    .withMessage('Invalid alignment'),
-  body('speed')
-    .optional()
-    .isFloat({ min: -10, max: 10 })
-    .withMessage('Speed must be between -10 and 10'),
   body('order')
     .isInt({ min: 0 })
     .withMessage('Order must be a positive integer')
@@ -183,16 +175,8 @@ router.put('/:id', [
     .withMessage('Description cannot exceed 1000 characters'),
   body('imageType')
     .optional()
-    .isIn(['predefined', 'upload', 'url'])
+    .isIn(['upload', 'url'])
     .withMessage('Invalid image type'),
-  body('alignment')
-    .optional()
-    .isIn(['left', 'right', 'center'])
-    .withMessage('Invalid alignment'),
-  body('speed')
-    .optional()
-    .isFloat({ min: -10, max: 10 })
-    .withMessage('Speed must be between -10 and 10'),
   body('order')
     .optional()
     .isInt({ min: 0 })
