@@ -109,11 +109,12 @@ classSchema.methods.incrementViews = function() {
 };
 
 // Static method to reorder classes
-classSchema.statics.reorderClasses = async function(classIds) {
-  const bulkOps = classIds.map((id, index) => ({
+classSchema.statics.reorderClasses = async function(classesWithOrders) {
+  // classesWithOrders should be an array of objects with { id, order }
+  const bulkOps = classesWithOrders.map(({ id, order }) => ({
     updateOne: {
       filter: { _id: id },
-      update: { order: index + 1 }
+      update: { order: order }
     }
   }));
   

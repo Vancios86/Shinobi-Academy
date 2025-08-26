@@ -11,6 +11,7 @@ const ClassesManager = () => {
     addClass, 
     updateClass, 
     deleteClass, 
+    reorderClasses,
     resetToDefault,
     getAvailableImages,
     isLoading,
@@ -22,6 +23,16 @@ const ClassesManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [newClassData, setNewClassData] = useState({
+    name: 'New Class',
+    description: 'Class description',
+    image: 'mma.webp',
+    imageType: 'predefined',
+    imagePosition: 'center',
+    alignment: 'left',
+    speed: 10,
+    order: 0
+  });
 
   // Load classes data from context
   useEffect(() => {
@@ -49,6 +60,18 @@ const ClassesManager = () => {
   };
 
   const handleInputChange = (classId, field, value) => {
+    if (classId === 'new-class') {
+      // Update the new class form data
+      setNewClassData(prev => ({ ...prev, [field]: value }));
+      return;
+    }
+    
+    // Special handling for order changes to prevent conflicts
+    if (field === 'order') {
+      handleOrderChange(classId, value);
+      return;
+    }
+    
     setLocalClassesData(prev => 
       prev.map(classItem => 
         classItem.id === classId 
@@ -56,6 +79,94 @@ const ClassesManager = () => {
           : classItem
       )
     );
+  };
+
+  const handleOrderChange = (classId, newOrder) => {
+    // Limit order to valid range (1 to total number of classes)
+    const maxOrder = localClassesData.length;
+    if (newOrder < 1) newOrder = 1;
+    if (newOrder > maxOrder) newOrder = maxOrder;
+
+    // Get the current class and its old order
+    const currentClass = localClassesData.find(c => c.id === classId);
+    if (!currentClass) return;
+    
+    const oldOrder = currentClass.order;
+    
+    // If the order hasn't changed, do nothing
+    if (oldOrder === newOrder) return;
+
+    setLocalClassesData(prev => {
+      const updated = [...prev];
+      
+      // Update the current class order
+      const classIndex = updated.findIndex(c => c.id === classId);
+      if (classIndex !== -1) {
+        updated[classIndex] = { ...updated[classIndex], order: newOrder };
+      }
+      
+      // Shift other classes to accommodate the order change
+      if (oldOrder < newOrder) {
+        // Moving to a higher order: shift classes between old and new down by 1
+        updated.forEach(classItem => {
+          if (classItem.id !== classId && 
+              classItem.order > oldOrder && 
+              classItem.order <= newOrder) {
+            classItem.order = classItem.order - 1;
+          }
+        });
+      } else {
+        // Moving to a lower order: shift classes between new and old up by 1
+        updated.forEach(classItem => {
+          if (classItem.id !== classId && 
+              classItem.order >= newOrder && 
+              classItem.order < oldOrder) {
+            classItem.order = classItem.order + 1;
+          }
+        });
+      }
+      
+      return updated;
+    });
+  };
+
+  const resolveOrderConflicts = (classes) => {
+    // Remove duplicates first (in case the same class appears multiple times)
+    const uniqueClasses = classes.filter((classItem, index, self) => 
+      index === self.findIndex(c => c.id === classItem.id)
+    );
+    
+    // Create a map to track used orders
+    const usedOrders = new Set();
+    const resolvedClasses = [];
+    
+    // First pass: handle classes with unique orders
+    uniqueClasses.forEach(classItem => {
+      if (!usedOrders.has(classItem.order)) {
+        usedOrders.add(classItem.order);
+        resolvedClasses.push({ ...classItem });
+      }
+    });
+    
+    // Second pass: handle classes with conflicting orders
+    uniqueClasses.forEach(classItem => {
+      if (usedOrders.has(classItem.order)) {
+        // Find the next available order
+        let nextOrder = classItem.order;
+        while (usedOrders.has(nextOrder)) {
+          nextOrder++;
+        }
+        usedOrders.add(nextOrder);
+        resolvedClasses.push({ ...classItem, order: nextOrder });
+      }
+    });
+    
+    // Sort by final order for consistency and return only unique classes
+    return resolvedClasses
+      .sort((a, b) => a.order - b.order)
+      .filter((classItem, index, self) => 
+        index === self.findIndex(c => c.id === classItem.id)
+      );
   };
 
   const handleImageUpload = (classId, file) => {
@@ -77,21 +188,29 @@ const ClassesManager = () => {
   };
 
   const handleAddClass = async () => {
+    // New class gets the next available order number
+    const newOrder = localClassesData.length + 1;
+    
     const newClass = {
-      name: 'New Class',
-      description: 'Class description',
-      image: 'mma.webp',
-      imageType: 'predefined',
-      imagePosition: 'center',
-      alignment: 'left',
-      speed: 10,
-      order: localClassesData.length + 1
+      ...newClassData,
+      order: newOrder
     };
     
     try {
       const result = await addClass(newClass);
       if (result.success) {
         setShowAddForm(false);
+        // Reset new class form data
+        setNewClassData({
+          name: 'New Class',
+          description: 'Class description',
+          image: 'mma.webp',
+          imageType: 'predefined',
+          imagePosition: 'center',
+          alignment: 'left',
+          speed: 10,
+          order: 0
+        });
         // Local data will be updated via context
       } else {
         alert(`Failed to add class: ${result.message}`);
@@ -137,38 +256,62 @@ const ClassesManager = () => {
     }
   };
 
-  const handleDeployChanges = () => {
+  const handleDeployChanges = async () => {
     setIsDeploying(true);
     
-    // Simulate deployment delay
-    setTimeout(() => {
-      try {
-        // Apply all local changes to the context
-        localClassesData.forEach(classItem => {
-          const existingClass = classesData.find(c => c.id === classItem.id);
-          if (existingClass) {
-            updateClass(classItem.id, classItem);
-          } else {
-            addClass(classItem);
-          }
-        });
-        
-        // Remove classes that were deleted locally
-        classesData.forEach(classItem => {
-          if (!localClassesData.find(c => c.id === classItem.id)) {
-            deleteClass(classItem.id);
-          }
-        });
-        
-        setHasChanges(false);
-        alert('Classes updated successfully!');
-      } catch (error) {
-        console.error('Error updating classes data:', error);
-        alert('Failed to update classes. Please try again.');
-      } finally {
-        setIsDeploying(false);
+    try {
+      // First, handle any new classes that need to be added
+      const newClasses = localClassesData.filter(classItem => 
+        !classesData.find(c => c.id === classItem.id)
+      );
+      
+      for (const newClass of newClasses) {
+        await addClass(newClass);
       }
-    }, 1000);
+      
+      // Then, handle any classes that need to be deleted
+      const classesToDelete = classesData.filter(classItem => 
+        !localClassesData.find(c => c.id === classItem.id)
+      );
+      
+      for (const classToDelete of classesToDelete) {
+        await deleteClass(classToDelete.id);
+      }
+      
+      // Now handle the reordering logic for existing classes
+      const existingClassesToUpdate = localClassesData.filter(classItem => 
+        classesData.find(c => c.id === classItem.id)
+      );
+      
+      if (existingClassesToUpdate.length > 0) {
+        // Create a properly ordered array by resolving conflicts
+        const orderedClasses = resolveOrderConflicts(existingClassesToUpdate);
+        
+        // Debug: Log what we're sending to the backend
+        console.log('Sending to reorderClasses:', orderedClasses);
+        console.log('Unique class IDs being sent:', [...new Set(orderedClasses.map(c => c.id))]);
+        
+        // Update local data with the resolved orders to prevent duplicates
+        setLocalClassesData(prev => {
+          const updated = prev.map(classItem => {
+            const resolved = orderedClasses.find(c => c.id === classItem.id);
+            return resolved ? { ...classItem, order: resolved.order } : classItem;
+          });
+          return updated;
+        });
+        
+        // Use reorderClasses to update all classes with their final orders
+        await reorderClasses(orderedClasses);
+      }
+      
+      setHasChanges(false);
+      alert('Classes updated successfully!');
+    } catch (error) {
+      console.error('Error updating classes data:', error);
+      alert(`Failed to update classes: ${error.message}`);
+    } finally {
+      setIsDeploying(false);
+    }
   };
 
   const handleResetToDefault = () => {
@@ -186,13 +329,14 @@ const ClassesManager = () => {
   };
 
   const renderImageSelector = (classItem) => {
-    const isEditing = editingClass === classItem.id;
+    const isEditing = editingClass === classItem.id || classItem.id === 'new-class';
     
     return (
       <div className="image-selector">
         <div className="image-input-type-selector">
           <label>Image Source:</label>
           <select
+            name="imageType"
             value={classItem.imageType || 'predefined'}
             onChange={(e) => {
               handleInputChange(classItem.id, 'imageType', e.target.value);
@@ -209,6 +353,7 @@ const ClassesManager = () => {
           <div className="form-group">
             <label>Background Image:</label>
             <select
+              name="image"
               value={classItem.image}
               onChange={(e) => handleInputChange(classItem.id, 'image', e.target.value)}
               disabled={!isEditing}
@@ -242,6 +387,7 @@ const ClassesManager = () => {
           <div className="form-group">
             <label>Image URL:</label>
             <input
+              name="image"
               type="url"
               value={classItem.image}
               onChange={(e) => handleImageUrlChange(classItem.id, e.target.value)}
@@ -261,7 +407,7 @@ const ClassesManager = () => {
   };
 
   const renderClassForm = (classItem, isNew = false) => {
-    const isEditing = editingClass === classItem.id;
+    const isEditing = isNew || editingClass === classItem.id;
     
     return (
       <div key={classItem.id} className={`class-form ${isEditing ? 'editing' : ''}`}>
@@ -306,6 +452,7 @@ const ClassesManager = () => {
           <div className="form-group">
             <label>Class Name:</label>
             <input
+              name="name"
               type="text"
               value={classItem.name}
               onChange={(e) => handleInputChange(classItem.id, 'name', e.target.value)}
@@ -317,6 +464,7 @@ const ClassesManager = () => {
           <div className="form-group">
             <label>Description:</label>
             <textarea
+              name="description"
               value={classItem.description}
               onChange={(e) => handleInputChange(classItem.id, 'description', e.target.value)}
               disabled={!isEditing}
@@ -331,6 +479,7 @@ const ClassesManager = () => {
             <div className="form-group">
               <label>Image Position:</label>
               <select
+                name="imagePosition"
                 value={classItem.imagePosition}
                 onChange={(e) => handleInputChange(classItem.id, 'imagePosition', e.target.value)}
                 disabled={!isEditing}
@@ -347,6 +496,7 @@ const ClassesManager = () => {
             <div className="form-group">
               <label>Text Alignment:</label>
               <select
+                name="alignment"
                 value={classItem.alignment}
                 onChange={(e) => handleInputChange(classItem.id, 'alignment', e.target.value)}
                 disabled={!isEditing}
@@ -361,6 +511,7 @@ const ClassesManager = () => {
             <div className="form-group">
               <label>Parallax Speed:</label>
               <input
+                name="speed"
                 type="number"
                 min="1"
                 max="20"
@@ -373,17 +524,37 @@ const ClassesManager = () => {
             <div className="form-group">
               <label>Display Order:</label>
               <input
+                name="order"
                 type="number"
                 min="1"
+                max={localClassesData.length}
                 value={classItem.order}
-                onChange={(e) => handleInputChange(classItem.id, 'order', parseInt(e.target.value))}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value)) {
+                    handleInputChange(classItem.id, 'order', value);
+                  }
+                }}
+                onBlur={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (isNaN(value) || value < 1 || value > localClassesData.length) {
+                    // Reset to current order if invalid
+                    e.target.value = classItem.order;
+                  }
+                }}
                 disabled={!isEditing}
-                placeholder="Enter display order (1, 2, 3...)"
+                placeholder={`Enter display order (1 to ${localClassesData.length})`}
+                style={{
+                  borderColor: classItem.order < 1 || classItem.order > localClassesData.length ? '#ff6b6b' : '#ddd'
+                }}
               />
+              <small className="form-help">
+                Lower numbers appear first. Valid range: 1 to {localClassesData.length}.
+              </small>
             </div>
           </div>
 
-          <small className="form-help">Lower numbers appear first. Classes with the same order will be sorted alphabetically.</small>
+          <small className="form-help">Lower numbers appear first. Order conflicts are automatically resolved by shifting other classes.</small>
         </div>
       </div>
     );
@@ -460,13 +631,7 @@ const ClassesManager = () => {
               <h3>Add New Class</h3>
               {renderClassForm({
                 id: 'new-class',
-                name: 'New Class',
-                description: 'Class description',
-                image: 'mma.webp',
-                imageType: 'predefined',
-                imagePosition: 'center',
-                alignment: 'left',
-                speed: 10,
+                ...newClassData,
                 order: localClassesData.length + 1
               }, true)}
               <div className='add-class-actions'>
@@ -478,7 +643,20 @@ const ClassesManager = () => {
                 </button>
                 <button 
                   className='btn-secondary'
-                  onClick={() => setShowAddForm(false)}
+                  onClick={() => {
+                    setShowAddForm(false);
+                    // Reset new class form data
+                    setNewClassData({
+                      name: 'New Class',
+                      description: 'Class description',
+                      image: 'mma.webp',
+                      imageType: 'predefined',
+                      imagePosition: 'center',
+                      alignment: 'left',
+                      speed: 10,
+                      order: 0
+                    });
+                  }}
                 >
                   Cancel
                 </button>
@@ -491,7 +669,16 @@ const ClassesManager = () => {
             <p className='order-instruction'>Change the display order numbers to reorder classes. Lower numbers appear first.</p>
             
             {localClassesData
-              .sort((a, b) => a.order - b.order)
+              .sort((a, b) => {
+                // During editing, maintain the original order from classesData
+                // This prevents jumping around while editing
+                const originalA = classesData.find(c => c.id === a.id);
+                const originalB = classesData.find(c => c.id === b.id);
+                if (originalA && originalB) {
+                  return originalA.order - originalB.order;
+                }
+                return 0;
+              })
               .map((classItem) => (
                 <div key={classItem.id} className='class-item'>
                   {renderClassForm(classItem)}

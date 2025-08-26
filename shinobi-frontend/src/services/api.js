@@ -246,8 +246,8 @@ export class ClassesAPI extends ApiService {
   }
 
   // Reorder classes
-  async reorderClasses(classIds) {
-    const response = await this.post('/classes/reorder', { classIds });
+  async reorderClasses(classesWithOrders) {
+    const response = await this.post('/classes/reorder', { classes: classesWithOrders });
     return response.data || [];
   }
 }

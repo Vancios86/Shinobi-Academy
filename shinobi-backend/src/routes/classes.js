@@ -299,12 +299,17 @@ router.delete('/:id', [
 router.post('/reorder', [
   authenticateToken,
   requireAdmin,
-  body('classIds')
+  body('classes')
     .isArray()
-    .withMessage('Class IDs must be an array')
+    .withMessage('Classes must be an array')
     .custom((value) => {
-      if (!value.every(id => /^[0-9a-fA-F]{24}$/.test(id))) {
-        throw new Error('All class IDs must be valid MongoDB ObjectIds');
+      if (!value.every(item => 
+        item.id && 
+        /^[0-9a-fA-F]{24}$/.test(item.id) && 
+        typeof item.order === 'number' && 
+        item.order > 0
+      )) {
+        throw new Error('Each class must have a valid ID and order number');
       }
       return true;
     })
@@ -318,10 +323,16 @@ router.post('/reorder', [
       });
     }
 
-    const { classIds } = req.body;
+    const { classes } = req.body;
+    
+    // Debug: Log what we're receiving
+    console.log('Backend received classes:', classes);
 
     // Verify all classes exist
+    const classIds = classes.map(c => c.id);
+    console.log('Extracted class IDs:', classIds);
     const existingClasses = await Class.find({ _id: { $in: classIds } });
+    console.log('Found existing classes:', existingClasses.length, 'vs expected:', classIds.length);
     if (existingClasses.length !== classIds.length) {
       return res.status(400).json({
         error: 'Validation failed',
@@ -329,8 +340,8 @@ router.post('/reorder', [
       });
     }
 
-    // Reorder classes
-    await Class.reorderClasses(classIds);
+    // Reorder classes with their specific orders
+    await Class.reorderClasses(classes);
 
     // Get updated classes
     const updatedClasses = await Class.getActiveClasses();
