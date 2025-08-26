@@ -224,12 +224,43 @@ const ClassesManager = () => {
     const classToUpdate = localClassesData.find(c => c.id === classId);
     if (classToUpdate) {
       try {
-        const result = await updateClass(classId, classToUpdate);
-        if (result.success) {
+        // Check if this is an order change that might cause conflicts
+        const originalClass = classesData.find(c => c.id === classId);
+        const isOrderChange = originalClass && originalClass.order !== classToUpdate.order;
+        
+        if (isOrderChange) {
+          // If it's an order change, we need to handle potential conflicts
+          // Get all existing classes that might be affected
+          const existingClassesToUpdate = localClassesData.filter(classItem => 
+            classesData.find(c => c.id === classItem.id)
+          );
+          
+          // Resolve order conflicts
+          const orderedClasses = resolveOrderConflicts(existingClassesToUpdate);
+          
+          // Update all classes together to avoid conflicts
+          await reorderClasses(orderedClasses);
+          
+          // Update local data with resolved orders
+          setLocalClassesData(prev => {
+            const updated = prev.map(classItem => {
+              const resolved = orderedClasses.find(c => c.id === classItem.id);
+              return resolved ? { ...classItem, order: resolved.order } : classItem;
+            });
+            return updated;
+          });
+          
           setEditingClass(null);
-          // Local data will be updated via context
+          alert('Class order updated successfully!');
         } else {
-          alert(`Failed to update class: ${result.message}`);
+          // If it's not an order change, just update the single class
+          const result = await updateClass(classId, classToUpdate);
+          if (result.success) {
+            setEditingClass(null);
+            // Local data will be updated via context
+          } else {
+            alert(`Failed to update class: ${result.message}`);
+          }
         }
       } catch (error) {
         alert(`Error updating class: ${error.message}`);
