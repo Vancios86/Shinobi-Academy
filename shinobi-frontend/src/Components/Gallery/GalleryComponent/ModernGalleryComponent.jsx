@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useGallery } from '../../../contexts/GalleryContext';
 import { AiOutlineFilter, AiOutlineClose, AiOutlineSearch, AiOutlineEye } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
@@ -49,26 +49,26 @@ const ModernGalleryComponent = () => {
   };
 
   // Close modal
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setSelectedImage(null);
-  };
+  }, []);
 
   // Navigate to previous image
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     if (!selectedImage) return;
     const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
     const previousIndex = currentIndex === 0 ? filteredImages.length - 1 : currentIndex - 1;
     setSelectedImage(filteredImages[previousIndex]);
-  };
+  }, [selectedImage, filteredImages]);
 
   // Navigate to next image
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     if (!selectedImage) return;
     const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
     const nextIndex = currentIndex === filteredImages.length - 1 ? 0 : currentIndex + 1;
     setSelectedImage(filteredImages[nextIndex]);
-  };
+  }, [selectedImage, filteredImages]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -92,7 +92,7 @@ const ModernGalleryComponent = () => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, selectedImage, filteredImages]);
+  }, [isModalOpen, selectedImage, filteredImages, goToNext, goToPrevious, closeModal]);
 
   if (!isLoaded) {
     return (
@@ -193,7 +193,7 @@ const ModernGalleryComponent = () => {
                 <div key={image.id} className="gallery-item">
                   <div className="image-container">
                                       <img
-                    src={image.src.startsWith('http') ? image.src : `http://localhost:5001${image.src}`}
+                    src={image.src.startsWith('http') ? image.src : `http://localhost:5000${image.src}`}
                       alt={image.title || 'Gallery image'}
                       className="gallery-image"
                       onClick={() => handleImageClick(image)}
@@ -236,7 +236,7 @@ const ModernGalleryComponent = () => {
             
             <div className="modal-image-container">
               <img
-                src={selectedImage.src.startsWith('http') ? selectedImage.src : `http://localhost:5001${selectedImage.src}`}
+                src={selectedImage.src.startsWith('http') ? selectedImage.src : `http://localhost:5000${selectedImage.src}`}
                 alt={selectedImage.title || 'Gallery image'}
                 className="modal-image"
               />

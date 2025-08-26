@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+
 import './GalleryPage.css';
 import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';

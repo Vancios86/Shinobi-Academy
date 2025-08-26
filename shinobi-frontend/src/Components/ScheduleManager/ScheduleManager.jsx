@@ -4,7 +4,7 @@ import './ScheduleManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
-import { scheduleAPI } from '../../services/api';
+
 
 const ScheduleManager = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const ScheduleManager = () => {
   // Force reload schedule data on component mount
   useEffect(() => {
     loadSchedule();
-  }, []); // Remove dependencies to avoid infinite loops
+  }, [loadSchedule]); // loadSchedule is stable from context
 
 
 
