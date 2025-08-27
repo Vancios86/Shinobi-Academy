@@ -1,15 +1,30 @@
 // import { memo } from 'react';
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useEffect } from 'react';
 import './AboutPage.css';
 import Tilt from 'react-parallax-tilt';
 import { useCoaches } from '../../contexts/CoachesContext';
 import { useContent } from '../../contexts/ContentContext';
+import { useLocation } from 'react-router-dom';
 import colin from '../../assets/images/colin.webp';
 import view from '../../assets/images/shinobi-view.webp';
 
 const AboutPage = memo(() => {
   const { coachesData, isLoaded } = useCoaches();
   const { contentData, isLoaded: contentLoaded } = useContent();
+  const location = useLocation();
+  
+  // Scroll to top when component mounts or route changes
+  useEffect(() => {
+    // Use a small delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]); // Re-run when the pathname changes
   
   // Memoize the coaches data processing to avoid unnecessary re-renders
   const processedCoachesData = useMemo(() => {

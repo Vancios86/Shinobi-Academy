@@ -1,22 +1,29 @@
 import './SchedulePage.css';
 import Logo from '../../Logo/Logo';
 import Footer from '../../Footer/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSchedule } from '../../../contexts/ScheduleContext';
 import { useClasses } from '../../../contexts/ClassesContext';
 
 const SchedulePage = () => {
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  });
-  
   const navigate = useNavigate();
+  const location = useLocation();
   const { getAllScheduleData, getDaysOfWeek, isLoaded: scheduleLoaded } = useSchedule();
   const { getAllClasses, isLoaded: classesLoaded } = useClasses();
+  
+  // Scroll to top when component mounts or route changes
+  useEffect(() => {
+    // Use a small delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]); // Re-run when the pathname changes
   
   const scheduleData = getAllScheduleData();
   const daysOfWeek = getDaysOfWeek();

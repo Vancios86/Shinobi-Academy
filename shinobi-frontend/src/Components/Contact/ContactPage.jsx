@@ -6,9 +6,25 @@ import { IconContext } from 'react-icons';
 import { SiFacebook, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
 import { useContact } from '../../contexts/ContactContext';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const ContactPage = () => {
   const { contactData, isLoaded } = useContact();
+  const location = useLocation();
+
+  // Scroll to top when component mounts or route changes
+  useEffect(() => {
+    // Use a small delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]); // Re-run when the pathname changes
 
   if (!isLoaded) {
     return (

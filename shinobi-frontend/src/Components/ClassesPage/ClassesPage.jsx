@@ -1,11 +1,26 @@
 import './ClassesPage.css';
 import { Parallax } from 'react-scroll-parallax';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useClasses } from '../../contexts/ClassesContext';
+import { useEffect } from 'react';
 
 const ClassesPage = () => {
   const { getAllClasses, isLoaded } = useClasses();
   const classes = getAllClasses();
+  const location = useLocation();
+
+  // Scroll to top when component mounts or route changes
+  useEffect(() => {
+    // Use a small delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]); // Re-run when the pathname changes
 
   if (!isLoaded) {
     return (

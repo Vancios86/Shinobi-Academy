@@ -3,6 +3,36 @@
   position: relative;
 }
 
+/* Ensure back button uses consistent global positioning */
+.schedule-page .back-button {
+  position: relative !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  background: linear-gradient(135deg, hsl(var(--clr-red)) 0%, hsl(var(--clr-red) / 0.8) 100%) !important;
+  border: 2px solid hsl(var(--clr-red)) !important;
+  border-radius: 50% !important;
+  color: hsl(var(--clr-white)) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
+  transition: all 0.3s ease !important;
+  margin: 2rem 0.33rem -5rem !important;
+  z-index: 100 !important;
+}
+
+.schedule-page .back-button:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.18) !important;
+}
+
+.schedule-page .back-button > b {
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  color: hsl(var(--clr-white)) !important;
+}
+
 .dynamic-schedule-container {
   max-width: 80rem;
   margin: 0 auto;
@@ -143,6 +173,16 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .schedule-page .back-button {
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+    margin: 1.5rem 0.25rem -4rem !important;
+  }
+  
+  .schedule-page .back-button > b {
+    font-size: 1rem !important;
+  }
+  
   .dynamic-schedule-container {
     padding: 1rem;
   }
@@ -172,6 +212,16 @@
 }
 
 @media (max-width: 480px) {
+  .schedule-page .back-button {
+    width: 2rem !important;
+    height: 2rem !important;
+    margin: 1rem 0.25rem -3rem !important;
+  }
+  
+  .schedule-page .back-button > b {
+    font-size: 0.9rem !important;
+  }
+  
   .dynamic-schedule-container {
     padding: 0.5rem;
   }
@@ -188,5 +238,3 @@
     padding: 1rem;
   }
 }
-
-    padding: 1rem;
