@@ -59,7 +59,7 @@ const classSchema = new mongoose.Schema({
 // Indexes for performance
 classSchema.index({ order: 1 });
 classSchema.index({ isActive: 1 });
-classSchema.index({ slug: 1 });
+// slug is already indexed via unique: true
 classSchema.index({ 'metadata.featured': 1 });
 
 // Pre-save middleware to generate slug

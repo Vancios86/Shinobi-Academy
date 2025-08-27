@@ -5,6 +5,31 @@ import logo from '../../assets/logos/logo.png';
 import { useGallery } from '../../contexts/GalleryContext';
 import { galleryAPI } from '../../services/api';
 
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
+
 const GalleryManager = () => {
   const navigate = useNavigate();
   const { 
@@ -29,8 +54,19 @@ const GalleryManager = () => {
     category: 'General',
     file: null
   });
+  const [toasts, setToasts] = useState([]);
 
   const fileInputRef = useRef(null);
+
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
 
   // Handle image file selection for new images
   const handleImageFileSelect = (event) => {
@@ -38,12 +74,12 @@ const GalleryManager = () => {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.');
+      addToast('Please select an image file.', 'error');
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 10MB.');
+      addToast('File is too large. Maximum size is 10MB.', 'error');
       return;
     }
 
@@ -72,7 +108,7 @@ const GalleryManager = () => {
 
   const handleAddImage = async () => {
     if (!newImage.src) {
-      alert('Please select an image');
+      addToast('Please select an image', 'error');
       return;
     }
 
@@ -109,9 +145,9 @@ const GalleryManager = () => {
         URL.revokeObjectURL(newImage.src);
       }
       
-      alert('Image added successfully!');
+      addToast('Image added successfully!', 'success');
     } catch (error) {
-      alert(`Error adding image: ${error.message}`);
+      addToast(`Error adding image: ${error.message}`, 'error');
     } finally {
       setIsUploading(false);
     }
@@ -152,13 +188,13 @@ const GalleryManager = () => {
         
         // Validate file type
         if (!file.type.startsWith('image/')) {
-          alert(`File ${file.name} is not an image. Please upload only image files.`);
+          addToast(`File ${file.name} is not an image. Please upload only image files.`, 'error');
           continue;
         }
 
         // Validate file size (max 10MB)
         if (file.size > 10 * 1024 * 1024) {
-          alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+          addToast(`File ${file.name} is too large. Maximum size is 10MB.`, 'error');
           continue;
         }
 
@@ -178,13 +214,13 @@ const GalleryManager = () => {
         await createImage(imageData);
       }
 
-      alert(`${files.length} image(s) uploaded successfully!`);
+      addToast(`${files.length} image(s) uploaded successfully!`, 'success');
       
       // Refresh the gallery data to show the new images at the top
       await loadAdminGalleryData();
     } catch (error) {
       console.error('Upload error:', error);
-      alert('An error occurred during upload. Please try again.');
+      addToast('An error occurred during upload. Please try again.', 'error');
     } finally {
       setIsUploading(false);
     }
@@ -242,7 +278,7 @@ const GalleryManager = () => {
         stack: error.stack,
         response: error.response
       });
-      alert(`Error saving new order: ${error.message}. Please try again.`);
+      addToast(`Error saving new order: ${error.message}. Please try again.`, 'error');
       
       // Revert the local state change on error
       setLocalGalleryData([...galleryData]);
@@ -269,9 +305,9 @@ const GalleryManager = () => {
         tags: imageToUpdate.tags
       });
       setEditingId(null);
-      alert('Image updated successfully!');
+      addToast('Image updated successfully!', 'success');
     } catch (error) {
-      alert(`Error updating image: ${error.message}`);
+      addToast(`Error updating image: ${error.message}`, 'error');
     }
   };
 
@@ -284,9 +320,9 @@ const GalleryManager = () => {
     if (confirmDelete) {
       try {
         await deleteImage(id);
-        alert('Image deleted successfully!');
+        addToast('Image deleted successfully!', 'success');
       } catch (error) {
-        alert(`Error deleting image: ${error.message}`);
+        addToast(`Error deleting image: ${error.message}`, 'error');
       }
     }
   };
@@ -310,13 +346,12 @@ const GalleryManager = () => {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.');
+      addToast('Please select an image file.', 'error');
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 10MB.');
-      return;
+      addToast('File is too large. Maximum size is 10MB.', 'error');
     }
 
     try {
@@ -330,9 +365,9 @@ const GalleryManager = () => {
         )
       );
       
-      alert('Image updated successfully!');
+      addToast('Image updated successfully!', 'success');
     } catch (error) {
-      alert(`Error updating image: ${error.message}`);
+      addToast(`Error updating image: ${error.message}`, 'error');
     } finally {
       setIsUploading(false);
     }
@@ -654,6 +689,16 @@ const GalleryManager = () => {
             <span className="status-text">All changes are saved automatically</span>
           </div>
         </div>
+
+        {/* Toast Notifications */}
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
         </div>
         </div>
       </main>

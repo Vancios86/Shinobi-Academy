@@ -26,14 +26,14 @@ app.use(helmet({
 app.use(compression());
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: {
-    error: 'Too many requests from this IP, please try again later.'
-  }
-});
-app.use('/api/', limiter);
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+//   message: {
+//     error: 'Too many requests from this IP, please try again later.'
+//   }
+// });
+// app.use('/api/', limiter);
 
 // CORS configuration - More permissive for development
 app.use(cors({
@@ -62,10 +62,7 @@ app.use('/uploads', (req, res, next) => {
 });
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shinobi-academy', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shinobi-academy')
 .then(() => {
   console.log('✅ Connected to MongoDB');
 })
@@ -146,10 +143,15 @@ app.use('*', (req, res) => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received. Shutting down gracefully...');
-  mongoose.connection.close(() => {
-    console.log('MongoDB connection closed.');
-    process.exit(0);
-  });
+  mongoose.connection.close()
+    .then(() => {
+      console.log('MongoDB connection closed.');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Error closing MongoDB connection:', error);
+      process.exit(1);
+    });
 });
 
 app.listen(PORT, () => {

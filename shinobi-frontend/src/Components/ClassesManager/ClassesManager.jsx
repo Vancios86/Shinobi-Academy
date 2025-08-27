@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ClassesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useClasses } from '../../contexts/ClassesContext';
+import ConfirmationModal from '../Common/ConfirmationModal';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -37,10 +38,9 @@ const ClassesManager = () => {
     updateClass, 
     deleteClass, 
     reorderClasses,
-    resetToDefault,
+    resetToOriginal,
     isLoading,
-    error,
-    loadClasses
+    error
   } = useClasses();
   
   const [localClassesData, setLocalClassesData] = useState(classesData);
@@ -48,6 +48,7 @@ const ClassesManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [newClassData, setNewClassData] = useState({
     name: 'New Class',
     description: 'Class description',
@@ -78,6 +79,26 @@ const ClassesManager = () => {
     setHasChanges(hasUnsavedChanges);
   }, [localClassesData, classesData]);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape' && showResetModal) {
+        setShowResetModal(false);
+      }
+    };
+
+    if (showResetModal) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showResetModal]);
+
   const handleBackToDashboard = () => {
     if (hasChanges) {
       const confirmLeave = window.confirm(
@@ -99,12 +120,7 @@ const ClassesManager = () => {
       return;
     }
     
-    // Special handling for order changes to prevent conflicts
-    if (field === 'order') {
-      handleOrderChange(classId, value);
-      return;
-    }
-    
+    // Update local data for existing class
     setLocalClassesData(prev => 
       prev.map(classItem => 
         classItem.id === classId 
@@ -112,55 +128,6 @@ const ClassesManager = () => {
           : classItem
       )
     );
-  };
-
-  const handleOrderChange = (classId, newOrder) => {
-    // Limit order to valid range (1 to total number of classes)
-    const maxOrder = localClassesData.length;
-    if (newOrder < 1) newOrder = 1;
-    if (newOrder > maxOrder) newOrder = maxOrder;
-
-    // Get the current class and its old order
-    const currentClass = localClassesData.find(c => c.id === classId);
-    if (!currentClass) return;
-    
-    const oldOrder = currentClass.order;
-    
-    // If the order hasn't changed, do nothing
-    if (oldOrder === newOrder) return;
-
-    setLocalClassesData(prev => {
-      const updated = [...prev];
-      
-      // Update the current class order
-      const classIndex = updated.findIndex(c => c.id === classId);
-      if (classIndex !== -1) {
-        updated[classIndex] = { ...updated[classIndex], order: newOrder };
-      }
-      
-      // Shift other classes to accommodate the order change
-      if (oldOrder < newOrder) {
-        // Moving to a higher order: shift classes between old and new down by 1
-        updated.forEach(classItem => {
-          if (classItem.id !== classId && 
-              classItem.order > oldOrder && 
-              classItem.order <= newOrder) {
-            classItem.order = classItem.order - 1;
-          }
-        });
-      } else {
-        // Moving to a lower order: shift classes between new and old up by 1
-        updated.forEach(classItem => {
-          if (classItem.id !== classId && 
-              classItem.order >= newOrder && 
-              classItem.order < oldOrder) {
-            classItem.order = classItem.order + 1;
-          }
-        });
-      }
-      
-      return updated;
-    });
   };
 
   const resolveOrderConflicts = (classes) => {
@@ -203,21 +170,55 @@ const ClassesManager = () => {
   };
 
   const handleImageUpload = (classId, file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        // Store the image as a data URL for now
-        // In the future, this would be uploaded to a server/database
-        handleInputChange(classId, 'image', e.target.result);
-        handleInputChange(classId, 'imageType', 'upload');
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      addToast('Please select an image file.', 'error');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      addToast('File is too large. Maximum size is 5MB.', 'error');
+      return;
+    }
+
+    try {
+      // Create a local URL for preview
+      const imageUrl = URL.createObjectURL(file);
+      
+      if (classId === 'new-class') {
+        setNewClassData(prev => ({ ...prev, image: imageUrl }));
+      } else {
+        setLocalClassesData(prev => 
+          prev.map(classItem => 
+            classItem.id === classId 
+              ? { ...classItem, image: imageUrl, imageType: 'upload' }
+              : classItem
+          )
+        );
+      }
+      
+      addToast('Image selected successfully!', 'success');
+    } catch (error) {
+      console.error('Error handling image upload:', error);
+      addToast('Error processing image. Please try again.', 'error');
     }
   };
 
   const handleImageUrlChange = (classId, url) => {
-    handleInputChange(classId, 'image', url);
-    handleInputChange(classId, 'imageType', 'url');
+    if (classId === 'new-class') {
+      setNewClassData(prev => ({ ...prev, image: url, imageType: 'url' }));
+    } else {
+      setLocalClassesData(prev => 
+        prev.map(classItem => 
+          classItem.id === classId 
+            ? { ...classItem, image: url, imageType: 'url' }
+            : classItem
+        )
+      );
+    }
   };
 
   const handleAddClass = async () => {
@@ -252,84 +253,54 @@ const ClassesManager = () => {
   };
 
   const handleUpdateClass = async (classId) => {
-    let classToUpdate;
-    
-    // Handle new class creation
     if (classId === 'new-class') {
-      classToUpdate = {
-        id: 'new-class',
-        ...newClassData,
+      // Handle adding new class
+      const classToAdd = {
+        name: newClassData.name,
+        description: newClassData.description,
+        image: newClassData.image,
+        imageType: newClassData.imageType,
         order: localClassesData.length + 1
       };
-    } else {
-      // Handle existing class updates
-      classToUpdate = localClassesData.find(c => c.id === classId);
-    }
-    
-    if (classToUpdate) {
-      try {
-        // Handle new class creation
-        if (classId === 'new-class') {
-          const result = await addClass(classToUpdate);
-          if (result.success) {
-            setShowAddForm(false);
-            setEditingClass(null);
-            // Reset new class form data
-            setNewClassData({
-              name: 'New Class',
-              description: 'Class description',
-              image: '',
-              imageType: 'upload',
-              order: 0
-            });
-            addToast('Class added successfully!', 'success');
-          } else {
-            addToast(`Failed to add class: ${result.message}`, 'error');
-          }
-          return;
-        }
 
-        // Handle existing class updates
-        const originalClass = classesData.find(c => c.id === classId);
-        const isOrderChange = originalClass && originalClass.order !== classToUpdate.order;
-        
-        if (isOrderChange) {
-          // If it's an order change, we need to handle potential conflicts
-          // Get all existing classes that might be affected
-          const existingClassesToUpdate = localClassesData.filter(classItem => 
-            classesData.find(c => c.id === classItem.id)
-          );
-          
-          // Resolve order conflicts
-          const orderedClasses = resolveOrderConflicts(existingClassesToUpdate);
-          
-          // Update all classes together to avoid conflicts
-          await reorderClasses(orderedClasses);
-          
-          // Update local data with resolved orders
-          setLocalClassesData(prev => {
-            const updated = prev.map(classItem => {
-              const resolved = orderedClasses.find(c => c.id === classItem.id);
-              return resolved ? { ...classItem, order: resolved.order } : classItem;
-            });
-            return updated;
+      try {
+        const result = await addClass(classToAdd);
+        if (result.success) {
+          setNewClassData({
+            name: 'New Class',
+            description: 'Class description',
+            image: '',
+            imageType: 'upload',
+            order: 0
           });
-          
-          setEditingClass(null);
-          addToast('Class order updated successfully!', 'success');
+          setShowAddForm(false);
+          addToast('Class added successfully!', 'success');
         } else {
-          // If it's not an order change, just update the single class
-          const result = await updateClass(classId, classToUpdate);
-          if (result.success) {
-            setEditingClass(null);
-            // Local data will be updated via context
-          } else {
-            addToast(`Failed to update class: ${result.message}`, 'error');
-          }
+          addToast(`Failed to add class: ${result.message}`, 'error');
         }
       } catch (error) {
-        addToast(`Error updating class: ${error.message}`, 'error');
+        addToast(`Error adding class: ${error.message}`, 'error');
       }
+      return;
+    }
+
+    // Handle updating existing class
+    const updatedClass = localClassesData.find(c => c.id === classId);
+    if (!updatedClass) {
+      addToast('Class not found. Please refresh the page.', 'error');
+      return;
+    }
+
+    try {
+      const result = await updateClass(classId, updatedClass);
+      if (result.success) {
+        setEditingClass(null);
+        addToast('Class updated successfully!', 'success');
+      } else {
+        addToast(`Failed to update class: ${result.message}`, 'error');
+      }
+    } catch (error) {
+      addToast(`Error updating class: ${error.message}`, 'error');
     }
   };
 
@@ -342,7 +313,6 @@ const ClassesManager = () => {
       try {
         const result = await deleteClass(classId);
         if (result.success) {
-          // Local data will be updated via context
           addToast('Class deleted successfully!', 'success');
         } else {
           addToast(`Failed to delete class: ${result.message}`, 'error');
@@ -411,19 +381,31 @@ const ClassesManager = () => {
     }
   };
 
-  const handleResetToDefault = () => {
-    const confirmReset = window.confirm(
-      'Are you sure you want to reset all classes to default values? This action cannot be undone.'
-    );
-    
-    if (confirmReset) {
-      resetToDefault();
-      setLocalClassesData(classesData);
-      setHasChanges(false);
-      setEditingClass(null);
-      setShowAddForm(false);
-      addToast('Classes reset to default!', 'info');
+  const handleResetToOriginal = async () => {
+    try {
+      addToast('Resetting classes to original state...', 'info');
+      const result = await resetToOriginal();
+      
+      if (result.success) {
+        setEditingClass(null);
+        setShowAddForm(false);
+        addToast(result.message, 'success');
+      } else {
+        addToast(result.message, 'error');
+      }
+    } catch (error) {
+      console.error('Error during reset:', error);
+      addToast('Failed to reset classes. Please try again.', 'error');
     }
+  };
+
+  const handleResetConfirm = () => {
+    setShowResetModal(false);
+    handleResetToOriginal();
+  };
+
+  const handleResetCancel = () => {
+    setShowResetModal(false);
   };
 
   const renderImageSelector = (classItem) => {
@@ -642,7 +624,7 @@ const ClassesManager = () => {
           )}
 
           <div className='welcome-section'>
-            <h2 className='welcome-title text-red'>Manage Classes</h2>
+            <h2 className='welcome-title text-red'>Update Classes</h2>
             <p className='welcome-subtitle text-dark'>
               Add, edit, delete, and reorder classes. Upload local images or use online URLs.
             </p>
@@ -658,9 +640,9 @@ const ClassesManager = () => {
             
             <button 
               className='btn-secondary'
-              onClick={handleResetToDefault}
+              onClick={() => setShowResetModal(true)}
             >
-              Reset to Default
+              Reset to Original
             </button>
           </div>
 
@@ -746,6 +728,17 @@ const ClassesManager = () => {
           ))}
         </div>
       </main>
+
+      <ConfirmationModal
+        isOpen={showResetModal}
+        title="Confirm Reset"
+        message="Are you sure you want to reset all classes to their original state from when you logged in? This action cannot be undone."
+        onConfirm={handleResetConfirm}
+        onCancel={handleResetCancel}
+        confirmText="Reset"
+        cancelText="Cancel"
+        type="warning"
+      />
     </div>
   );
 };

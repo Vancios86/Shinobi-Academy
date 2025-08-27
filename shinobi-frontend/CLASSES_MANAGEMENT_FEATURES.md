@@ -84,7 +84,7 @@ Successfully implemented a comprehensive classes management system for the Shino
 7. **Speed Adjustment**: Customize parallax scrolling speed
 
 ### 3. **Admin Dashboard Integration**
-- **New Button Added**: "Manage Classes" button in admin dashboard
+- **New Button Added**: "Update Classes" button in admin dashboard
 - **Consistent Design**: Matches existing admin interface style
 - **Navigation**: Seamless routing to classes manager
 - **Icon Integration**: Star icon representing classes/achievements
@@ -195,7 +195,7 @@ ClassesManager → ClassesContext → localStorage
 
 ### **For Administrators**
 1. **Access**: Login to admin dashboard
-2. **Navigate**: Click "Manage Classes" button
+2. **Navigate**: Click "Update Classes" button
 3. **Add Class**: Click "+ Add New Class" button
 4. **Edit Class**: Click "Edit" button on any class
 5. **Delete Class**: Click "Delete" button with confirmation

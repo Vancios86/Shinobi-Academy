@@ -4,6 +4,32 @@ import './CoachesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useCoaches } from '../../contexts/CoachesContext';
 import { coachesAPI } from '../../services/api';
+import ConfirmationModal from '../Common/ConfirmationModal';
+
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
 
 const CoachesManager = () => {
   const navigate = useNavigate();
@@ -20,6 +46,9 @@ const CoachesManager = () => {
   } = useCoaches();
   const [localCoachesData, setLocalCoachesData] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [coachToDelete, setCoachToDelete] = useState(null);
+  const [toasts, setToasts] = useState([]);
   const [newCoach, setNewCoach] = useState({
     name: '',
     imgSrc: '',
@@ -27,9 +56,21 @@ const CoachesManager = () => {
     specialty: ''
   });
 
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
+
   // Load initial coaches data from global context
   useEffect(() => {
-    setLocalCoachesData([...coachesData]);
+    if (coachesData && coachesData.length > 0) {
+      setLocalCoachesData([...coachesData]);
+    }
   }, [coachesData]);
 
   // Load admin coaches data on component mount
@@ -37,6 +78,26 @@ const CoachesManager = () => {
     loadAdminCoaches();
   }, [loadAdminCoaches]);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape' && showDeleteModal) {
+        setShowDeleteModal(false);
+        setCoachToDelete(null);
+      }
+    };
+
+    if (showDeleteModal) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDeleteModal]);
 
 
   const handleBackToDashboard = () => {
@@ -45,23 +106,23 @@ const CoachesManager = () => {
 
   const handleAddCoach = async () => {
     if (!newCoach.name || !newCoach.imgSrc) {
-      alert('Please fill in both name and image URL');
+      addToast('Please fill in both name and image URL', 'error');
       return;
     }
 
     // Validate character limits
     if (newCoach.name.length > 25) {
-      alert('Coach name cannot exceed 25 characters');
+      addToast('Coach name cannot exceed 25 characters', 'error');
       return;
     }
     
     if (newCoach.specialty && newCoach.specialty.length > 25) {
-      alert('Specialty cannot exceed 25 characters');
+      addToast('Specialty cannot exceed 25 characters', 'error');
       return;
     }
     
     if (newCoach.description && newCoach.description.length > 1000) {
-      alert('Description cannot exceed 1000 characters');
+      addToast('Description cannot exceed 1000 characters', 'error');
       return;
     }
 
@@ -70,7 +131,7 @@ const CoachesManager = () => {
       imgSrc: newCoach.imgSrc,
       description: newCoach.description || '',
       specialty: newCoach.specialty || '',
-      order: coachesData.length // Set order to add at the end
+      order: (coachesData?.length || 0) + 1 // Set order to add at the end
     };
 
     try {
@@ -78,11 +139,12 @@ const CoachesManager = () => {
       if (result.success) {
         setNewCoach({ name: '', imgSrc: '', description: '', specialty: '' });
         // Data will be updated via context
+        addToast('Coach added successfully!', 'success');
       } else {
-        alert(`Failed to add coach: ${result.message}`);
+        addToast(`Failed to add coach: ${result.message}`, 'error');
       }
     } catch (error) {
-      alert(`Error adding coach: ${error.message}`);
+      addToast(`Error adding coach: ${error.message}`, 'error');
     }
   };
 
@@ -94,13 +156,13 @@ const CoachesManager = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.');
+      addToast('Please select an image file.', 'error');
       return;
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 10MB.');
+      addToast('File is too large. Maximum size is 10MB.', 'error');
       return;
     }
 
@@ -115,13 +177,13 @@ const CoachesManager = () => {
           ...prev,
           imgSrc: imageUrl
         }));
-        alert('Image uploaded successfully!');
+        addToast('Image uploaded successfully!', 'success');
       } else {
-        alert(`Failed to upload image: ${uploadResult.message}`);
+        addToast(`Failed to upload image: ${uploadResult.message}`, 'error');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert(`Error uploading image: ${error.message}`);
+      addToast(`Error uploading image: ${error.message}`, 'error');
     } finally {
       // Clear the file input
       event.target.value = '';
@@ -134,13 +196,13 @@ const CoachesManager = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.');
+      addToast('Please select an image file.', 'error');
       return;
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 10MB.');
+      addToast('File is too large. Maximum size is 10MB.', 'error');
       return;
     }
 
@@ -156,13 +218,13 @@ const CoachesManager = () => {
             ? { ...coach, imgSrc: imageUrl }
             : coach
         ));
-        alert('New image uploaded successfully! It will be applied when you save the changes.');
+        addToast('New image uploaded successfully! It will be applied when you save the changes.', 'success');
       } else {
-        alert(`Failed to upload image: ${uploadResult.message}`);
+        addToast(`Failed to upload image: ${uploadResult.message}`, 'error');
       }
     } catch (error) {
       console.error('Error uploading image for edit:', error);
-      alert(`Error uploading image: ${error.message}`);
+      addToast(`Error uploading image: ${error.message}`, 'error');
     } finally {
       // Clear the file input
       event.target.value = '';
@@ -181,23 +243,23 @@ const CoachesManager = () => {
     // Try to find coach in local data first, then fallback to context data
     const coach = localCoachesData.find(c => c.id === id) || coachesData.find(c => c.id === id);
     if (!coach) {
-      alert('Coach not found. Please refresh the page and try again.');
+      addToast('Coach not found. Please refresh the page and try again.', 'error');
       return;
     }
 
     // Validate character limits
     if (coach.name.length > 25) {
-      alert('Coach name cannot exceed 25 characters');
+      addToast('Coach name cannot exceed 25 characters', 'error');
       return;
     }
     
     if (coach.specialty && coach.specialty.length > 25) {
-      alert('Specialty cannot exceed 25 characters');
+      addToast('Specialty cannot exceed 25 characters', 'error');
       return;
     }
     
     if (coach.description && coach.description.length > 1000) {
-      alert('Description cannot exceed 1000 characters');
+      addToast('Description cannot exceed 1000 characters', 'error');
       return;
     }
 
@@ -216,11 +278,11 @@ const CoachesManager = () => {
         setEditingId(null);
         // Data will be updated via context
       } else {
-        alert(`Failed to update coach: ${result.message}`);
+        addToast(`Failed to update coach: ${result.message}`, 'error');
       }
     } catch (error) {
       console.error('Error updating coach:', error);
-      alert('An error occurred while updating the coach. Please try again.');
+      addToast('An error occurred while updating the coach. Please try again.', 'error');
     }
   };
 
@@ -237,50 +299,55 @@ const CoachesManager = () => {
   };
 
   const handleDeleteCoach = async (id) => {
-    const coachToDelete = coachesData.find(coach => coach.id === id);
-    if (!coachToDelete) {
-      alert('Coach not found. Please refresh the page and try again.');
+    const coach = coachesData.find(coach => coach.id === id);
+    if (!coach) {
+      addToast('Coach not found. Please refresh the page and try again.', 'error');
       return;
     }
 
     // Prevent deleting the last coach
-    if (coachesData.length === 1) {
-      alert('Cannot delete the last coach. Your team must have at least one coach.');
+    if (coachesData && coachesData.length === 1) {
+      addToast('Cannot delete the last coach. Your team must have at least one coach.', 'error');
       return;
     }
 
     // Check if coach can be deleted using context function
     const { canDelete, reason } = canDeleteCoach(id);
     if (!canDelete) {
-      alert(`Cannot delete coach: ${reason}`);
+      addToast(`Cannot delete coach: ${reason}`, 'error');
       return;
     }
 
-    // Enhanced confirmation dialog with more details and warnings
-    const confirmDelete = window.confirm(
-      `⚠️ WARNING: You are about to delete "${coachToDelete.name}"\n\n` +
-      `This action will:\n` +
-      `• Immediately remove the coach from your team\n` +
-      `• Cannot be undone\n\n` +
-      `Are you absolutely sure you want to continue?`
-    );
-    
-    if (confirmDelete) {
-      try {
-        const result = await deleteCoach(id);
-        if (result.success) {
-          // Success - data will be updated via context
-          alert('Coach deleted successfully!');
-        } else {
-          alert(`Failed to delete coach: ${result.message}`);
-        }
-      } catch (error) {
-        console.error('Error deleting coach:', error);
-        alert('An error occurred while deleting the coach. Please try again.');
+    // Set the coach to delete and show the confirmation modal
+    setCoachToDelete(coach);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!coachToDelete) return;
+
+    try {
+      const result = await deleteCoach(coachToDelete.id);
+      if (result.success) {
+        // Success - data will be updated via context
+        addToast('Coach deleted successfully!', 'success');
+      } else {
+        addToast(`Failed to delete coach: ${result.message}`, 'error');
       }
+    } catch (error) {
+      console.error('Error deleting coach:', error);
+      addToast('An error occurred while deleting the coach. Please try again.', 'error');
+    } finally {
+      // Close modal and reset state
+      setShowDeleteModal(false);
+      setCoachToDelete(null);
     }
   };
 
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setCoachToDelete(null);
+  };
 
 
   const handleMoveCoach = async (id, direction) => {
@@ -288,7 +355,7 @@ const CoachesManager = () => {
     if (currentIndex === -1) return;
 
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= coachesData.length) return;
+    if (newIndex < 0 || (coachesData && newIndex >= coachesData.length)) return;
 
     // Create new order array with swapped positions
     const newData = [...coachesData];
@@ -300,12 +367,12 @@ const CoachesManager = () => {
     try {
       const result = await reorderCoaches(coachIds);
       if (!result.success) {
-        alert(`Failed to reorder coaches: ${result.message}`);
+        addToast(`Failed to reorder coaches: ${result.message}`, 'error');
       }
       // Data will be updated via context on success
     } catch (error) {
       console.error('Error reordering coaches:', error);
-      alert('An error occurred while reordering coaches. Please try again.');
+      addToast('An error occurred while reordering coaches. Please try again.', 'error');
     }
   };
 
@@ -465,12 +532,12 @@ const CoachesManager = () => {
           <div className='coaches-section'>
             <div className='section-header'>
               <h2 className='section-title text-red'>
-                Coaches ({localCoachesData.length})
+                Coaches ({localCoachesData?.length || 0})
               </h2>
 
             </div>
             
-            {localCoachesData.length === 0 ? (
+            {!localCoachesData || localCoachesData.length === 0 ? (
               <div className='empty-coaches shadowed-box'>
                 <div className='empty-coaches-icon'>
                   <svg viewBox="0 0 24 24" fill="currentColor" className='empty-icon-svg'>
@@ -484,7 +551,7 @@ const CoachesManager = () => {
               </div>
             ) : (
               <div className='coaches-grid'>
-                {coachesData.map((coach, index) => (
+                {coachesData && coachesData.map((coach, index) => (
                   <div
                     key={coach.id}
                     className='coach-card'
@@ -496,7 +563,7 @@ const CoachesManager = () => {
                         alt={coach.name} 
                         className='preview-img'
                         onError={(e) => {
-                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTExLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0xMDAgMTUwQzExMS4wNDYgMTUwIDEyMCAxNDEuMDQ2IDEyMCAxMzBDMTIwIDExOC45NTQgMTEwLjA0NiAxMTAgMTAwIDExMEM4OC45NTQgMTEwIDgwIDExOC45NTQgODAgMTMwQzgwIDE0MS4wNDYgODguOTU0IDE1MCAxMDAgMTUwWiIgZmlsbD0iI0NDQ0NDQyIvPgo8L3N2Zz4K';
                         }}
                       />
                     </div>
@@ -611,7 +678,7 @@ const CoachesManager = () => {
                               </button>
                               <button 
                                 onClick={() => handleMoveCoach(coach.id, 'down')}
-                                disabled={index === coachesData.length - 1}
+                                disabled={coachesData && index === coachesData.length - 1}
                                 className='move-btn'
                                 title='Move Down'
                               >
@@ -637,6 +704,31 @@ const CoachesManager = () => {
           </div>
         </div>
       </main>
+
+      {/* Confirmation Modal */}
+      {showDeleteModal && (
+        <ConfirmationModal
+          isOpen={showDeleteModal}
+          title="Delete Coach"
+          message={`Are you sure you want to delete "${coachToDelete?.name}"? This action cannot be undone and the coach will be permanently removed from your team.`}
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+          confirmText="Delete Coach"
+          cancelText="Cancel"
+          type="danger"
+          showIcon={true}
+        />
+      )}
+
+      {/* Toast Notifications */}
+      {toasts.map(toast => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => removeToast(toast.id)}
+        />
+      ))}
     </div>
   );
 };

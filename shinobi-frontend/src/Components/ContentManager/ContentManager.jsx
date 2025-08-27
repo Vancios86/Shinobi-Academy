@@ -4,24 +4,61 @@ import './ContentManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useContent } from '../../contexts/ContentContext';
 
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
+
 const ContentManager = () => {
   const navigate = useNavigate();
-  const { contentData, updateContentData, resetToDefault } = useContent();
-  const [localContentData, setLocalContentData] = useState(contentData);
+  const { content, updateContent, resetContent } = useContent();
+
+  const [localContent, setLocalContent] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [activeSection, setActiveSection] = useState('founder');
+  const [toasts, setToasts] = useState([]);
+
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
 
   // Load content data from context
   useEffect(() => {
-    setLocalContentData(contentData);
-  }, [contentData]);
+    setLocalContent(content);
+  }, [content]);
 
   // Check for changes
   useEffect(() => {
-    const hasUnsavedChanges = JSON.stringify(localContentData) !== JSON.stringify(contentData);
+    const hasUnsavedChanges = JSON.stringify(localContent) !== JSON.stringify(content);
     setHasChanges(hasUnsavedChanges);
-  }, [localContentData, contentData]);
+  }, [localContent, content]);
 
   const handleBackToDashboard = () => {
     if (hasChanges) {
@@ -31,14 +68,14 @@ const ContentManager = () => {
       if (!confirmLeave) return;
       
       // Reset local data if user confirms leaving
-      setLocalContentData(contentData);
+      setLocalContent(content);
       setHasChanges(false);
     }
     navigate('/admin/dashboard');
   };
 
   const handleInputChange = (section, field, value) => {
-    setLocalContentData(prev => ({
+    setLocalContent(prev => ({
       ...prev,
       [section]: {
         ...prev[section],
@@ -48,7 +85,7 @@ const ContentManager = () => {
   };
 
   const handleAddAchievement = () => {
-    setLocalContentData(prev => ({
+    setLocalContent(prev => ({
       ...prev,
       about: {
         ...prev.about,
@@ -61,7 +98,7 @@ const ContentManager = () => {
   };
 
   const handleRemoveAchievement = (index) => {
-    setLocalContentData(prev => ({
+    setLocalContent(prev => ({
       ...prev,
       about: {
         ...prev.about,
@@ -79,12 +116,12 @@ const ContentManager = () => {
     // Simulate deployment delay
     setTimeout(() => {
       try {
-        updateContentData(localContentData);
+        updateContent(localContent);
         setHasChanges(false);
-        alert('Content updated successfully!');
+        addToast('Content updated successfully!');
       } catch (error) {
         console.error('Error updating content data:', error);
-        alert('Failed to update content. Please try again.');
+        addToast('Failed to update content. Please try again.', 'error');
       } finally {
         setIsDeploying(false);
       }
@@ -97,10 +134,10 @@ const ContentManager = () => {
     );
     
     if (confirmReset) {
-      resetToDefault();
-      setLocalContentData(contentData);
+      resetContent();
+      setLocalContent(content);
       setHasChanges(false);
-      alert('Content reset to default values.');
+      addToast('Content reset to default values.');
     }
   };
 
@@ -115,16 +152,16 @@ const ContentManager = () => {
         <input
           type='text'
           id='founder-title'
-          value={localContentData.about.founderSection.title}
+          value={localContent.about.founderSection.title}
           onChange={(e) => handleInputChange('about', 'founderSection', {
-            ...localContentData.about.founderSection,
+            ...localContent.about.founderSection,
             title: e.target.value
           })}
           className='form-input'
           placeholder='e.g., Colin Byrne'
           maxLength={100}
         />
-        <small className='char-count'>{localContentData.about.founderSection.title.length}/100</small>
+        <small className='char-count'>{localContent.about.founderSection.title.length}/100</small>
       </div>
 
       <div className='form-group'>
@@ -133,9 +170,9 @@ const ContentManager = () => {
         </label>
         <textarea
           id='founder-description'
-          value={localContentData.about.founderSection.description}
+          value={localContent.about.founderSection.description}
           onChange={(e) => handleInputChange('about', 'founderSection', {
-            ...localContentData.about.founderSection,
+            ...localContent.about.founderSection,
             description: e.target.value
           })}
           className='form-textarea'
@@ -143,7 +180,7 @@ const ContentManager = () => {
           rows={8}
           maxLength={2000}
         />
-        <small className='char-count'>{localContentData.about.founderSection.description.length}/2000</small>
+        <small className='char-count'>{localContent.about.founderSection.description.length}/2000</small>
       </div>
 
       <div className='form-group'>
@@ -151,15 +188,15 @@ const ContentManager = () => {
           Achievements & Notable Mentions
         </label>
         <div className='achievements-list'>
-          {localContentData.about.founderSection.achievements.map((achievement, index) => (
+          {localContent.about.founderSection.achievements.map((achievement, index) => (
             <div key={index} className='achievement-item'>
               <div className='achievement-bullet'>•</div>
               <textarea
                 value={achievement}
                 onChange={(e) => {
-                  const newAchievements = [...localContentData.about.founderSection.achievements];
+                  const newAchievements = [...localContent.about.founderSection.achievements];
                   newAchievements[index] = e.target.value;
-                  setLocalContentData(prev => ({
+                  setLocalContent(prev => ({
                     ...prev,
                     about: {
                       ...prev.about,
@@ -208,16 +245,16 @@ const ContentManager = () => {
         <input
           type='text'
           id='coaches-title'
-          value={localContentData.about.coachesSection.title}
+          value={localContent.about.coachesSection.title}
           onChange={(e) => handleInputChange('about', 'coachesSection', {
-            ...localContentData.about.coachesSection,
+            ...localContent.about.coachesSection,
             title: e.target.value
           })}
           className='form-input'
           placeholder='e.g., SHINOBI COACHES'
           maxLength={100}
         />
-        <small className='char-count'>{localContentData.about.coachesSection.title.length}/100</small>
+        <small className='char-count'>{localContent.about.coachesSection.title.length}/100</small>
       </div>
 
       <div className='form-group'>
@@ -226,9 +263,9 @@ const ContentManager = () => {
         </label>
         <textarea
           id='coaches-description'
-          value={localContentData.about.coachesSection.description}
+          value={localContent.about.coachesSection.description}
           onChange={(e) => handleInputChange('about', 'coachesSection', {
-            ...localContentData.about.coachesSection,
+            ...localContent.about.coachesSection,
             description: e.target.value
           })}
           className='form-textarea'
@@ -236,7 +273,7 @@ const ContentManager = () => {
           rows={3}
           maxLength={300}
         />
-        <small className='char-count'>{localContentData.about.coachesSection.description.length}/300</small>
+        <small className='char-count'>{localContent.about.coachesSection.description.length}/300</small>
       </div>
     </div>
   );
@@ -252,16 +289,16 @@ const ContentManager = () => {
         <input
           type='text'
           id='aside-title'
-          value={localContentData.about.asideSection.title}
+          value={localContent.about.asideSection.title}
           onChange={(e) => handleInputChange('about', 'asideSection', {
-            ...localContentData.about.asideSection,
+            ...localContent.about.asideSection,
             title: e.target.value
           })}
           className='form-input'
           placeholder='e.g., Training Camps & Facilities'
           maxLength={100}
         />
-        <small className='char-count'>{localContentData.about.asideSection.title.length}/100</small>
+        <small className='char-count'>{localContent.about.asideSection.title.length}/100</small>
       </div>
 
       <div className='form-group'>
@@ -270,7 +307,7 @@ const ContentManager = () => {
         </label>
         <textarea
           id='aside-description'
-          value={`${localContentData.about.asideSection.description}\n\n${localContentData.about.founderSection.facilityDescription}`}
+          value={`${localContent.about.asideSection.description}\n\n${localContent.about.founderSection.facilityDescription}`}
           onChange={(e) => {
             const lines = e.target.value.split('\n\n');
             const description = lines[0] || '';
@@ -278,12 +315,12 @@ const ContentManager = () => {
             
             // Update both sections
             handleInputChange('about', 'asideSection', {
-              ...localContentData.about.asideSection,
+              ...localContent.about.asideSection,
               description: description
             });
             
             handleInputChange('about', 'founderSection', {
-              ...localContentData.about.founderSection,
+              ...localContent.about.founderSection,
               facilityDescription: facilityDescription
             });
           }}
@@ -292,7 +329,7 @@ const ContentManager = () => {
           rows={10}
           maxLength={2500}
         />
-        <small className='char-count'>{`${localContentData.about.asideSection.description}\n\n${localContentData.about.founderSection.facilityDescription}`.length}/2500</small>
+        <small className='char-count'>{`${localContent.about.asideSection.description}\n\n${localContent.about.founderSection.facilityDescription}`.length}/2500</small>
       </div>
     </div>
   );
@@ -373,6 +410,16 @@ const ContentManager = () => {
             </div>
           )}
         </div>
+
+        {/* Toast Notifications */}
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
       </main>
     </div>
   );

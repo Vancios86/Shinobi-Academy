@@ -5,6 +5,30 @@ import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
 
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
 
 const ScheduleManager = () => {
   const navigate = useNavigate();
@@ -32,6 +56,17 @@ const ScheduleManager = () => {
   const [selectedDay, setSelectedDay] = useState('monday');
   const [selectedTime, setSelectedTime] = useState('09:00');
   const [selectedClassId, setSelectedClassId] = useState('');
+  const [toasts, setToasts] = useState([]);
+
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
 
   const classes = getAllClasses();
   const daysOfWeek = getDaysOfWeek();
@@ -85,13 +120,13 @@ const ScheduleManager = () => {
 
   const handleAddScheduleEntry = async () => {
     if (!selectedClassId) {
-      alert('Please select a class');
+      addToast('Please select a class', 'error');
       return;
     }
 
     const selectedClass = classes.find(c => c.id === selectedClassId);
     if (!selectedClass) {
-      alert('Selected class not found');
+      addToast('Selected class not found', 'error');
       return;
     }
 
@@ -111,12 +146,13 @@ const ScheduleManager = () => {
       if (result.success) {
         setShowAddForm(false);
         setSelectedClassId(''); // Reset form
+        addToast('Schedule entry added successfully!', 'success');
         // Data will be updated via context
       } else {
-        alert(`Failed to add schedule entry: ${result.message}`);
+        addToast(`Failed to add schedule entry: ${result.message}`, 'error');
       }
     } catch (error) {
-      alert(`Error adding schedule entry: ${error.message}`);
+      addToast(`Error adding schedule entry: ${error.message}`, 'error');
     }
   };
 
@@ -128,12 +164,13 @@ const ScheduleManager = () => {
         const result = await updateScheduleEntry(day, entryId, entryToUpdate);
         if (result.success) {
           setEditingEntry(null);
+          addToast('Schedule entry updated successfully!', 'success');
           // Data will be updated via context
         } else {
-          alert(`Failed to update schedule entry: ${result.message}`);
+          addToast(`Failed to update schedule entry: ${result.message}`, 'error');
         }
       } catch (error) {
-        alert(`Error updating schedule entry: ${error.message}`);
+        addToast(`Error updating schedule entry: ${error.message}`, 'error');
       }
     }
   };
@@ -147,12 +184,13 @@ const ScheduleManager = () => {
       try {
         const result = await deleteScheduleEntry(day, entryId);
         if (result.success) {
+          addToast('Schedule entry deleted successfully!', 'success');
           // Data will be updated via context
         } else {
-          alert(`Failed to delete schedule entry: ${result.message}`);
+          addToast(`Failed to delete schedule entry: ${result.message}`, 'error');
         }
       } catch (error) {
-        alert(`Error deleting schedule entry: ${error.message}`);
+        addToast(`Error deleting schedule entry: ${error.message}`, 'error');
       }
     }
   };
@@ -193,10 +231,10 @@ const ScheduleManager = () => {
         });
         
         setHasChanges(false);
-        alert('Schedule updated successfully!');
+        addToast('Schedule updated successfully!', 'success');
       } catch (error) {
         console.error('Error updating schedule data:', error);
-        alert('Failed to update schedule. Please try again.');
+        addToast('Failed to update schedule. Please try again.', 'error');
       } finally {
         setIsDeploying(false);
       }
@@ -214,6 +252,7 @@ const ScheduleManager = () => {
       setHasChanges(false);
       setEditingEntry(null);
       setShowAddForm(false);
+      addToast('Schedule reset to default successfully!', 'success');
     }
   };
 
@@ -568,6 +607,14 @@ const ScheduleManager = () => {
           )}
         </div>
       </main>
+      {toasts.map(toast => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => removeToast(toast.id)}
+        />
+      ))}
     </div>
   );
 };

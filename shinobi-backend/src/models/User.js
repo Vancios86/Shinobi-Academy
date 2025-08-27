@@ -40,8 +40,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for performance
-userSchema.index({ username: 1 });
+// Username is already indexed via unique: true
 
 // Virtual for checking if account is locked
 userSchema.virtual('isLocked').get(function() {

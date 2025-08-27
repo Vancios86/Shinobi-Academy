@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { classesAPI } from '../services/api';
 
 const ClassesContext = createContext();
@@ -11,78 +11,25 @@ export const useClasses = () => {
   return context;
 };
 
-// Default classes data structure
-const defaultClasses = [
-  {
-    id: 'mma-box-muay-thai',
-    name: 'MMA Box Muay-Thai',
-    description: 'We will help you develop a strong and fluid striking foundation based on techniques from the most efficient disciplines in the world',
-    image: 'mma.webp',
-    imageType: 'predefined',
-    imagePosition: '18%',
-    alignment: 'right',
-    speed: 9,
-    order: 1
-  },
-  {
-    id: 'brazilian-jiu-jitsu',
-    name: 'Brazilian Jiu-Jitsu',
-    description: 'Self-defense practice emphasizing grappling fighting. A good workout that doesn\'t allow striking and teaches numerous life-changing lessons, including discipline, consistency, and combat methods',
-    image: 'bjj.webp',
-    imageType: 'predefined',
-    imagePosition: '66%',
-    alignment: 'left',
-    speed: 11,
-    order: 2
-  },
-  {
-    id: 'wrestling-judo',
-    name: 'Wrestling Judo',
-    description: 'Combat sports involving grappling-type techniques such as clinch fighting, throws and takedowns, joint locks, pins and other grappling holds which have been incorporated into martial arts, combat sports and military systems',
-    image: 'wj.webp',
-    imageType: 'predefined',
-    imagePosition: '11%',
-    alignment: 'right',
-    speed: 13,
-    order: 3
-  },
-  {
-    id: 'strength-condition',
-    name: 'Strength Condition',
-    description: 'The practical application of sports science to enhance movement quality, grounded in evidence-based research and physiology of exercise and anatomy',
-    image: 'sc.webp',
-    imageType: 'predefined',
-    imagePosition: 'center',
-    alignment: 'left',
-    speed: 15,
-    order: 4
-  },
-  {
-    id: 'private-classes',
-    name: 'Private classes',
-    description: 'One-on-one training with a coach, tailored to your needs and at a time that suits you best - perfect for those who want to get the most out of their training',
-    image: 'private.webp',
-    imageType: 'predefined',
-    imagePosition: '18%',
-    alignment: 'right',
-    speed: 17,
-    order: 5
-  }
-];
-
 export const ClassesProvider = ({ children }) => {
   const [classesData, setClassesData] = useState([]);
+  const [initialSessionData, setInitialSessionData] = useState([]); // Store initial session state
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Load classes data from backend
-  const loadClasses = async () => {
+  const loadClasses = useCallback(async (forceUpdateInitial = false) => {
     setIsLoading(true);
     setError(null);
     try {
       const classes = await classesAPI.getClasses();
       setClassesData(classes);
+      // Store the initial session state (only on first load or when forced)
+      if (initialSessionData.length === 0 || forceUpdateInitial) {
+        setInitialSessionData(classes);
+      }
+      setIsLoaded(true); // Add this line to fix infinite loading
     } catch (error) {
       console.error('Error loading classes:', error);
       setError(error.message);
@@ -92,25 +39,32 @@ export const ClassesProvider = ({ children }) => {
         try {
           const parsedData = JSON.parse(savedClasses);
           setClassesData(parsedData);
+          if (initialSessionData.length === 0 || forceUpdateInitial) {
+            setInitialSessionData(parsedData);
+          }
+          setIsLoaded(true); // Add this line for fallback case too
         } catch (parseError) {
           console.error('Error parsing saved classes:', parseError);
-          setClassesData(defaultClasses);
+          setClassesData([]);
+          setInitialSessionData([]);
+          setIsLoaded(true); // Add this line for error case too
         }
       } else {
-        setClassesData(defaultClasses);
+        setClassesData([]);
+        setInitialSessionData([]);
+        setIsLoaded(true); // Add this line for empty case too
       }
     } finally {
       setIsLoading(false);
-      setIsLoaded(true);
     }
-  };
+  }, [initialSessionData.length]);
 
   // Load classes data on mount
   useEffect(() => {
     loadClasses();
-  }, []);
+  }, [loadClasses]);
 
-  // Save classes data to localStorage whenever it changes (backup)
+  // Save classes data to localStorage whenever it changes
   useEffect(() => {
     if (isLoaded && classesData.length > 0) {
       try {
@@ -122,13 +76,13 @@ export const ClassesProvider = ({ children }) => {
   }, [classesData, isLoaded]);
 
   // Add new class
-  const addClass = async (newClass) => {
+  const addClass = async (classData) => {
     setIsLoading(true);
     setError(null);
     try {
-      const createdClass = await classesAPI.createClass(newClass);
-      setClassesData(prev => [...prev, createdClass]);
-      return { success: true, data: createdClass };
+      const newClass = await classesAPI.addClass(classData);
+      setClassesData(prev => [...prev, newClass]);
+      return { success: true, data: newClass };
     } catch (error) {
       console.error('Error adding class:', error);
       setError(error.message);
@@ -203,13 +157,40 @@ export const ClassesProvider = ({ children }) => {
     return [...classesData].sort((a, b) => a.order - b.order);
   };
 
-  // Reset to default classes
-  const resetToDefault = () => {
-    setClassesData(defaultClasses);
-    localStorage.removeItem('shinobi-classes-data');
+  // Reset to original session state
+  const resetToOriginal = async () => {
+    try {
+      // First, update the database with the original session data
+      // We need to update each class to match the original state
+      const updatePromises = initialSessionData.map(async (originalClass) => {
+        const currentClass = classesData.find(c => c.id === originalClass.id);
+        if (currentClass && JSON.stringify(currentClass) !== JSON.stringify(originalClass)) {
+          return await classesAPI.updateClass(originalClass.id, originalClass);
+        }
+        return originalClass;
+      });
+
+      // Wait for all updates to complete
+      const updatedClasses = await Promise.all(updatePromises);
+      
+      // Update both the current data and the initial session data
+      setClassesData([...updatedClasses]);
+      setInitialSessionData([...updatedClasses]);
+      
+      // Update localStorage with the new state
+      localStorage.setItem('shinobi-classes-data', JSON.stringify(updatedClasses));
+      
+      // Reload classes from the database to ensure consistency
+      // Force update the initial session data to reflect the new "original" state
+      await loadClasses(true);
+      
+      return { success: true, message: 'Classes reset to original state successfully' };
+    } catch (error) {
+      console.error('Error resetting classes:', error);
+      setError(error.message);
+      return { success: false, message: `Failed to reset classes: ${error.message}` };
+    }
   };
-
-
 
   const value = {
     classesData,
@@ -219,7 +200,7 @@ export const ClassesProvider = ({ children }) => {
     reorderClasses,
     getClassById,
     getAllClasses,
-    resetToDefault,
+    resetToOriginal,
     loadClasses,
     isLoaded,
     isLoading,

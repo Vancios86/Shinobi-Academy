@@ -4,12 +4,48 @@ import './ContactManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useContact } from '../../contexts/ContactContext';
 
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 4000); // Auto-dismiss after 4 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      <div className="toast-content">
+        <span className="toast-icon">
+          {type === 'success' && '✅'}
+          {type === 'error' && '❌'}
+          {type === 'info' && 'ℹ️'}
+        </span>
+        <span className="toast-message">{message}</span>
+        <button className="toast-close" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+};
+
 const ContactManager = () => {
   const navigate = useNavigate();
   const { contactData, updateContactData, resetToDefault } = useContact();
   const [localContactData, setLocalContactData] = useState(contactData);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
 
   // Load contact data from context
   useEffect(() => {
@@ -87,10 +123,10 @@ const ContactManager = () => {
       try {
         updateContactData(localContactData);
         setHasChanges(false);
-        alert('Contact information updated successfully!');
+        addToast('Contact information updated successfully!', 'success');
       } catch (error) {
         console.error('Error updating contact data:', error);
-        alert('Failed to update contact information. Please try again.');
+        addToast('Failed to update contact information. Please try again.', 'error');
       } finally {
         setIsDeploying(false);
       }
@@ -106,7 +142,7 @@ const ContactManager = () => {
       resetToDefault();
       setLocalContactData(contactData);
       setHasChanges(false);
-      alert('Contact information reset to default values.');
+      addToast('Contact information reset to default values.', 'info');
     }
   };
 
@@ -474,6 +510,14 @@ const ContactManager = () => {
           )}
         </div>
       </main>
+      {toasts.map(toast => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => removeToast(toast.id)}
+        />
+      ))}
     </div>
   );
 };
