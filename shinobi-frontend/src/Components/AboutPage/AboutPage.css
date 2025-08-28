@@ -1,5 +1,4 @@
 .about-page-content {
-  border-radius: 0.33rem;
   padding: 0.33rem;
   margin: 0.33rem;
 }
@@ -14,7 +13,6 @@
   max-height: 20rem;
   width: 50%;
   min-width: 12rem;
-  border-radius: 0.33rem;
   margin-left: 0.33rem;
 }
 
@@ -47,7 +45,6 @@
   height: 10rem;
   min-width: 8rem;
   max-width: 10.5rem;
-  border-radius: 0.33rem;
   box-shadow: 0 0 0.25rem 0.15rem hsl(var(--clr-red));
   position: relative;
   margin-bottom: 1rem;

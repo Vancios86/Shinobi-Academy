@@ -80,7 +80,7 @@ const AboutPage = memo(() => {
               ))}
             </p>
             <div className='aside text-dark text-content'>
-              <img src={view} loading='lazy' alt='Shinobi Academy view' />
+              <img src={view} loading='lazy' alt='Shinobi Academy view' className='rounded-sm' />
               <div className='team-title flex'>
                 <h3>{contentData.about.asideSection.title}</h3>
               </div>

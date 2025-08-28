@@ -106,7 +106,7 @@ const ContactFormComponent = () => {
         <p>We'd love to hear from you!</p>
       </div>
 
-      <form className='contact-form-container shadowed-box' onSubmit={handleSubmit}>
+      <form className='contact-form-container shadowed-box rounded-sm' onSubmit={handleSubmit}>
         <div className='form-field'>
           <div className='input-wrapper'>
             <input

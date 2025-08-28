@@ -241,6 +241,11 @@ ul {
   line-height: 1.1;
 }
 
+/* Utility Classes */
+.rounded-sm {
+  border-radius: 0.33rem;
+}
+
 .shadowed-box {
   box-shadow: var(--bs);
 }
@@ -374,11 +379,8 @@ ul {
   justify-content: space-evenly;
   position: relative;
   height: auto;
-  border: 0.125rem solid hsl(var(--clr-dark));
-  border-radius: 0.33rem;
-  box-shadow: var(--bs);
   margin: 0.33rem;
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 /* Enhanced button-large with modern design and animations */
@@ -556,7 +558,6 @@ ul {
   bottom: 0;
   width: 2rem;
   height: 3rem;
-  border-radius: 0.33rem;
   border: 0.125rem solid hsl(var(--clr-red));
   margin: 0.33rem;
   font-size: var(--fs-600);
@@ -596,7 +597,6 @@ ul {
   background-color: hsl(var(--clr-dark));
   border: 0.125rem solid hsl(var(--clr-red));
   font-size: var(--fs-700);
-  border-radius: 0.33rem;
   margin: 2rem 0.33rem -5rem;
   transition: all 0.33s ease-in-out;
 }

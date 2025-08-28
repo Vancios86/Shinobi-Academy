@@ -27,7 +27,7 @@ const GalleryComponent = () => {
 
   return (
     <Parallax opacity={[3, 0]}>
-      <div className='gallery-component preview-component container flow'>
+      <div className='gallery-component preview-component container flow shadowed-box'>
         <div className='component-title'>
           <h3 id='gallery-component-title'>Media Gallery</h3>
         </div>
@@ -43,7 +43,7 @@ const GalleryComponent = () => {
           </button>
         </div>
         <div
-          className='gallery-background'
+          className='gallery-background rounded-sm'
           style={{
             backgroundImage: `url(${imgSrc})`,
           }}

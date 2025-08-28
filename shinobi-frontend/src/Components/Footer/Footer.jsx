@@ -13,16 +13,16 @@ const Footer = () => {
   if (!isLoaded) {
     return (
       <div className='footer container grid text-dark'>
-        <div className='section footer-top'>
-          <p>Loading contact information...</p>
-        </div>
+              <div className='section footer-top'>
+        <p>Loading contact information...</p>
+      </div>
       </div>
     );
   }
 
   return (
     <div className='footer container grid text-dark'>
-      <div className='section footer-top'>
+              <div className='section footer-top'>
         <div className='logo-footer'>
           <Tilt>
             <img src={logoMask} loading='lazy' alt='vector-logo' />

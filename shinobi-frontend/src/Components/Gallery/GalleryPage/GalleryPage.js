@@ -29,7 +29,7 @@ const GalleryPage = () => {
         <Logo />
       </div>
       <button
-        className='back-button flex'
+        className='back-button flex rounded-sm'
         onClick={() => {
           navigate(-1);
         }}
@@ -41,9 +41,7 @@ const GalleryPage = () => {
         <ModernGalleryComponent />
       </div>
       
-      <div className='secondary-page-footer'>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

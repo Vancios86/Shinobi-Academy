@@ -6,7 +6,7 @@ import backgroundImage from '../../../assets/images/camps-background.webp';
 const CampsComponent = () => {
   return (
     <Parallax opacity={[3, 0]}>
-      <div className='camps-component preview-component container flow'>
+      <div className='camps-component preview-component container flow shadowed-box'>
         <div className='component-title'>
           <h3 id='camps-component-title'>Camps</h3>
         </div>
@@ -22,7 +22,7 @@ const CampsComponent = () => {
           </button>
         </div>
         <div
-          className='camps-background'
+          className='camps-background rounded-sm'
           style={{
             backgroundImage: `url(${backgroundImage})`,
           }}

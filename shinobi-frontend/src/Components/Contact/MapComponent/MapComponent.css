@@ -1,6 +1,4 @@
 .map {
-  border: 0.125rem solid hsl(var(--clr-dark));
-  border-radius: 0.33rem;
   aspect-ratio: 1;
   display: flex;
   justify-content: center;

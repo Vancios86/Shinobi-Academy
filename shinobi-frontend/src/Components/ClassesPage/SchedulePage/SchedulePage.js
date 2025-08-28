@@ -69,7 +69,7 @@ const SchedulePage = () => {
       </div>
 
       <button
-        className='back-button flex'
+        className='back-button flex rounded-sm'
         onClick={() => {
           navigate(-1);
         }}
@@ -136,9 +136,7 @@ const SchedulePage = () => {
         </div>
       </div>
       
-      <div className='secondary-page-footer'>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

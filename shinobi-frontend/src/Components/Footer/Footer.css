@@ -2,7 +2,6 @@
   width: 100%;
   height: auto;
   grid-template-rows: auto auto;
-  border-top: 0.15rem solid black;
   gap: 0;
 }
 .footer-top {
@@ -10,6 +9,10 @@
   height: auto;
   display: flex;
   justify-content: space-between;
+  /* Top and bottom shadow only - no left/right shadow */
+  box-shadow: 
+    0 -4px 8px rgba(0, 0, 0, 0.12),  /* Top shadow */
+    0 4px 8px rgba(0, 0, 0, 0.12);   /* Bottom shadow */
 }
 .footer-top ul {
   margin: 0.1rem;
@@ -72,7 +75,6 @@
 }
 
 .footer-bottom > .social-media {
-  border-top: 0.15rem solid hsl(var(--clr-dark));
   width: 100%;
 }
 .social-media ul {
@@ -83,7 +85,6 @@
 /* Enhanced footer social media buttons with original background and smaller size */
 .social-media ul li {
   padding: 0.512rem;
-  border: 0.125rem solid hsl(var(--clr-red));
   box-shadow: var(--bs);
   position: relative;
   overflow: hidden;
@@ -184,16 +185,7 @@
   transition-duration: 0.1s;
 }
 
-.secondary-page-footer {
-  width: 100%;
-  height: auto;
-  grid-template-rows: auto auto;
-  gap: 0;
-}
 
-.secondary-page-footer > * {
-  margin-inline: 0;
-}
 
 .created-by {
   color: hsl(var(--clr-gold));

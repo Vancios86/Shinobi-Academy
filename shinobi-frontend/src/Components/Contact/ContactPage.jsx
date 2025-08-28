@@ -53,7 +53,7 @@ const ContactPage = () => {
             className: 'social-media-icons',
           }}
         >
-          <div className='social-media-container shadowed-box flex clr-red'>
+          <div className='social-media-container shadowed-box flex clr-red rounded-sm'>
             <div className='social-media '>
               <ul className='flex'>
                 <li 

@@ -39,7 +39,7 @@ const Main = () => {
         <ContactPage />
         <Footer />
       </ParallaxProvider>
-      <button className='go-to-top-button'>
+              <button className='go-to-top-button rounded-sm'>
         <a href='#to-top' id='back-to-top-link'>
           <b>↟</b>
         </a>

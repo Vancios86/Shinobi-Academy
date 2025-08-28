@@ -30,15 +30,11 @@
   width: 100%;
   padding: 2rem;
   background: white;
-  border: 2px solid hsl(var(--clr-dark));
-  border-radius: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .contact-form-container:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  /* Hover effects removed for cleaner appearance */
 }
 
 .form-field {
