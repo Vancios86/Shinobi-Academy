@@ -26,6 +26,10 @@ const scheduleEntrySchema = new mongoose.Schema({
     required: [true, 'Instructor name is required'],
     maxlength: [100, 'Instructor name cannot exceed 100 characters']
   },
+  description: {
+    type: String,
+    maxlength: [500, 'Description cannot exceed 500 characters']
+  },
   level: {
     type: String,
     required: [true, 'Level is required'],

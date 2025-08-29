@@ -4,6 +4,7 @@ import './ScheduleManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
+import { useCoaches } from '../../contexts/CoachesContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
 
 // Toast Notification Component
@@ -48,6 +49,7 @@ const ScheduleManager = () => {
   } = useSchedule();
   
   const { getAllClasses, isLoaded: classesLoaded } = useClasses();
+  const { coachesData, isLoaded: coachesLoaded } = useCoaches();
   
   const [localScheduleData, setLocalScheduleData] = useState(scheduleData);
   const [hasChanges, setHasChanges] = useState(false);
@@ -57,7 +59,10 @@ const ScheduleManager = () => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState('monday');
   const [selectedTime, setSelectedTime] = useState('09:00');
+  const [selectedEndTime, setSelectedEndTime] = useState('10:00');
   const [selectedClassId, setSelectedClassId] = useState('');
+  const [selectedCoachId, setSelectedCoachId] = useState('colin-byrne');
+  const [selectedDescription, setSelectedDescription] = useState('');
   const [toasts, setToasts] = useState([]);
 
   // Toast management
@@ -106,6 +111,17 @@ const ScheduleManager = () => {
     };
   }, [showResetModal]);
 
+  // Update end time when start time changes
+  useEffect(() => {
+    const availableEndTimes = getAvailableEndTimes(selectedTime);
+    if (availableEndTimes.length > 0) {
+      // Set end time to 1 hour after start time, or the first available time if that's not possible
+      const oneHourLater = calculateEndTime(selectedTime, 60);
+      const newEndTime = availableEndTimes.includes(oneHourLater) ? oneHourLater : availableEndTimes[0];
+      setSelectedEndTime(newEndTime);
+    }
+  }, [selectedTime]);
+
 
 
   // Check for changes
@@ -148,18 +164,35 @@ const ScheduleManager = () => {
       return;
     }
 
+    if (!selectedCoachId) {
+      addToast('Please select a coach', 'error');
+      return;
+    }
+
     const selectedClass = classes.find(c => c.id === selectedClassId);
     if (!selectedClass) {
       addToast('Selected class not found', 'error');
       return;
     }
 
+    let selectedCoach;
+    if (selectedCoachId === 'colin-byrne') {
+      selectedCoach = { name: 'Colin Byrne' };
+    } else {
+      selectedCoach = coachesData.find(c => c.id === selectedCoachId);
+      if (!selectedCoach) {
+        addToast('Selected coach not found', 'error');
+        return;
+      }
+    }
+
     const newEntry = {
       time: selectedTime,
-      endTime: calculateEndTime(selectedTime, 60), // Default 60 minutes
+      endTime: selectedEndTime,
       classId: selectedClassId,
       className: selectedClass.name,
-      instructor: 'Colin Byrne', // Default instructor
+      instructor: selectedCoach.name,
+      description: selectedDescription.trim() || undefined, // Only include if not empty
       level: 'All Levels', // Default level
       maxStudents: 20,
       isActive: true
@@ -170,6 +203,9 @@ const ScheduleManager = () => {
       if (result.success) {
         setShowAddForm(false);
         setSelectedClassId(''); // Reset form
+        setSelectedEndTime('10:00'); // Reset end time
+        setSelectedCoachId('colin-byrne'); // Reset coach selection to Colin Byrne
+        setSelectedDescription(''); // Reset description
         addToast('Schedule entry added successfully!', 'success');
         // Data will be updated via context
       } else {
@@ -225,6 +261,28 @@ const ScheduleManager = () => {
     const endHours = Math.floor(totalMinutes / 60);
     const endMinutes = totalMinutes % 60;
     return `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+  };
+
+  // Get available end times based on selected start time
+  const getAvailableEndTimes = (startTime) => {
+    const endTimes = [];
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const startTotalMinutes = startHour * 60 + startMinute;
+    
+    // Generate end times from 30 minutes to 3 hours after start time
+    for (let duration = 30; duration <= 180; duration += 30) {
+      const endTotalMinutes = startTotalMinutes + duration;
+      const endHour = Math.floor(endTotalMinutes / 60);
+      const endMinute = endTotalMinutes % 60;
+      
+      // Only add times that are within the facility hours (8 AM to 10 PM)
+      if (endHour >= 8 && endHour < 22) {
+        const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+        endTimes.push(endTime);
+      }
+    }
+    
+    return endTimes;
   };
 
   const handleDeployChanges = () => {
@@ -434,6 +492,41 @@ const ScheduleManager = () => {
             </div>
           </div>
 
+          {entry.description ? (
+            <div className='form-row'>
+              <div className='form-group'>
+                <label>Description:</label>
+                <textarea
+                  value={entry.description}
+                  onChange={(e) => handleInputChange(day, entry.id, 'description', e.target.value)}
+                  disabled={!isEditing}
+                  placeholder="Enter class description..."
+                  rows="3"
+                  maxLength="500"
+                />
+                <div className="form-help">
+                  {entry.description.length}/500 characters
+                </div>
+              </div>
+            </div>
+          ) : isEditing && (
+            <div className='form-row'>
+              <div className='form-group'>
+                <label>Description (Optional):</label>
+                <textarea
+                  value=""
+                  onChange={(e) => handleInputChange(day, entry.id, 'description', e.target.value)}
+                  placeholder="Enter class description..."
+                  rows="3"
+                  maxLength="500"
+                />
+                <div className="form-help">
+                  0/500 characters
+                </div>
+              </div>
+            </div>
+          )}
+
           {selectedClass && (
             <div className="class-info">
               <small className="form-help">
@@ -548,7 +641,7 @@ const ScheduleManager = () => {
                 </div>
 
                 <div className='form-group'>
-                  <label>Time:</label>
+                  <label>Start Time:</label>
                   <select
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
@@ -560,19 +653,68 @@ const ScheduleManager = () => {
                 </div>
 
                 <div className='form-group'>
+                  <label>End Time:</label>
+                  <select
+                    value={selectedEndTime}
+                    onChange={(e) => setSelectedEndTime(e.target.value)}
+                  >
+                    {getAvailableEndTimes(selectedTime).map(time => (
+                      <option key={time} value={time}>{time}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className='form-group'>
                   <label>Class:</label>
                   <select
                     value={selectedClassId}
                     onChange={(e) => setSelectedClassId(e.target.value)}
                     required
+                    disabled={!classesLoaded}
                   >
-                    <option value="">Select a class...</option>
-                    {classes.map(classItem => (
+                    <option value="">
+                      {classesLoaded ? 'Select a class...' : 'Loading classes...'}
+                    </option>
+                    {classesLoaded && classes.map(classItem => (
                       <option key={classItem.id} value={classItem.id}>
                         {classItem.name}
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div className='form-group'>
+                  <label>Coach:</label>
+                  <select
+                    value={selectedCoachId}
+                    onChange={(e) => setSelectedCoachId(e.target.value)}
+                    required
+                    disabled={!coachesLoaded}
+                  >
+                    <option value="">
+                      {coachesLoaded ? 'Select a coach...' : 'Loading coaches...'}
+                    </option>
+                    <option value="colin-byrne">Colin Byrne</option>
+                    {coachesLoaded && coachesData.map(coach => (
+                      <option key={coach.id} value={coach.id}>
+                        {coach.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className='form-group'>
+                  <label>Description (Optional):</label>
+                  <textarea
+                    value={selectedDescription}
+                    onChange={(e) => setSelectedDescription(e.target.value)}
+                    placeholder="Enter class description, special requirements, or notes..."
+                    rows="3"
+                    maxLength="500"
+                  />
+                  <div className="form-help">
+                    {selectedDescription.length}/500 characters
+                  </div>
                 </div>
               </div>
 
@@ -588,6 +730,9 @@ const ScheduleManager = () => {
                   onClick={() => {
                     setShowAddForm(false);
                     setSelectedClassId(''); // Reset form
+                    setSelectedEndTime('10:00'); // Reset end time
+                    setSelectedCoachId('colin-byrne'); // Reset coach selection to Colin Byrne
+                    setSelectedDescription(''); // Reset description
                   }}
                 >
                   Cancel

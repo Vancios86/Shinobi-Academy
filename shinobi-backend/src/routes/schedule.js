@@ -112,6 +112,7 @@ router.post('/class', [
     .isLength({ max: 100 }).withMessage('Class name cannot exceed 100 characters'),
   body('instructor').trim().notEmpty().withMessage('Instructor name is required')
     .isLength({ max: 100 }).withMessage('Instructor name cannot exceed 100 characters'),
+  body('description').optional().trim().isLength({ max: 500 }).withMessage('Description cannot exceed 500 characters'),
   body('level').isIn(['Beginner', 'Intermediate', 'Advanced', 'All Levels'])
     .withMessage('Invalid level'),
   body('maxStudents').isInt({ min: 1, max: 50 })
@@ -182,6 +183,7 @@ router.put('/class/:day/:entryId', [
     .isLength({ max: 100 }).withMessage('Class name cannot exceed 100 characters'),
   body('instructor').optional().trim().notEmpty().withMessage('Instructor name cannot be empty')
     .isLength({ max: 100 }).withMessage('Instructor name cannot exceed 100 characters'),
+  body('description').optional().trim().isLength({ max: 500 }).withMessage('Description cannot exceed 500 characters'),
   body('level').optional().isIn(['Beginner', 'Intermediate', 'Advanced', 'All Levels'])
     .withMessage('Invalid level'),
   body('maxStudents').optional().isInt({ min: 1, max: 50 })

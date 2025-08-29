@@ -114,7 +114,10 @@ const SchedulePage = () => {
                               <h5 className='class-name'>{entry.className || 'Class TBD'}</h5>
                               <p className='class-instructor'>Instructor: {entry.instructor}</p>
                               <p className='class-level'>Level: {entry.level}</p>
-                              {classInfo && (
+                              {entry.description && (
+                                <p className='class-description'>{entry.description}</p>
+                              )}
+                              {classInfo && classInfo.description && !entry.description && (
                                 <p className='class-description'>{classInfo.description}</p>
                               )}
                             </div>
