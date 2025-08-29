@@ -31,7 +31,7 @@ const Toast = ({ message, type = 'success', onClose }) => {
 
 const ContactManager = () => {
   const navigate = useNavigate();
-  const { contactData, updateContactData, resetToDefault } = useContact();
+  const { contactData, updateContactData, resetToDefault, isLoaded } = useContact();
   const [localContactData, setLocalContactData] = useState(contactData);
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -73,13 +73,24 @@ const ContactManager = () => {
   };
 
   const handleInputChange = (section, field, value) => {
-    setLocalContactData(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value
+    setLocalContactData(prev => {
+      // Handle simplified phone and email structure
+      if (section === 'phone' || section === 'email') {
+        return {
+          ...prev,
+          [section]: value
+        };
       }
-    }));
+      
+      // Handle nested structure for other sections
+      return {
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [field]: value
+        }
+      };
+    });
   };
 
   const handleSocialMediaChange = (platform, field, value) => {
@@ -105,44 +116,46 @@ const ContactManager = () => {
     }));
   };
 
-  const handleBusinessHoursChange = (day, value) => {
-    setLocalContactData(prev => ({
-      ...prev,
-      businessHours: {
-        ...prev.businessHours,
-        [day]: value
-      }
-    }));
-  };
 
-  const handleDeployChanges = () => {
+
+  const handleDeployChanges = async () => {
     setIsDeploying(true);
     
-    // Simulate deployment delay
-    setTimeout(() => {
-      try {
-        updateContactData(localContactData);
+    try {
+      const result = await updateContactData(localContactData);
+      if (result.success) {
         setHasChanges(false);
         addToast('Contact information updated successfully!', 'success');
-      } catch (error) {
-        console.error('Error updating contact data:', error);
-        addToast('Failed to update contact information. Please try again.', 'error');
-      } finally {
-        setIsDeploying(false);
+      } else {
+        addToast(`Failed to update contact information: ${result.message}`, 'error');
       }
-    }, 1000);
+    } catch (error) {
+      console.error('Error updating contact data:', error);
+      addToast('Failed to update contact information. Please try again.', 'error');
+    } finally {
+      setIsDeploying(false);
+    }
   };
 
-  const handleResetToDefault = () => {
+  const handleResetToDefault = async () => {
     const confirmReset = window.confirm(
       'Are you sure you want to reset all contact information to default values? This action cannot be undone.'
     );
     
     if (confirmReset) {
-      resetToDefault();
-      setLocalContactData(contactData);
-      setHasChanges(false);
-      addToast('Contact information reset to default values.', 'info');
+      try {
+        const result = await resetToDefault();
+        if (result.success) {
+          setLocalContactData(result.data);
+          setHasChanges(false);
+          addToast('Contact information reset to default values.', 'info');
+        } else {
+          addToast(`Failed to reset contact information: ${result.message}`, 'error');
+        }
+      } catch (error) {
+        console.error('Error resetting contact data:', error);
+        addToast('Failed to reset contact information. Please try again.', 'error');
+      }
     }
   };
 
@@ -167,6 +180,17 @@ const ContactManager = () => {
       }));
     }
   }, [localContactData.address.street, localContactData.address.city, localContactData.address.postalCode, localContactData.address.country, localContactData.address.full]);
+
+  // Don't render until data is loaded
+  if (!isLoaded || !localContactData) {
+    return (
+      <div className='contact-manager'>
+        <div className='loading-message'>
+          <p>Loading contact information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='contact-manager'>
@@ -196,37 +220,20 @@ const ContactManager = () => {
             <h3 className='subsection-title text-dark'>Contact Details</h3>
             <div className='form-row'>
               <div className='form-group'>
-                <label htmlFor='phone-display' className='form-label text-dark'>
-                  Phone Number (Display)
+                <label htmlFor='phone' className='form-label text-dark'>
+                  Phone Number
                 </label>
                 <input
-                  type='text'
-                  id='phone-display'
-                  value={localContactData.phone.display}
-                  onChange={(e) => handleInputChange('phone', 'display', e.target.value)}
+                  type='tel'
+                  id='phone'
+                  value={localContactData.phone || ''}
+                  onChange={(e) => handleInputChange('phone', null, e.target.value)}
                   className='form-input'
                   placeholder='e.g., (+351) 977 777 777'
                   maxLength={25}
                 />
-                <small className='char-count'>{localContactData.phone.display.length}/25</small>
+                <small className='char-count'>{(localContactData.phone || '').length}/25</small>
               </div>
-              <div className='form-group'>
-                <label htmlFor='phone-value' className='form-label text-dark'>
-                  Phone Number (Clickable)
-                </label>
-                <input
-                  type='tel'
-                  id='phone-value'
-                  value={localContactData.phone.value}
-                  onChange={(e) => handleInputChange('phone', 'value', e.target.value)}
-                  className='form-input'
-                  placeholder='e.g., +351977777777'
-                  maxLength={20}
-                />
-                <small className='char-count'>{localContactData.phone.value.length}/20</small>
-              </div>
-            </div>
-            <div className='form-row'>
               <div className='form-group'>
                 <label htmlFor='email' className='form-label text-dark'>
                   Email Address
@@ -234,28 +241,13 @@ const ContactManager = () => {
                 <input
                   type='email'
                   id='email'
-                  value={localContactData.email.value}
-                  onChange={(e) => handleInputChange('email', 'value', e.target.value)}
+                  value={localContactData.email || ''}
+                  onChange={(e) => handleInputChange('email', null, e.target.value)}
                   className='form-input'
                   placeholder='e.g., shinobiacademy@gmail.com'
                   maxLength={50}
                 />
-                <small className='char-count'>{localContactData.email.value.length}/50</small>
-              </div>
-              <div className='form-group'>
-                <label htmlFor='email-display' className='form-label text-dark'>
-                  Email Display
-                </label>
-                <input
-                  type='text'
-                  id='email-display'
-                  value={localContactData.email.display}
-                  onChange={(e) => handleInputChange('email', 'display', e.target.value)}
-                  className='form-input'
-                  placeholder='e.g., shinobiacademy@gmail.com'
-                  maxLength={50}
-                />
-                <small className='char-count'>{localContactData.email.display.length}/50</small>
+                <small className='char-count'>{(localContactData.email || '').length}/50</small>
               </div>
             </div>
           </div>
@@ -461,29 +453,7 @@ const ContactManager = () => {
             </div>
           </div>
 
-          {/* Business Hours Section */}
-          <div className='business-hours-section shadowed-box'>
-            <h3 className='subsection-title text-dark'>Business Hours</h3>
-            <div className='business-hours-grid'>
-              {Object.entries(localContactData.businessHours).map(([day, hours]) => (
-                <div key={day} className='business-hour-item'>
-                  <label htmlFor={`hours-${day}`} className='form-label text-dark'>
-                    {day.charAt(0).toUpperCase() + day.slice(1)}
-                  </label>
-                  <input
-                    type='text'
-                    id={`hours-${day}`}
-                    value={hours}
-                    onChange={(e) => handleBusinessHoursChange(day, e.target.value)}
-                    className='form-input'
-                    placeholder='e.g., 9:00 AM - 9:00 PM'
-                    maxLength={25}
-                  />
-                  <small className='char-count'>{hours.length}/25</small>
-                </div>
-              ))}
-            </div>
-          </div>
+
 
           {/* Action Buttons */}
           <div className='action-buttons'>

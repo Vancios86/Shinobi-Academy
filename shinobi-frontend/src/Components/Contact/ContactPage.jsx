@@ -125,13 +125,13 @@ const ContactPage = () => {
               <ul className='shadowed-box contact-list-items flex'>
                 <li>
                   <MdPhone /> 
-                  <a href={`tel:${contactData.phone.value}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {contactData.phone.display}
+                  <a href={`tel:${contactData.phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {contactData.phone}
                   </a>
                 </li>
                 <li>
                   <a
-                    href={`mailto:${contactData.email.value}?&subject=From Shinobi Academy website`}
+                    href={`mailto:${contactData.email}?&subject=From Shinobi Academy website`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <MdEmail /> Send us an Email

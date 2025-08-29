@@ -405,12 +405,40 @@ export class GalleryAPI extends ApiService {
   }
 }
 
+// Contact API
+export class ContactAPI extends ApiService {
+  // Get contact information (public)
+  async getContact() {
+    const response = await this.get('/contact');
+    return response.data;
+  }
+
+  // Get contact information for admin (including metadata)
+  async getAdminContact() {
+    const response = await this.get('/contact/admin');
+    return response.data;
+  }
+
+  // Update contact information
+  async updateContact(contactData) {
+    const response = await this.put('/contact', contactData);
+    return response.data;
+  }
+
+  // Reset contact information to default values
+  async resetContact() {
+    const response = await this.post('/contact/reset');
+    return response.data;
+  }
+}
+
 // Create singleton instances
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
 export const scheduleAPI = new ScheduleAPI();
 export const coachesAPI = new CoachesAPI();
 export const galleryAPI = new GalleryAPI();
+export const contactAPI = new ContactAPI();
 
 // Default export
 export default ApiService;
