@@ -164,6 +164,7 @@ const defaultSchedule = {
 
 export const ScheduleProvider = ({ children }) => {
   const [scheduleData, setScheduleData] = useState({});
+  const [initialSessionData, setInitialSessionData] = useState(null); // Store initial session state
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -175,7 +176,12 @@ export const ScheduleProvider = ({ children }) => {
     try {
       const schedule = await scheduleAPI.getSchedule();
       if (schedule) {
-        setScheduleData({ weeklySchedule: schedule });
+        const newScheduleData = { weeklySchedule: schedule };
+        setScheduleData(newScheduleData);
+        // Store the initial session state if this is the first load
+        if (!initialSessionData) {
+          setInitialSessionData(newScheduleData);
+        }
       } else {
         // Fallback to localStorage if backend fails
         const savedSchedule = localStorage.getItem('shinobi-schedule-data');
@@ -183,12 +189,24 @@ export const ScheduleProvider = ({ children }) => {
           try {
             const parsedData = JSON.parse(savedSchedule);
             setScheduleData(parsedData);
+            // Store the initial session state if this is the first load
+            if (!initialSessionData) {
+              setInitialSessionData(parsedData);
+            }
           } catch (parseError) {
             console.error('Error parsing saved schedule:', parseError);
             setScheduleData(defaultSchedule);
+            // Store the initial session state if this is the first load
+            if (!initialSessionData) {
+              setInitialSessionData(defaultSchedule);
+            }
           }
         } else {
           setScheduleData(defaultSchedule);
+          // Store the initial session state if this is the first load
+          if (!initialSessionData) {
+            setInitialSessionData(defaultSchedule);
+          }
         }
       }
     } catch (error) {
@@ -200,18 +218,30 @@ export const ScheduleProvider = ({ children }) => {
         try {
           const parsedData = JSON.parse(savedSchedule);
           setScheduleData(parsedData);
+          // Store the initial session state if this is the first load
+          if (!initialSessionData) {
+            setInitialSessionData(parsedData);
+          }
         } catch (parseError) {
           console.error('Error parsing saved schedule:', parseError);
           setScheduleData(defaultSchedule);
+          // Store the initial session state if this is the first load
+          if (!initialSessionData) {
+            setInitialSessionData(defaultSchedule);
+          }
         }
       } else {
         setScheduleData(defaultSchedule);
+        // Store the initial session state if this is the first load
+        if (!initialSessionData) {
+          setInitialSessionData(defaultSchedule);
+        }
       }
     } finally {
       setIsLoading(false);
       setIsLoaded(true);
     }
-  }, []);
+  }, [initialSessionData]);
 
   // Load schedule data on mount
   useEffect(() => {
@@ -346,10 +376,31 @@ export const ScheduleProvider = ({ children }) => {
     return Array.from(scheduledClasses);
   };
 
-  // Reset to default schedule
-  const resetToDefault = () => {
-    setScheduleData(defaultSchedule);
-    localStorage.removeItem('shinobi-schedule-data');
+  // Reset to initial session state (what was loaded when admin session started)
+  const resetToDefault = async () => {
+    try {
+      if (initialSessionData) {
+        // Send the reset data to the backend
+        const result = await scheduleAPI.resetSchedule(initialSessionData.weeklySchedule);
+        if (result) {
+          setScheduleData(initialSessionData);
+          localStorage.removeItem('shinobi-schedule-data');
+          return { success: true, data: result };
+        }
+      } else {
+        // Fallback to hardcoded default if no initial session data
+        const result = await scheduleAPI.resetSchedule(defaultSchedule.weeklySchedule);
+        if (result) {
+          setScheduleData(defaultSchedule);
+          localStorage.removeItem('shinobi-schedule-data');
+          return { success: true, data: result };
+        }
+      }
+      return { success: false, message: 'Failed to reset schedule' };
+    } catch (error) {
+      console.error('Error resetting schedule:', error);
+      return { success: false, message: error.message };
+    }
   };
 
   // Get available time slots

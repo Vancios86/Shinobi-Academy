@@ -37,7 +37,7 @@ A Node.js/Express REST API for the Shinobi Academy website with MongoDB database
    ```
    Edit `.env` with your configuration:
    ```env
-   PORT=5000
+   PORT=5001
    MONGODB_URI=mongodb://localhost:27017/shinobi-academy
    JWT_SECRET=your-super-secret-jwt-key
    CLIENT_URL=http://localhost:3000
@@ -127,19 +127,19 @@ headers: {
 
 1. **Health Check:**
    ```bash
-   curl http://localhost:5000/api/health
+   curl http://localhost:5001/api/health
    ```
 
 2. **Login:**
    ```bash
-   curl -X POST http://localhost:5000/api/auth/login \
+   curl -X POST http://localhost:5001/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{"username":"admin","password":"admin123"}'
    ```
 
 3. **Get Classes:**
    ```bash
-   curl http://localhost:5000/api/classes
+   curl http://localhost:5001/api/classes
    ```
 
 ## 🚢 Deployment

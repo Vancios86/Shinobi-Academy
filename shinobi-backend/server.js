@@ -16,7 +16,7 @@ const galleryRoutes = require('./src/routes/gallery');
 const contentRoutes = require('./src/routes/content');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Security middleware - More permissive for development
 app.use(helmet({

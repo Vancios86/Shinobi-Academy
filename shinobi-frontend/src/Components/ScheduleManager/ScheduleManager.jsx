@@ -4,6 +4,7 @@ import './ScheduleManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
+import ConfirmationModal from '../Common/ConfirmationModal';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -53,6 +54,7 @@ const ScheduleManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [editingEntry, setEditingEntry] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState('monday');
   const [selectedTime, setSelectedTime] = useState('09:00');
   const [selectedClassId, setSelectedClassId] = useState('');
@@ -81,6 +83,28 @@ const ScheduleManager = () => {
   useEffect(() => {
     loadSchedule();
   }, [loadSchedule]); // loadSchedule is stable from context
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && showResetModal) {
+        setShowResetModal(false);
+      }
+    };
+
+    // Prevent body scroll when modal is open
+    if (showResetModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showResetModal]);
 
 
 
@@ -241,19 +265,26 @@ const ScheduleManager = () => {
     }, 1000);
   };
 
-  const handleResetToDefault = () => {
-    const confirmReset = window.confirm(
-      'Are you sure you want to reset all schedule data to default values? This action cannot be undone.'
-    );
-    
-    if (confirmReset) {
-      resetToDefault();
-      setLocalScheduleData(scheduleData);
-      setHasChanges(false);
-      setEditingEntry(null);
-      setShowAddForm(false);
-      addToast('Schedule reset to default successfully!', 'success');
+  const handleResetToDefault = async () => {
+    try {
+      const result = await resetToDefault();
+      if (result.success) {
+        setLocalScheduleData(scheduleData);
+        setHasChanges(false);
+        setEditingEntry(null);
+        setShowAddForm(false);
+        addToast('Schedule reset to initial session state successfully!', 'success');
+      } else {
+        addToast(`Failed to reset schedule: ${result.message}`, 'error');
+      }
+    } catch (error) {
+      addToast(`Error resetting schedule: ${error.message}`, 'error');
     }
+    setShowResetModal(false);
+  };
+
+  const openResetModal = () => {
+    setShowResetModal(true);
   };
 
   const renderScheduleEntry = (entry, day) => {
@@ -492,9 +523,9 @@ const ScheduleManager = () => {
             
             <button 
               className='btn-secondary'
-              onClick={handleResetToDefault}
+              onClick={openResetModal}
             >
-              Reset to Default
+              Reset to Session Start
             </button>
           </div>
 
@@ -615,6 +646,18 @@ const ScheduleManager = () => {
           onClose={() => removeToast(toast.id)}
         />
       ))}
+      
+      <ConfirmationModal
+        isOpen={showResetModal}
+        title="Reset Schedule"
+        message="Are you sure you want to reset all schedule data to the initial state from when you started this admin session? This action cannot be undone."
+        onConfirm={handleResetToDefault}
+        onCancel={() => setShowResetModal(false)}
+        confirmText="Reset Schedule"
+        cancelText="Cancel"
+        type="warning"
+        showIcon={true}
+      />
     </div>
   );
 };

@@ -294,6 +294,12 @@ export class ScheduleAPI extends ApiService {
     const response = await this.put('/schedule/settings', settings);
     return response.data;
   }
+
+  // Reset schedule to provided state
+  async resetSchedule(weeklySchedule) {
+    const response = await this.post('/schedule/reset', { weeklySchedule });
+    return response.data;
+  }
 }
 
 // Coaches API

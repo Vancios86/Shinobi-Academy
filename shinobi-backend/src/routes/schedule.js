@@ -339,4 +339,53 @@ router.put('/settings', [
   }
 });
 
+// POST /api/schedule/reset - Reset schedule to provided state (admin only)
+router.post('/reset', [
+  authenticateToken,
+  requireAdmin,
+  body('weeklySchedule').isObject().withMessage('Weekly schedule is required'),
+  body('weeklySchedule.monday').isArray().withMessage('Monday schedule must be an array'),
+  body('weeklySchedule.tuesday').isArray().withMessage('Tuesday schedule must be an array'),
+  body('weeklySchedule.wednesday').isArray().withMessage('Wednesday schedule must be an array'),
+  body('weeklySchedule.thursday').isArray().withMessage('Thursday schedule must be an array'),
+  body('weeklySchedule.friday').isArray().withMessage('Friday schedule must be an array'),
+  body('weeklySchedule.saturday').isArray().withMessage('Saturday schedule must be an array'),
+  body('weeklySchedule.sunday').isArray().withMessage('Sunday schedule must be an array')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: errors.array()
+      });
+    }
+
+    let schedule = await Schedule.getActiveSchedule();
+    
+    if (!schedule) {
+      schedule = new Schedule({
+        weeklySchedule: req.body.weeklySchedule
+      });
+    } else {
+      schedule.weeklySchedule = req.body.weeklySchedule;
+    }
+
+    schedule.lastUpdatedBy = req.user._id;
+    await schedule.save();
+
+    res.json({
+      success: true,
+      message: 'Schedule reset successfully',
+      data: schedule.getAllClassesSorted()
+    });
+  } catch (error) {
+    console.error('Reset schedule error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Failed to reset schedule'
+    });
+  }
+});
+
 module.exports = router;
