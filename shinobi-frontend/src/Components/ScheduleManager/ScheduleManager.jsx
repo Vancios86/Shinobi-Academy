@@ -357,6 +357,9 @@ const ScheduleManager = () => {
       });
     }
     
+    // Get coaches data
+    const coaches = coachesData || [];
+    
     return (
       <div key={entry.id} className={`schedule-entry ${isEditing ? 'editing' : ''}`}>
         <div className="entry-header">
@@ -437,18 +440,42 @@ const ScheduleManager = () => {
                 ))}
               </select>
             </div>
+
+            <div className="form-group">
+              <label>End Time:</label>
+              <select
+                value={entry.endTime}
+                onChange={(e) => handleInputChange(day, entry.id, 'endTime', e.target.value)}
+                disabled={!isEditing}
+              >
+                {getAvailableEndTimes(entry.time).map(time => (
+                  <option key={time} value={time}>{time}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Instructor:</label>
-              <input
-                type="text"
-                value={entry.instructor}
-                onChange={(e) => handleInputChange(day, entry.id, 'instructor', e.target.value)}
+              <label>Coach:</label>
+              <select
+                value={entry.coachId || 'colin-byrne'}
+                onChange={(e) => {
+                  const selectedCoach = coaches.find(c => c.id === e.target.value);
+                  handleInputChange(day, entry.id, 'coachId', e.target.value);
+                  if (selectedCoach) {
+                    handleInputChange(day, entry.id, 'instructor', selectedCoach.name);
+                  }
+                }}
                 disabled={!isEditing}
-                placeholder="Enter instructor name"
-              />
+              >
+                <option value="colin-byrne">Colin Byrne</option>
+                {coaches.filter(coach => coach.id !== 'colin-byrne').map(coach => (
+                  <option key={coach.id} value={coach.id}>
+                    {coach.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="form-group">
@@ -492,49 +519,28 @@ const ScheduleManager = () => {
             </div>
           </div>
 
-          {entry.description ? (
-            <div className='form-row'>
-              <div className='form-group'>
-                <label>Description:</label>
-                <textarea
-                  value={entry.description}
-                  onChange={(e) => handleInputChange(day, entry.id, 'description', e.target.value)}
-                  disabled={!isEditing}
-                  placeholder="Enter class description..."
-                  rows="3"
-                  maxLength="500"
-                />
-                <div className="form-help">
-                  {entry.description.length}/500 characters
-                </div>
-              </div>
-            </div>
-          ) : isEditing && (
+          {isEditing && (
             <div className='form-row'>
               <div className='form-group'>
                 <label>Description (Optional):</label>
                 <textarea
-                  value=""
+                  value={entry.description || ""}
                   onChange={(e) => handleInputChange(day, entry.id, 'description', e.target.value)}
                   placeholder="Enter class description..."
                   rows="3"
                   maxLength="500"
                 />
                 <div className="form-help">
-                  0/500 characters
+                  {(entry.description || "").length}/500 characters
                 </div>
+                {!entry.description && (
+                  <small className="form-help">No description set. Add one to provide more details about this specific class session.</small>
+                )}
               </div>
             </div>
           )}
 
-          {selectedClass && (
-            <div className="class-info">
-              <small className="form-help">
-                <strong>Class:</strong> {selectedClass.name} | 
-                <strong>Description:</strong> {selectedClass.description.substring(0, 100)}...
-              </small>
-            </div>
-          )}
+
         </div>
       </div>
     );
