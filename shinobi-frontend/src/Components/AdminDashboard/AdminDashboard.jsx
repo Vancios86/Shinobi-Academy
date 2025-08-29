@@ -2,11 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 import logo from '../../assets/logos/logo.png';
+import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 import { useAuth } from '../../contexts/AuthContext';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  
+  // Scroll to top when component mounts
+  useScrollToTopOnMount();
 
   const handleLogout = () => {
     logout();

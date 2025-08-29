@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './ContentManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useContent } from '../../contexts/ContentContext';
+import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -38,6 +39,9 @@ const ContentManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [activeSection, setActiveSection] = useState('founder');
   const [toasts, setToasts] = useState([]);
+  
+  // Scroll to top when component mounts
+  useScrollToTopOnMount();
 
   // Toast management
   const addToast = (message, type = 'success') => {

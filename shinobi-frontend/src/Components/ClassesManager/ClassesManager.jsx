@@ -4,6 +4,7 @@ import './ClassesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useClasses } from '../../contexts/ClassesContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
+import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -57,6 +58,9 @@ const ClassesManager = () => {
     order: 0
   });
   const [toasts, setToasts] = useState([]);
+  
+  // Scroll to top when component mounts
+  useScrollToTopOnMount();
 
   // Toast management
   const addToast = (message, type = 'success') => {

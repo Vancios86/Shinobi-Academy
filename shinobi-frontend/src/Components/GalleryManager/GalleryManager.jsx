@@ -4,6 +4,7 @@ import './GalleryManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useGallery } from '../../contexts/GalleryContext';
 import { galleryAPI } from '../../services/api';
+import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -55,6 +56,9 @@ const GalleryManager = () => {
     file: null
   });
   const [toasts, setToasts] = useState([]);
+  
+  // Scroll to top when component mounts
+  useScrollToTopOnMount();
 
   const fileInputRef = useRef(null);
 

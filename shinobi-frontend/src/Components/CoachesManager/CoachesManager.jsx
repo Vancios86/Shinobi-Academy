@@ -5,6 +5,7 @@ import logo from '../../assets/logos/logo.png';
 import { useCoaches } from '../../contexts/CoachesContext';
 import { coachesAPI } from '../../services/api';
 import ConfirmationModal from '../Common/ConfirmationModal';
+import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -55,6 +56,9 @@ const CoachesManager = () => {
     description: '',
     specialty: ''
   });
+  
+  // Scroll to top when component mounts
+  useScrollToTopOnMount();
 
   // Toast management
   const addToast = (message, type = 'success') => {

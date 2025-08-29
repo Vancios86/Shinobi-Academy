@@ -6,6 +6,7 @@ import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
 import { useCoaches } from '../../contexts/CoachesContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
+import { useScrollToTopOnMount, useScrollToTopOnChange } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -64,7 +65,13 @@ const ScheduleManager = () => {
   const [selectedCoachId, setSelectedCoachId] = useState('colin-byrne');
   const [selectedDescription, setSelectedDescription] = useState('');
   const [toasts, setToasts] = useState([]);
-
+  
+    // Scroll to top when component mounts
+  useScrollToTopOnMount();
+  
+  // Scroll to top when schedule data changes significantly
+  useScrollToTopOnChange(scheduleData);
+  
   // Toast management
   const addToast = (message, type = 'success') => {
     const id = Date.now();
@@ -356,6 +363,7 @@ const ScheduleManager = () => {
         return classSlug === entry.classId || c.name === entry.className;
       });
     }
+
     
     // Get coaches data
     const coaches = coachesData || [];

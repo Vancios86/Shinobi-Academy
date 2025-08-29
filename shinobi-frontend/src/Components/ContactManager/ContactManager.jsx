@@ -4,6 +4,7 @@ import './ContactManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useContact } from '../../contexts/ContactContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
+import { useScrollToTopOnMount, useScrollToTopOnChange } from '../../hooks/useScrollToTop';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -38,7 +39,13 @@ const ContactManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [toasts, setToasts] = useState([]);
-
+  
+    // Scroll to top when component mounts
+  useScrollToTopOnMount();
+  
+  // Scroll to top when contact data changes significantly
+  useScrollToTopOnChange(contactData);
+  
   // Toast management
   const addToast = (message, type = 'success') => {
     const id = Date.now();
