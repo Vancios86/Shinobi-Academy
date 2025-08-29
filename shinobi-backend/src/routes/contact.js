@@ -52,7 +52,7 @@ router.get('/admin', [authenticateToken, requireAdmin], async (req, res) => {
   }
 });
 
-// PUT /api/contact - Update contact information (admin only)
+// PUT /api/contact - Update or create contact information (admin only)
 router.put('/', [
   authenticateToken,
   requireAdmin,
@@ -81,41 +81,53 @@ router.put('/', [
       });
     }
 
-    const contact = await Contact.getActiveContact();
-    const updatedContact = await contact.updateContactInfo(req.body, req.user._id);
+    console.log('PUT /api/contact - Request body:', req.body);
     
-    res.json({
-      success: true,
-      message: 'Contact information updated successfully',
-      data: updatedContact
-    });
+    let contact = await Contact.getActiveContact();
+    console.log('Existing contact from database:', contact);
+    
+    if (!contact) {
+      // Create new contact if none exists
+      console.log('Creating new contact...');
+      contact = new Contact(req.body);
+      contact.lastUpdatedBy = req.user._id;
+      contact.lastUpdatedAt = new Date();
+      
+      // Auto-generate full address
+      if (req.body.address) {
+        const { street, city, postalCode, country } = req.body.address;
+        contact.address.full = `${street}, ${postalCode} ${city}, ${country}`;
+      }
+      
+      await contact.save();
+      console.log('New contact created:', contact);
+      
+      res.json({
+        success: true,
+        message: 'Contact information created successfully',
+        data: contact
+      });
+    } else {
+      // Update existing contact
+      console.log('Updating existing contact...');
+      const updatedContact = await contact.updateContactInfo(req.body, req.user._id);
+      console.log('Contact updated:', updatedContact);
+      
+      res.json({
+        success: true,
+        message: 'Contact information updated successfully',
+        data: updatedContact
+      });
+    }
   } catch (error) {
-    console.error('Update contact error:', error);
+    console.error('Update/create contact error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update contact information'
+      message: 'Failed to update/create contact information'
     });
   }
 });
 
-// POST /api/contact/reset - Reset contact information to default values (admin only)
-router.post('/reset', [authenticateToken, requireAdmin], async (req, res) => {
-  try {
-    const contact = await Contact.getActiveContact();
-    const resetContact = await contact.resetToDefault(req.user._id);
-    
-    res.json({
-      success: true,
-      message: 'Contact information reset to default values successfully',
-      data: resetContact
-    });
-  } catch (error) {
-    console.error('Reset contact error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to reset contact information'
-    });
-  }
-});
+
 
 module.exports = router;

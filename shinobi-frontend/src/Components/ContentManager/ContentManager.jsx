@@ -390,13 +390,13 @@ const ContentManager = () => {
           <div className='action-buttons'>
             <button 
               onClick={handleDeployChanges} 
-              className={`deploy-btn ${!hasChanges ? 'disabled' : ''}`}
+              className='btn-primary'
               disabled={!hasChanges || isDeploying}
             >
               {isDeploying ? 'Updating...' : 'Update Content'}
             </button>
             
-            <button onClick={handleResetToDefault} className='reset-btn'>
+            <button onClick={handleResetToDefault} className='btn-secondary'>
               Reset to Default
             </button>
           </div>

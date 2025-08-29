@@ -112,38 +112,8 @@ contactSchema.statics.getActiveContact = async function() {
     let contact = await this.findOne().sort({ createdAt: -1 });
     
     if (!contact) {
-      // Create default contact if none exists
-      contact = new this({
-        phone: "(+351) 977 777 777",
-        email: "shinobiacademy@gmail.com",
-        address: {
-          street: "R.Convento da Trindade 15",
-          city: "Lagos",
-          postalCode: "8600-613",
-          country: "Portugal",
-          full: "R.Convento da Trindade 15, 8600-613 Lagos, Portugal"
-        },
-        socialMedia: {
-          instagram: {
-            url: "https://instagram.com/shinobiacademylagos",
-            display: "shinobiacademylagos",
-            platform: "Instagram"
-          },
-          facebook: {
-            url: "https://www.facebook.com/profile.php?id=100028550547285",
-            display: "Shinobi Academy Lagos",
-            platform: "Facebook"
-          },
-          youtube: {
-            url: "https://www.youtube.com/c/ShinobiVlog",
-            display: "ShinobiVlog",
-            platform: "YouTube"
-          }
-        },
-
-        lastUpdatedBy: undefined // Will be set when first updated
-      });
-      await contact.save();
+      // Return null if no contact exists - let the frontend handle empty state
+      return null;
     }
     
     return contact;
@@ -185,52 +155,6 @@ contactSchema.statics.getActiveContact = async function() {
     }
   };
 
-// Method to reset to default values
-contactSchema.methods.resetToDefault = async function(userId) {
-  try {
-    const defaultData = {
-      phone: "(+351) 977 777 777",
-      email: "shinobiacademy@gmail.com",
-      address: {
-        street: "R.Convento da Trindade 15",
-        city: "Lagos",
-        postalCode: "8600-613",
-        country: "Portugal",
-        full: "R.Convento da Trindade 15, 8600-613 Lagos, Portugal"
-      },
-      socialMedia: {
-        instagram: {
-          url: "https://instagram.com/shinobiacademylagos",
-          display: "shinobiacademylagos",
-          platform: "Instagram"
-        },
-        facebook: {
-          url: "https://www.facebook.com/profile.php?id=100028550547285",
-          display: "Shinobi Academy Lagos",
-          platform: "Facebook"
-        },
-        youtube: {
-          url: "https://www.youtube.com/c/ShinobiVlog",
-          display: "ShinobiVlog",
-          platform: "YouTube"
-        }
-      },
 
-    };
-    
-    Object.keys(defaultData).forEach(key => {
-      this[key] = defaultData[key];
-    });
-    
-    this.lastUpdatedBy = userId;
-    this.lastUpdatedAt = new Date();
-    
-    await this.save();
-    return this;
-  } catch (error) {
-    console.error('Error resetting contact to default:', error);
-    throw error;
-  }
-};
 
 module.exports = mongoose.model('Contact', contactSchema);

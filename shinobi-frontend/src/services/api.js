@@ -425,11 +425,7 @@ export class ContactAPI extends ApiService {
     return response.data;
   }
 
-  // Reset contact information to default values
-  async resetContact() {
-    const response = await this.post('/contact/reset');
-    return response.data;
-  }
+
 }
 
 // Create singleton instances
