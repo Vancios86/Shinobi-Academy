@@ -243,7 +243,7 @@ ul {
 
 /* Utility Classes */
 .rounded-sm {
-  border-radius: 0.33rem;
+  border-radius: 1rem;
 }
 
 .shadowed-box {
@@ -288,26 +288,24 @@ ul {
   letter-spacing: 0.2em;
   color: hsl(var(--clr-dark));
   
+  /* Stack title and accent line vertically */
+  flex-direction: column;
+  
   /* Subtle underline animation */
   position: relative;
 }
 
-.page-title.variation-3::after {
-  content: '';
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
+.page-title.variation-3 .page-title-accent-line {
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, 
-    hsl(var(--clr-red)), 
-    hsl(var(--clr-dark)));
+  background: linear-gradient(90deg, hsl(var(--clr-red)), hsl(var(--clr-red) / 0.5));
   border-radius: 2px;
+  margin: 0.5rem auto 0 auto;
+  display: block;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(-50%);
 }
 
-.page-title.variation-3:hover::after {
+.page-title.variation-3:hover .page-title-accent-line {
   width: 80px;
 }
 

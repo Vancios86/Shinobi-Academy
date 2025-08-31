@@ -31,6 +31,7 @@ const ContactPage = () => {
       <div className='contact-page container flex'>
         <div className='page-title variation-3' id='contact'>
           <h3>Contact</h3>
+          <div className='page-title-accent-line'></div>
         </div>
         <div className='inline-elements inline-elements-top'>
           <p>Loading contact information...</p>
@@ -43,6 +44,7 @@ const ContactPage = () => {
     <div className='contact-page container flex'>
               <div className='page-title variation-3' id='contact'>
           <h3>Contact</h3>
+          <div className='page-title-accent-line'></div>
         </div>
 
       <div className='inline-elements inline-elements-top'>

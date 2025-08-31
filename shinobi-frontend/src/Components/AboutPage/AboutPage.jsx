@@ -40,6 +40,7 @@ const AboutPage = memo(() => {
       <div className='about-page grid'>
                  <div className='page-title variation-3' id='about-page'>
            <h3>Loading...</h3>
+           <div className='page-title-accent-line'></div>
          </div>
         <div className='about-page-content shadowed-box'>
           <p>Loading content...</p>
@@ -52,8 +53,9 @@ const AboutPage = memo(() => {
     <div className='about-page grid'>
                              <div className='page-title variation-3' id='about-page'>
            <h3>{contentData.about.pageTitle}</h3>
+           <div className='page-title-accent-line'></div>
          </div>
-      <div className='about-page-content shadowed-box'>
+      <div className='about-page-content shadowed-box rounded-sm'>
         {/* Founder Section - Enhanced Hero */}
         <section className='founder-section'>
           <div className='founder-container'>
