@@ -8,6 +8,7 @@ import ClassesPage from './Components/ClassesPage/ClassesPage';
 import CampsComponent from './Components/Camps/CampsComponent/CampsComponent';
 import GalleryComponent from './Components/Gallery/GalleryComponent/GalleryComponent';
 import ContactPage from './Components/Contact/ContactPage';
+import Testimonials from './Components/Testimonials/Testimonials';
 
 import Footer from './Components/Footer/Footer';
 
@@ -37,6 +38,7 @@ const Main = () => {
           <GalleryComponent />
         </div>
         <ContactPage />
+        <Testimonials />
         <Footer />
       </ParallaxProvider>
               <button className='go-to-top-button rounded-sm'>
