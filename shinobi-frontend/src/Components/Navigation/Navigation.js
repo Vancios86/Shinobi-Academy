@@ -25,7 +25,7 @@ const Navigation = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isExpanded]);
+  }, [isExpanded, handleKeyDown]);
 
   // Announce menu state changes to screen readers
   useEffect(() => {
