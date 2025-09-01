@@ -112,6 +112,7 @@
   right: 0;
   margin: auto;
   will-change: transform;
+  transform: translateY(-1rem);
 }
 .menu-toggler + label:before,
 .menu-toggler + label:after {

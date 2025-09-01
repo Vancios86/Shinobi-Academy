@@ -28,6 +28,7 @@ const ClassesPage = () => {
         <div className='flow'>
           <div className='page-title variation-3' id='classes-page'>
             <h3 id='classes-page'>Classes</h3>
+            <div className='page-title-accent-line'></div>
           </div>
           <div className='classes-content shadowed-box grid text-silver'>
             <div className='loading-message'>
@@ -44,6 +45,7 @@ const ClassesPage = () => {
       <div className='flow'>
         <div className='page-title variation-3' id='classes-page'>
           <h3 id='classes-page'>Classes</h3>
+          <div className='page-title-accent-line'></div>
         </div>
 
         <div className='classes-content shadowed-box grid text-silver'>
