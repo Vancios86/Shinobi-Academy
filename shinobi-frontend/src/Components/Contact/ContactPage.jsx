@@ -124,7 +124,7 @@ const ContactPage = () => {
         >
           <div className='contact-list-container flex'>
             <div className='contact-list flex'>
-              <ul className='shadowed-box contact-list-items flex'>
+              <ul className='shadowed-box contact-list-items rounded-sm flex'>
                 <li>
                   <MdPhone /> 
                   <a href={`tel:${contactData.phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>

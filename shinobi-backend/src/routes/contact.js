@@ -10,13 +10,36 @@ router.get('/', async (req, res) => {
   try {
     const contact = await Contact.getActiveContact();
     
+    if (!contact) {
+      // Return empty contact data if none exists
+      return res.json({
+        success: true,
+        message: 'No contact information found',
+        data: {
+          phone: '',
+          email: '',
+          address: {
+            street: '',
+            city: '',
+            postalCode: '',
+            country: '',
+            full: ''
+          },
+          socialMedia: {
+            instagram: { url: '', display: '' },
+            facebook: { url: '', display: '' },
+            youtube: { url: '', display: '' }
+          }
+        }
+      });
+    }
+    
     // Remove sensitive fields for public endpoint
     const publicContact = {
       phone: contact.phone,
       email: contact.email,
       address: contact.address,
-      socialMedia: contact.socialMedia,
-      businessHours: contact.businessHours
+      socialMedia: contact.socialMedia
     };
     
     res.json({
@@ -37,6 +60,14 @@ router.get('/', async (req, res) => {
 router.get('/admin', [authenticateToken, requireAdmin], async (req, res) => {
   try {
     const contact = await Contact.getActiveContact();
+    
+    if (!contact) {
+      return res.json({
+        success: true,
+        message: 'No contact information found',
+        data: null
+      });
+    }
     
     res.json({
       success: true,

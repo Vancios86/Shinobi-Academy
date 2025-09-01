@@ -27,7 +27,7 @@ const GalleryComponent = () => {
 
   return (
     <Parallax opacity={[3, 0]}>
-      <div className='gallery-component preview-component container flow shadowed-box'>
+      <div className='gallery-component preview-component container flow shadowed-box rounded-sm'>
         <div className='component-title'>
           <h3 id='gallery-component-title'>Media Gallery</h3>
         </div>
