@@ -200,6 +200,141 @@
   display: block;
 }
 
+/* Form Help Text */
+.form-help {
+  font-size: var(--fs-200);
+  color: hsl(var(--clr-dark) / 0.7);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Image Source Selector */
+.image-source-selector {
+  margin-bottom: 1rem;
+}
+
+.source-options {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: var(--fs-300);
+  color: hsl(var(--clr-dark));
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-option span {
+  user-select: none;
+}
+
+/* URL Input Styles */
+.url-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.url-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--clr-white));
+  border: 1px solid hsl(var(--clr-dark) / 0.2);
+  border-radius: 8px;
+}
+
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--clr-red) / 0.1);
+  border: 1px solid hsl(var(--clr-red) / 0.3);
+  border-radius: 8px;
+  color: hsl(var(--clr-red));
+}
+
+.error-icon {
+  font-size: var(--fs-400);
+}
+
+.error-text {
+  font-size: var(--fs-200);
+  font-style: italic;
+}
+
+/* File Upload Styles */
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: hsl(var(--clr-white));
+  border: 2px dashed hsl(var(--clr-dark) / 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--fs-300);
+  color: hsl(var(--clr-dark));
+}
+
+.file-upload-label:hover {
+  border-color: hsl(var(--clr-red));
+  background: hsl(var(--clr-red) / 0.05);
+}
+
+.upload-icon {
+  font-size: var(--fs-400);
+}
+
+.uploaded-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: hsl(var(--clr-white));
+  border: 1px solid hsl(var(--clr-dark) / 0.2);
+  border-radius: 8px;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px hsl(var(--clr-dark) / 0.1);
+}
+
+.preview-text {
+  font-size: var(--fs-200);
+  color: hsl(var(--clr-dark) / 0.6);
+  font-style: italic;
+}
+
 /* Achievements Section */
 .achievements-list {
   margin-bottom: 1rem;
@@ -209,7 +344,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .achievement-bullet {
@@ -250,21 +385,51 @@
 }
 
 .add-achievement-btn {
-  background: hsl(var(--clr-dark));
+  background: linear-gradient(135deg, hsl(var(--clr-dark)), hsl(var(--clr-dark) / 0.9));
   color: hsl(var(--clr-white));
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border: 2px solid transparent;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   font-size: var(--fs-300);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.add-achievement-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
 }
 
 .add-achievement-btn:hover {
-  background: hsl(var(--clr-dark) / 0.8);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, hsl(var(--clr-dark) / 0.9), hsl(var(--clr-dark) / 0.7));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: hsl(var(--clr-dark) / 0.3);
+}
+
+.add-achievement-btn:hover::before {
+  left: 100%;
+}
+
+.add-achievement-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-achievement-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--clr-dark) / 0.3);
 }
 
 /* Action Buttons */

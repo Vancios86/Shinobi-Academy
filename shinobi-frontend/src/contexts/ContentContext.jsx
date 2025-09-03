@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// API Configuration
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const ContentContext = createContext();
 
 export const useContent = () => {
@@ -72,35 +75,52 @@ const defaultContent = {
 
 export const ContentProvider = ({ children }) => {
   const [contentData, setContentData] = useState(defaultContent);
+  const [initialSessionData, setInitialSessionData] = useState(null); // Store initial session state
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load content data on mount
   useEffect(() => {
-    const loadContentData = () => {
+    const loadContentData = async () => {
       try {
-        // Try to load from localStorage first
-        const savedContent = localStorage.getItem('shinobi-content-data');
-        
-        if (savedContent) {
-          const parsedData = JSON.parse(savedContent);
-          // Merge with default data to ensure all fields exist
-          const mergedData = {
-            ...defaultContent,
-            ...parsedData,
-            about: {
-              ...defaultContent.about,
-              ...parsedData.about
+        const response = await fetch(`${API_BASE_URL}/content`);
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            // Merge with default data to ensure all fields exist
+            const mergedData = {
+              ...defaultContent,
+              ...result.data,
+              about: {
+                ...defaultContent.about,
+                ...result.data.about
+              }
+            };
+            setContentData(mergedData);
+            // Store the initial session state (only on first load)
+            if (!initialSessionData) {
+              setInitialSessionData(mergedData);
             }
-          };
-          setContentData(mergedData);
+          } else {
+            // Fallback to default content data
+            setContentData(defaultContent);
+            if (!initialSessionData) {
+              setInitialSessionData(defaultContent);
+            }
+          }
         } else {
-          // Use default content data
+          // Fallback to default content data
           setContentData(defaultContent);
+          if (!initialSessionData) {
+            setInitialSessionData(defaultContent);
+          }
         }
       } catch (error) {
         console.error('Error loading content data:', error);
         // Fallback to default content data
         setContentData(defaultContent);
+        if (!initialSessionData) {
+          setInitialSessionData(defaultContent);
+        }
       }
       setIsLoaded(true);
     };
@@ -120,8 +140,39 @@ export const ContentProvider = ({ children }) => {
   }, [contentData, isLoaded]);
 
   // Update content data (used by ContentManager)
-  const updateContentData = (newData) => {
-    setContentData(newData);
+  const updateContentData = async (newData) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${API_BASE_URL}/content`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setContentData(result.data);
+        } else {
+          throw new Error(result.message || 'Failed to update content');
+        }
+      } else {
+        const errorResult = await response.json();
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please log in again.');
+        } else if (response.status === 403) {
+          throw new Error('Access denied. Admin privileges required.');
+        } else {
+          throw new Error(errorResult.message || `Failed to update content (${response.status})`);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating content:', error);
+      throw error;
+    }
   };
 
   // Update specific content section
@@ -181,10 +232,45 @@ export const ContentProvider = ({ children }) => {
     }));
   };
 
-  // Reset to default content data
-  const resetToDefault = () => {
-    setContentData(defaultContent);
-    localStorage.removeItem('shinobi-content-data');
+  // Reset to original session state
+  const resetToOriginal = async () => {
+    try {
+      if (!initialSessionData) {
+        throw new Error('No original session data available');
+      }
+
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${API_BASE_URL}/content`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(initialSessionData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setContentData(result.data);
+          return { success: true, message: 'Content reset to original session state' };
+        } else {
+          throw new Error(result.message || 'Failed to reset content');
+        }
+      } else {
+        const errorResult = await response.json();
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please log in again.');
+        } else if (response.status === 403) {
+          throw new Error('Access denied. Admin privileges required.');
+        } else {
+          throw new Error(errorResult.message || `Failed to reset content (${response.status})`);
+        }
+      }
+    } catch (error) {
+      console.error('Error resetting content:', error);
+      return { success: false, message: error.message };
+    }
   };
 
   // Get content for specific section
@@ -205,7 +291,7 @@ export const ContentProvider = ({ children }) => {
     updateContentArray,
     addContentArrayItem,
     removeContentArrayItem,
-    resetToDefault,
+    resetToOriginal,
     getContent,
     getContentField,
     isLoaded

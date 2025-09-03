@@ -112,7 +112,16 @@ const AboutPage = memo(() => {
             </div>
             <div className='facilities-visual'>
               <div className='facilities-image-container'>
-                <img src={view} loading='lazy' alt='Shinobi Academy view' />
+                <img 
+                  src={
+                    contentData.about.asideSection.facilitiesImage?.startsWith('http') || 
+                    contentData.about.asideSection.facilitiesImage?.startsWith('data:')
+                      ? contentData.about.asideSection.facilitiesImage
+                      : require(`../../assets/images/${contentData.about.asideSection.facilitiesImage || 'shinobi-view.webp'}`)
+                  }
+                  loading='lazy' 
+                  alt='Shinobi Academy view' 
+                />
                 <div className='image-caption'>
                   <p>{contentData.about.asideSection.viewDescription}</p>
                 </div>
