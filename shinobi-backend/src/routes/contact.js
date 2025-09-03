@@ -87,18 +87,128 @@ router.get('/admin', [authenticateToken, requireAdmin], async (req, res) => {
 router.put('/', [
   authenticateToken,
   requireAdmin,
-  body('phone').optional().trim().isLength({ min: 1 }).withMessage('Phone number is required'),
-  body('email').optional().trim().isEmail().withMessage('Valid email is required'),
-  body('address.street').optional().trim().isLength({ min: 1 }).withMessage('Street is required'),
-  body('address.city').optional().trim().isLength({ min: 1 }).withMessage('City is required'),
-  body('address.postalCode').optional().trim().isLength({ min: 1 }).withMessage('Postal code is required'),
-  body('address.country').optional().trim().isLength({ min: 1 }).withMessage('Country is required'),
-  body('socialMedia.instagram.url').optional().trim().isURL().withMessage('Valid Instagram URL is required'),
-  body('socialMedia.instagram.display').optional().trim().isLength({ min: 1 }).withMessage('Instagram display is required'),
-  body('socialMedia.facebook.url').optional().trim().isURL().withMessage('Valid Facebook URL is required'),
-  body('socialMedia.facebook.display').optional().trim().isLength({ min: 1 }).withMessage('Facebook display is required'),
-  body('socialMedia.youtube.url').optional().trim().isURL().withMessage('Valid YouTube URL is required'),
-  body('socialMedia.youtube.display').optional().trim().isLength({ min: 1 }).withMessage('YouTube display is required'),
+  body('phone').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      // Remove all non-digit characters for validation
+      const digitsOnly = value.replace(/\D/g, '');
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        throw new Error('Phone number must be between 7 and 15 digits');
+      }
+    }
+    return true;
+  }),
+  body('email').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        throw new Error('Valid email is required');
+      }
+    }
+    return true;
+  }),
+  body('address.street').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      if (value.length < 3 || value.length > 100) {
+        throw new Error('Street address must be between 3 and 100 characters');
+      }
+      // Check for invalid characters in street address
+      const invalidChars = /[@!<?\/{}[\]\\|`~$%^&*()+=;:"'<>]/;
+      if (invalidChars.test(value)) {
+        throw new Error('Street address contains invalid characters. Only letters, numbers, spaces, hyphens, periods, commas, #, /, and & are allowed');
+      }
+    }
+    return true;
+  }),
+  body('address.city').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      // Allow letters, spaces, hyphens, and apostrophes for city names
+      const cityRegex = /^[A-Za-z\s\-']{2,50}$/;
+      if (!cityRegex.test(value)) {
+        throw new Error('City name must be 2-50 characters (letters, spaces, hyphens, or apostrophes)');
+      }
+    }
+    return true;
+  }),
+  body('address.postalCode').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      // Allow alphanumeric postal codes (US, UK, Canada, etc.)
+      const postalCodeRegex = /^[A-Za-z0-9\s-]{3,10}$/;
+      if (!postalCodeRegex.test(value)) {
+        throw new Error('Postal code must be 3-10 characters (letters, numbers, spaces, or hyphens)');
+      }
+    }
+    return true;
+  }),
+  body('address.country').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      // Allow letters, spaces, hyphens, and apostrophes for country names
+      const countryRegex = /^[A-Za-z\s\-']{2,50}$/;
+      if (!countryRegex.test(value)) {
+        throw new Error('Country name must be 2-50 characters (letters, spaces, hyphens, or apostrophes)');
+      }
+    }
+    return true;
+  }),
+  body('socialMedia.instagram.url').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      try {
+        const url = new URL(value);
+        if (!url.hostname.includes('instagram.com')) {
+          throw new Error('Instagram URL must be from instagram.com');
+        }
+        return true;
+      } catch {
+        throw new Error('Valid Instagram URL is required (e.g., https://instagram.com/username)');
+      }
+    }
+    return true;
+  }),
+  body('socialMedia.instagram.display').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      return value.length >= 1;
+    }
+    return true;
+  }),
+  body('socialMedia.facebook.url').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      try {
+        const url = new URL(value);
+        if (!url.hostname.includes('facebook.com')) {
+          throw new Error('Facebook URL must be from facebook.com');
+        }
+        return true;
+      } catch {
+        throw new Error('Valid Facebook URL is required (e.g., https://facebook.com/username)');
+      }
+    }
+    return true;
+  }),
+  body('socialMedia.facebook.display').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      return value.length >= 1;
+    }
+    return true;
+  }),
+  body('socialMedia.youtube.url').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      try {
+        const url = new URL(value);
+        if (!url.hostname.includes('youtube.com') && !url.hostname.includes('youtu.be')) {
+          throw new Error('YouTube URL must be from youtube.com or youtu.be');
+        }
+        return true;
+      } catch {
+        throw new Error('Valid YouTube URL is required (e.g., https://youtube.com/channel/... or https://youtu.be/...)');
+      }
+    }
+    return true;
+  }),
+  body('socialMedia.youtube.display').optional().trim().custom((value) => {
+    if (value && value.length > 0) {
+      return value.length >= 1;
+    }
+    return true;
+  }),
 
 ], async (req, res) => {
   try {

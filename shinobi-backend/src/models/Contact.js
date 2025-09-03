@@ -3,92 +3,108 @@ const mongoose = require('mongoose');
 const contactSchema = new mongoose.Schema({
   phone: {
     type: String,
-    required: true,
-    trim: true
+    required: false,
+    trim: true,
+    default: ''
   },
   email: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
+    default: ''
   },
   address: {
     street: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     },
     city: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     },
     postalCode: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     },
     country: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     },
     full: {
       type: String,
-      required: true,
-      trim: true
+      required: false,
+      trim: true,
+      default: ''
     }
   },
   socialMedia: {
     instagram: {
       url: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       display: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       platform: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: 'instagram'
       }
     },
     facebook: {
       url: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       display: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       platform: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: 'facebook'
       }
     },
     youtube: {
       url: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       display: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: ''
       },
       platform: {
         type: String,
-        required: true,
-        trim: true
+        required: false,
+        trim: true,
+        default: 'youtube'
       }
     }
   },
