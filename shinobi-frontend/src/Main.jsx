@@ -7,6 +7,7 @@ import AboutPage from './Components/AboutPage/AboutPage';
 import ClassesPage from './Components/ClassesPage/ClassesPage';
 import CampsComponent from './Components/Camps/CampsComponent/CampsComponent';
 import GalleryComponent from './Components/Gallery/GalleryComponent/GalleryComponent';
+import { StorePreviewMinimal } from './Components/StorePreview';
 import ContactPage from './Components/Contact/ContactPage';
 import Testimonials from './Components/Testimonials/Testimonials';
 
@@ -37,6 +38,7 @@ const Main = () => {
           <CampsComponent />
           <GalleryComponent />
         </div>
+        <StorePreviewMinimal />
         <ContactPage />
         <Testimonials />
         <Footer />
