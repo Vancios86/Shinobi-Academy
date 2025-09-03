@@ -1,6 +1,6 @@
 import './Navigation.css';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const Navigation = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -9,7 +9,7 @@ const Navigation = () => {
     setIsExpanded(e.target.checked);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'Escape' && isExpanded) {
       e.preventDefault();
       const checkbox = document.getElementById('menu-toggle');
@@ -18,7 +18,7 @@ const Navigation = () => {
         setIsExpanded(false);
       }
     }
-  };
+  }, [isExpanded]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
