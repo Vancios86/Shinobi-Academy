@@ -39,6 +39,7 @@ const ContactManager = () => {
   const [isDeploying, setIsDeploying] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [toasts, setToasts] = useState([]);
+  const [emailError, setEmailError] = useState('');
   
     // Scroll to top when component mounts
   useScrollToTopOnMount();
@@ -54,6 +55,23 @@ const ContactManager = () => {
 
   const removeToast = (id) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
+
+  // Email validation function
+  const validateEmail = (email) => {
+    if (!email) {
+      setEmailError('');
+      return true;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address (e.g., user@domain.com)');
+      return false;
+    }
+    
+    setEmailError('');
+    return true;
   };
 
   // Load contact data from context
@@ -97,7 +115,16 @@ const ContactManager = () => {
       const currentData = prev || {};
       
       // Handle simplified phone and email structure
-      if (section === 'phone' || section === 'email') {
+      if (section === 'phone') {
+        // Only allow digits, spaces, parentheses, hyphens, and plus sign
+        const filteredValue = value.replace(/[^0-9\s\(\)\-\+]/g, '');
+        return {
+          ...currentData,
+          [section]: filteredValue
+        };
+      } else if (section === 'email') {
+        // Validate email format
+        validateEmail(value);
         return {
           ...currentData,
           [section]: value
@@ -118,13 +145,27 @@ const ContactManager = () => {
   const handleSocialMediaChange = (platform, field, value) => {
     setLocalContactData(prev => {
       const currentData = prev || {};
+      
+      let filteredValue = value;
+      
+      // Apply field-specific validation
+      if (field === 'url') {
+        // For URLs, we'll let the backend handle validation but ensure it starts with http/https
+        if (value && !value.startsWith('http://') && !value.startsWith('https://') && value.length > 0) {
+          filteredValue = 'https://' + value;
+        }
+      } else if (field === 'display') {
+        // Display names can contain most characters but limit length
+        filteredValue = value.substring(0, 50); // Limit to 50 characters
+      }
+      
       return {
         ...currentData,
         socialMedia: {
           ...currentData.socialMedia,
           [platform]: {
             ...currentData.socialMedia?.[platform],
-            [field]: value
+            [field]: filteredValue
           }
         }
       };
@@ -134,11 +175,27 @@ const ContactManager = () => {
   const handleAddressChange = (field, value) => {
     setLocalContactData(prev => {
       const currentData = prev || {};
+      
+      let filteredValue = value;
+      
+      // Apply field-specific validation
+      if (field === 'street') {
+        // Allow letters, numbers, spaces, hyphens, periods, commas, and common address characters
+        // Block special characters like @!<?/{ etc.
+        filteredValue = value.replace(/[^A-Za-z0-9\s\-.,#\/&]/g, '');
+      } else if (field === 'city' || field === 'country') {
+        // Only allow letters, spaces, hyphens, and apostrophes
+        filteredValue = value.replace(/[^A-Za-z\s\-']/g, '');
+      } else if (field === 'postalCode') {
+        // Only allow alphanumeric characters, spaces, and hyphens
+        filteredValue = value.replace(/[^A-Za-z0-9\s\-]/g, '');
+      }
+      
       return {
         ...currentData,
         address: {
           ...currentData.address,
-          [field]: value
+          [field]: filteredValue
         }
       };
     });
@@ -147,6 +204,12 @@ const ContactManager = () => {
 
 
   const handleDeployChanges = async () => {
+    // Validate email before submission
+    if (localContactData?.email && !validateEmail(localContactData.email)) {
+      addToast('Please fix the email format before saving.', 'error');
+      return;
+    }
+    
     setIsDeploying(true);
     
     try {
@@ -312,11 +375,13 @@ const ContactManager = () => {
                     id='email'
                     value=''
                     onChange={(e) => handleInputChange('email', null, e.target.value)}
-                    className='form-input'
+                    onBlur={(e) => validateEmail(e.target.value)}
+                    className={`form-input ${emailError ? 'error' : ''}`}
                     placeholder='e.g., shinobiacademy@gmail.com'
                     maxLength={50}
                   />
                   <small className='char-count'>0/50</small>
+                  {emailError && <small className='error-message'>{emailError}</small>}
                 </div>
               </div>
             </div>
@@ -363,15 +428,33 @@ const ContactManager = () => {
                 <label htmlFor='phone' className='form-label text-dark'>
                   Phone Number
                 </label>
-                <input
-                  type='tel'
-                  id='phone'
-                  value={localContactData.phone || ''}
-                  onChange={(e) => handleInputChange('phone', null, e.target.value)}
-                  className='form-input'
-                  placeholder='e.g., (+351) 977 777 777'
-                  maxLength={25}
-                />
+                                  <input
+                    type='tel'
+                    id='phone'
+                    value={localContactData.phone || ''}
+                    onChange={(e) => handleInputChange('phone', null, e.target.value)}
+                    onKeyDown={(e) => {
+                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
+                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                          (e.keyCode === 65 && e.ctrlKey === true) ||
+                          (e.keyCode === 67 && e.ctrlKey === true) ||
+                          (e.keyCode === 86 && e.ctrlKey === true) ||
+                          (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                      }
+                      // Ensure that it is a number, space, parentheses, hyphen, or plus sign
+                      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && 
+                          (e.keyCode < 96 || e.keyCode > 105) &&
+                          e.keyCode !== 32 && e.keyCode !== 40 && e.keyCode !== 41 && 
+                          e.keyCode !== 45 && e.keyCode !== 43) {
+                        e.preventDefault();
+                      }
+                    }}
+                    className='form-input'
+                    placeholder='e.g., (+351) 977 777 777'
+                    maxLength={25}
+                  />
                 <small className='char-count'>{(localContactData.phone || '').length}/25</small>
               </div>
               <div className='form-group'>
@@ -383,11 +466,13 @@ const ContactManager = () => {
                   id='email'
                   value={localContactData.email || ''}
                   onChange={(e) => handleInputChange('email', null, e.target.value)}
-                  className='form-input'
+                  onBlur={(e) => validateEmail(e.target.value)}
+                  className={`form-input ${emailError ? 'error' : ''}`}
                   placeholder='e.g., shinobiacademy@gmail.com'
                   maxLength={50}
                 />
                 <small className='char-count'>{(localContactData.email || '').length}/50</small>
+                {emailError && <small className='error-message'>{emailError}</small>}
               </div>
             </div>
           </div>
@@ -405,6 +490,21 @@ const ContactManager = () => {
                     id='street'
                     value={localContactData?.address?.street || ''}
                     onChange={(e) => handleAddressChange('street', e.target.value)}
+                    onKeyDown={(e) => {
+                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
+                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                          (e.keyCode === 65 && e.ctrlKey === true) ||
+                          (e.keyCode === 67 && e.ctrlKey === true) ||
+                          (e.keyCode === 86 && e.ctrlKey === true) ||
+                          (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                      }
+                      // Allow letters, numbers, spaces, hyphens, periods, commas, #, /, and &
+                      if (!/[A-Za-z0-9\s\-.,#\/&]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className='form-input'
                     placeholder='e.g., R.Convento da Trindade 15'
                     maxLength={100}
@@ -420,6 +520,21 @@ const ContactManager = () => {
                     id='city'
                     value={localContactData?.address?.city || ''}
                     onChange={(e) => handleAddressChange('city', e.target.value)}
+                    onKeyDown={(e) => {
+                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
+                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                          (e.keyCode === 65 && e.ctrlKey === true) ||
+                          (e.keyCode === 67 && e.ctrlKey === true) ||
+                          (e.keyCode === 86 && e.ctrlKey === true) ||
+                          (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                      }
+                      // Allow letters, spaces, hyphens, and apostrophes
+                      if (!/[A-Za-z\s\-']/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className='form-input'
                     placeholder='e.g., Lagos'
                     maxLength={50}
@@ -437,6 +552,21 @@ const ContactManager = () => {
                     id='postal-code'
                     value={localContactData?.address?.postalCode || ''}
                     onChange={(e) => handleAddressChange('postalCode', e.target.value)}
+                    onKeyDown={(e) => {
+                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
+                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                          (e.keyCode === 65 && e.ctrlKey === true) ||
+                          (e.keyCode === 67 && e.ctrlKey === true) ||
+                          (e.keyCode === 86 && e.ctrlKey === true) ||
+                          (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                      }
+                      // Allow alphanumeric characters, spaces, and hyphens
+                      if (!/[A-Za-z0-9\s\-]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className='form-input'
                     placeholder='e.g., 8600-613'
                     maxLength={20}
@@ -452,6 +582,21 @@ const ContactManager = () => {
                     id='country'
                     value={localContactData?.address?.country || ''}
                     onChange={(e) => handleAddressChange('country', e.target.value)}
+                    onKeyDown={(e) => {
+                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
+                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
+                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                          (e.keyCode === 65 && e.ctrlKey === true) ||
+                          (e.keyCode === 67 && e.ctrlKey === true) ||
+                          (e.keyCode === 86 && e.ctrlKey === true) ||
+                          (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                      }
+                      // Allow letters, spaces, hyphens, and apostrophes
+                      if (!/[A-Za-z\s\-']/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                     className='form-input'
                     placeholder='e.g., Portugal'
                     maxLength={50}

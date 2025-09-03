@@ -162,6 +162,16 @@
   cursor: not-allowed;
 }
 
+.form-input.error {
+  border-color: hsl(0 70% 50%);
+  box-shadow: 0 0 0 3px hsl(0 70% 50% / 0.1);
+}
+
+.form-input.error:focus {
+  border-color: hsl(0 70% 50%);
+  box-shadow: 0 0 0 3px hsl(0 70% 50% / 0.2);
+}
+
 /* Character Count */
 .char-count {
   font-size: var(--fs-200);
@@ -169,6 +179,15 @@
   margin-top: 0.25rem;
   text-align: right;
   font-style: italic;
+}
+
+/* Error Message */
+.error-message {
+  font-size: var(--fs-200);
+  color: hsl(0 70% 50%);
+  margin-top: 0.25rem;
+  display: block;
+  font-weight: 500;
 }
 
 .help-text {
