@@ -404,15 +404,18 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: hsl(var(--clr-silver) / 0.1);
+  background: hsl(var(--clr-silver) / 0.2);
   border-radius: 12px;
+  border: 1px solid hsl(var(--clr-silver) / 0.3);
   border-left: 3px solid hsl(var(--clr-red));
+  box-shadow: 0 4px 15px hsl(var(--clr-dark) / 0.1);
   transition: all 0.3s ease;
 }
 
 .achievement-card:hover {
-  background: hsl(var(--clr-silver) / 0.2);
+  background: hsl(var(--clr-silver) / 0.3);
   transform: translateX(5px);
+  box-shadow: 0 6px 20px hsl(var(--clr-dark) / 0.15);
 }
 
 .achievement-number {
@@ -632,15 +635,15 @@
   background: hsl(var(--clr-white));
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 8px 25px hsl(var(--clr-dark) / 0.1);
-  border: 1px solid hsl(var(--clr-silver) / 0.3);
+  box-shadow: 0 8px 25px hsl(var(--clr-dark) / 0.2);
+  border: 1px solid hsl(var(--clr-silver) / 0.5);
   transition: all 0.4s ease;
   text-align: center;
 }
 
 .coach-profile:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px hsl(var(--clr-dark) / 0.15);
+  box-shadow: 0 15px 35px hsl(var(--clr-dark) / 0.25);
 }
 
 .coach-image {
