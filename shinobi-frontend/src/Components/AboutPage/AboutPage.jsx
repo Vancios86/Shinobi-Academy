@@ -6,7 +6,6 @@ import { useCoaches } from '../../contexts/CoachesContext';
 import { useContent } from '../../contexts/ContentContext';
 import { useLocation } from 'react-router-dom';
 import colin from '../../assets/images/colin.webp';
-import view from '../../assets/images/shinobi-view.webp';
 
 const AboutPage = memo(() => {
   const { coachesData, isLoaded } = useCoaches();

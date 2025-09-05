@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -75,7 +75,8 @@ const defaultContent = {
 
 export const ContentProvider = ({ children }) => {
   const [contentData, setContentData] = useState(defaultContent);
-  const [initialSessionData, setInitialSessionData] = useState(null); // Store initial session state
+  const [initialSessionData, setInitialSessionData] = useState(null);
+  const initialSessionDataRef = useRef(null); // Store initial session state
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load content data on mount
@@ -97,29 +98,33 @@ export const ContentProvider = ({ children }) => {
             };
             setContentData(mergedData);
             // Store the initial session state (only on first load)
-            if (!initialSessionData) {
+            if (!initialSessionDataRef.current) {
               setInitialSessionData(mergedData);
+              initialSessionDataRef.current = mergedData;
             }
           } else {
             // Fallback to default content data
             setContentData(defaultContent);
-            if (!initialSessionData) {
+            if (!initialSessionDataRef.current) {
               setInitialSessionData(defaultContent);
+              initialSessionDataRef.current = defaultContent;
             }
           }
         } else {
           // Fallback to default content data
           setContentData(defaultContent);
-          if (!initialSessionData) {
+          if (!initialSessionDataRef.current) {
             setInitialSessionData(defaultContent);
+            initialSessionDataRef.current = defaultContent;
           }
         }
       } catch (error) {
         console.error('Error loading content data:', error);
         // Fallback to default content data
         setContentData(defaultContent);
-        if (!initialSessionData) {
+        if (!initialSessionDataRef.current) {
           setInitialSessionData(defaultContent);
+          initialSessionDataRef.current = defaultContent;
         }
       }
       setIsLoaded(true);

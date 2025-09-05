@@ -117,7 +117,7 @@ const ContactManager = () => {
       // Handle simplified phone and email structure
       if (section === 'phone') {
         // Only allow digits, spaces, parentheses, hyphens, and plus sign
-        const filteredValue = value.replace(/[^0-9\s\(\)\-\+]/g, '');
+        const filteredValue = value.replace(/[^0-9\s()\-+]/g, '');
         return {
           ...currentData,
           [section]: filteredValue
@@ -182,13 +182,13 @@ const ContactManager = () => {
       if (field === 'street') {
         // Allow letters, numbers, spaces, hyphens, periods, commas, and common address characters
         // Block special characters like @!<?/{ etc.
-        filteredValue = value.replace(/[^A-Za-z0-9\s\-.,#\/&]/g, '');
+        filteredValue = value.replace(/[^A-Za-z0-9\s\-.,#/&]/g, '');
       } else if (field === 'city' || field === 'country') {
         // Only allow letters, spaces, hyphens, and apostrophes
-        filteredValue = value.replace(/[^A-Za-z\s\-']/g, '');
+        filteredValue = value.replace(/[^A-Za-z\s-']/g, '');
       } else if (field === 'postalCode') {
         // Only allow alphanumeric characters, spaces, and hyphens
-        filteredValue = value.replace(/[^A-Za-z0-9\s\-]/g, '');
+        filteredValue = value.replace(/[^A-Za-z0-9\s-]/g, '');
       }
       
       return {
@@ -501,7 +501,7 @@ const ContactManager = () => {
                         return;
                       }
                       // Allow letters, numbers, spaces, hyphens, periods, commas, #, /, and &
-                      if (!/[A-Za-z0-9\s\-.,#\/&]/.test(e.key)) {
+                      if (!/[A-Za-z0-9\s\-.,#/&]/.test(e.key)) {
                         e.preventDefault();
                       }
                     }}
@@ -563,7 +563,7 @@ const ContactManager = () => {
                         return;
                       }
                       // Allow alphanumeric characters, spaces, and hyphens
-                      if (!/[A-Za-z0-9\s\-]/.test(e.key)) {
+                      if (!/[A-Za-z0-9\s-]/.test(e.key)) {
                         e.preventDefault();
                       }
                     }}

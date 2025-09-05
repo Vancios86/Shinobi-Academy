@@ -522,7 +522,7 @@ const ContentManager = () => {
               <div className='url-image-preview'>
                 <img 
                   src={localContent.about?.asideSection?.facilitiesImage} 
-                  alt='URL image preview' 
+                  alt='URL preview' 
                   className='preview-image'
                   onError={(e) => {
                     e.target.style.display = 'none';
