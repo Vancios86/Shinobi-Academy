@@ -1,0 +1,22 @@
+.testimonials-editor {
+    display: grid;
+    gap: 1rem;
+}
+
+.testimonial-editor-card {
+    padding: 1rem;
+    border: 1px solid hsl(var(--clr-dark));
+    border-radius: 0.75rem;
+}
+
+.testimonial-editor-card .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem 1rem;
+}
+
+.testimonial-editor-card .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}

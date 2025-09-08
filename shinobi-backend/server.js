@@ -14,9 +14,10 @@ const coachesRoutes = require('./src/routes/coaches');
 const contactRoutes = require('./src/routes/contact');
 const galleryRoutes = require('./src/routes/gallery');
 const contentRoutes = require('./src/routes/content');
+const testimonialsRoutes = require('./src/routes/testimonials');
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 // Security middleware - More permissive for development
 app.use(helmet({
@@ -56,20 +57,20 @@ app.use('/uploads', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+
   // Continue to static file serving
   express.static('uploads')(req, res, next);
 });
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shinobi-academy')
-.then(() => {
-  console.log('✅ Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('❌ MongoDB connection error:', error);
-  process.exit(1);
-});
+  .then(() => {
+    console.log('✅ Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('❌ MongoDB connection error:', error);
+    process.exit(1);
+  });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -89,11 +90,12 @@ app.use('/api/coaches', coachesRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/content', contentRoutes);
+app.use('/api/testimonials', testimonialsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  
+
   // Mongoose validation error
   if (err.name === 'ValidationError') {
     const errors = Object.values(err.errors).map(e => e.message);
@@ -102,7 +104,7 @@ app.use((err, req, res, next) => {
       details: errors
     });
   }
-  
+
   // Mongoose duplicate key error
   if (err.code === 11000) {
     return res.status(400).json({
@@ -110,24 +112,24 @@ app.use((err, req, res, next) => {
       details: 'A record with this value already exists'
     });
   }
-  
+
   // JWT errors
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
       error: 'Invalid token'
     });
   }
-  
+
   if (err.name === 'TokenExpiredError') {
     return res.status(401).json({
       error: 'Token expired'
     });
   }
-  
+
   // Default error
   res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Something went wrong!' 
+    error: process.env.NODE_ENV === 'production'
+      ? 'Something went wrong!'
       : err.message
   });
 });

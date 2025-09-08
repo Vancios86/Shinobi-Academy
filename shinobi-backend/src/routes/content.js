@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 // Update content data
 router.put('/', [authenticateToken, requireAdmin], async (req, res) => {
   try {
-    const { about, topPage } = req.body;
+    const { about, topPage, testimonials } = req.body;
 
     if (!about) {
       return res.status(400).json({
@@ -51,6 +51,11 @@ router.put('/', [authenticateToken, requireAdmin], async (req, res) => {
         ...content.topPage,
         ...topPage
       };
+    }
+
+    // Optionally update testimonials if provided (replace array)
+    if (Array.isArray(testimonials)) {
+      content.testimonials = testimonials;
     }
 
     await content.save();
