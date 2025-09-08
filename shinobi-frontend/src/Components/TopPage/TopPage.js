@@ -1,15 +1,22 @@
 import './TopPage.css';
 import Navigation from '../Navigation/Navigation';
 import Logo from '../Logo/Logo';
+import { useContent } from '../../contexts/ContentContext';
 
 const TopPage = () => {
+  const { contentData } = useContent();
+  const heroSubtitle = contentData?.topPage?.heroSubtitle || 'Train hard. Stay humble.';
+  const heroBg = contentData?.topPage?.heroBackgroundImage || 'top-image.webp';
+  const heroBgUrl = (heroBg?.startsWith('http') || heroBg?.startsWith('data:'))
+    ? heroBg
+    : require(`../../assets/images/${heroBg}`);
   return (
     <div className='top-page'>
       <div className='top-content'>
         <div className='top-logo flex' id='to-top'>
           <Logo />
         </div>
-        
+
         {/* Separate Title Section */}
         <div className='title-section'>
           <h1 className='hero-title'>
@@ -19,11 +26,11 @@ const TopPage = () => {
 
         {/* Enhanced Hero Section */}
         <div className='hero-section'>
-          <div className='hero-background shadowed-box'>
+          <div className='hero-background shadowed-box' style={{ backgroundImage: `url(${heroBgUrl})` }}>
             <div className='hero-overlay'></div>
             <div className='hero-content'>
               <p className='hero-subtitle'>
-                Master the art of martial arts through expert training, discipline, and tradition
+                {heroSubtitle}
               </p>
               <div className='hero-navigation'>
                 <div className='nav-wrapper'>
@@ -49,9 +56,9 @@ const TopPage = () => {
         </div>
 
         <div id='break-top'></div>
-        
 
-        
+
+
         <div className='partners-logos'>
           <div
             className='partner1'

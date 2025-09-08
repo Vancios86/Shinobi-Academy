@@ -5,6 +5,7 @@
   font-family: 'Antonio';
   src: url(./assets/Antonio-VariableFont_wght.ttf);
 }
+
 :root {
   /* Position */
   display: flex;
@@ -103,6 +104,7 @@ ul {
 
 /* Remove animations for those who disabled them */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -139,7 +141,7 @@ ul {
   display: grid;
 }
 
-.flow > *:where(:not(:first-child)) {
+.flow>*:where(:not(:first-child)) {
   margin-top: var(--flow-space, 1rem);
   /* outline: 1px solid hsl(var(--clr-red)); */
 }
@@ -165,36 +167,47 @@ ul {
 .bg-dark {
   background-color: hsl(var(--clr-dark));
 }
+
 .bg-light {
   background-color: hsl(var(--clr-white));
 }
+
 .bg-red {
   background-color: hsl(var(--clr-red));
 }
+
 .bg-gold {
   background-color: hsl(var(--clr-gold));
 }
+
 .bg-silver {
   background-color: hsl(var(--clr-silver));
 }
+
 .text-dark {
   color: hsl(var(--clr-dark));
 }
+
 .text-white {
   color: hsl(var(--clr-white));
 }
+
 .text-red {
   color: hsl(var(--clr-red));
 }
+
 .text-gold {
   color: hsl(var(--clr-gold));
 }
+
 .text-silver {
   color: hsl(var(--clr-silver));
 }
+
 .border-red {
   border: 0.15rem solid hsl(var(--clr-red));
 }
+
 .border-dark {
   border: 0.15rem solid hsl(var(--clr-dark));
 }
@@ -203,6 +216,7 @@ ul {
 .ff-normal {
   font-family: var(--ff-normal);
 }
+
 .ff-hand {
   font-family: var(--ff-hand);
 }
@@ -210,24 +224,31 @@ ul {
 .fs-800 {
   font-size: var(--fs-800);
 }
+
 .fs-700 {
   font-size: var(--fs-700);
 }
+
 .fs-600 {
   font-size: var(--fs-600);
 }
+
 .fs-500 {
   font-size: var(--fs-500);
 }
+
 .fs-400 {
   font-size: var(--fs-400);
 }
+
 .fs-300 {
   font-size: var(--fs-300);
 }
+
 .fs-200 {
   font-size: var(--fs-200);
 }
+
 .fs-100 {
   font-size: var(--fs-100);
 }
@@ -264,14 +285,14 @@ ul {
   padding: 6rem 0.3rem 3rem 0.3rem;
   margin: 0 auto;
   position: relative;
-  
+
   /* Typography */
   font-size: var(--fs-600);
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: hsl(var(--clr-dark));
-  
+
   /* Smooth transitions */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform, color;
@@ -282,16 +303,16 @@ ul {
   /* Clean minimal design */
   padding: 5rem 1rem 2rem 1rem;
   margin: 1rem auto;
-  
+
   /* Typography focus */
   font-size: var(--fs-700);
   font-weight: 600;
   letter-spacing: 0.2em;
   color: hsl(var(--clr-dark));
-  
+
   /* Stack title and accent line vertically */
   flex-direction: column;
-  
+
   /* Subtle underline animation */
   position: relative;
 }
@@ -319,6 +340,7 @@ ul {
 /* =========================================== */
 
 @media screen and (max-width: 335px) {
+
   .page-title,
   .page-title.variation-3 {
     font-size: var(--fs-500);
@@ -327,6 +349,7 @@ ul {
 }
 
 @media screen and (min-width: 500px) {
+
   .page-title,
   .page-title.variation-3 {
     font-size: var(--fs-700);
@@ -335,6 +358,7 @@ ul {
 }
 
 @media screen and (min-width: 630px) {
+
   .page-title,
   .page-title.variation-3 {
     font-size: var(--fs-800);
@@ -343,6 +367,7 @@ ul {
 }
 
 @media screen and (min-width: 1000px) {
+
   .page-title,
   .page-title.variation-3 {
     font-size: var(--fs-900);
@@ -391,31 +416,31 @@ ul {
   margin: 1rem;
   position: relative;
   overflow: hidden;
-  
+
   /* Visual Design */
-  background: linear-gradient(135deg, 
-    hsl(var(--clr-dark)) 0%, 
-    hsl(260 14% 8%) 50%, 
-    hsl(var(--clr-dark)) 100%);
+  background: linear-gradient(135deg,
+      hsl(var(--clr-dark)) 0%,
+      hsl(260 14% 8%) 50%,
+      hsl(var(--clr-dark)) 100%);
   border: 0.125rem solid hsl(var(--clr-red));
   border-radius: 0.75rem;
-  box-shadow: 
+  box-shadow:
     0 4px 15px rgba(0, 0, 0, 0.2),
     0 2px 8px rgba(220, 38, 38, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
+
   /* Typography */
   color: hsl(var(--clr-white));
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.1em;
   font-size: var(--fs-400);
-  
+
   /* Interaction */
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform, box-shadow, background;
-  
+
   /* Ensure proper stacking */
   z-index: 1;
 }
@@ -428,17 +453,15 @@ ul {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent);
   transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
 }
 
-.button-large > a {
+.button-large>a {
   text-decoration: none;
   position: absolute;
   color: inherit;
@@ -458,11 +481,11 @@ ul {
 .button-large:hover,
 .button-large:focus-visible {
   transform: translateY(-3px) scale(1.02);
-  background: linear-gradient(135deg, 
-    hsl(260 14% 8%) 0%, 
-    hsl(260 14% 12%) 50%, 
-    hsl(260 14% 8%) 100%);
-  box-shadow: 
+  background: linear-gradient(135deg,
+      hsl(260 14% 8%) 0%,
+      hsl(260 14% 12%) 50%,
+      hsl(260 14% 8%) 100%);
+  box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.3),
     0 4px 15px rgba(220, 38, 38, 0.2),
     0 0 20px rgba(220, 38, 38, 0.1),
@@ -479,7 +502,7 @@ ul {
 .button-large:active {
   transform: translateY(-1px) scale(0.98);
   transition-duration: 0.1s;
-  box-shadow: 
+  box-shadow:
     0 4px 15px rgba(0, 0, 0, 0.2),
     0 2px 8px rgba(220, 38, 38, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -496,17 +519,17 @@ ul {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .button-large:disabled:hover {
   transform: none;
-  background: linear-gradient(135deg, 
-    hsl(var(--clr-dark)) 0%, 
-    hsl(260 14% 8%) 50%, 
-    hsl(var(--clr-dark)) 100%);
+  background: linear-gradient(135deg,
+      hsl(var(--clr-dark)) 0%,
+      hsl(260 14% 8%) 50%,
+      hsl(var(--clr-dark)) 100%);
 }
 
 /* Responsive design */
@@ -533,20 +556,21 @@ ul {
 @media (hover: none) and (pointer: coarse) {
   .button-large:hover {
     transform: none;
-    background: linear-gradient(135deg, 
-      hsl(var(--clr-dark)) 0%, 
-      hsl(260 14% 8%) 50%, 
-      hsl(var(--clr-dark)) 100%);
+    background: linear-gradient(135deg,
+        hsl(var(--clr-dark)) 0%,
+        hsl(260 14% 8%) 50%,
+        hsl(var(--clr-dark)) 100%);
   }
-  
+
   .button-large:active {
     transform: scale(0.95);
-    background: linear-gradient(135deg, 
-      hsl(260 14% 8%) 0%, 
-      hsl(260 14% 12%) 50%, 
-      hsl(260 14% 8%) 100%);
+    background: linear-gradient(135deg,
+        hsl(260 14% 8%) 0%,
+        hsl(260 14% 12%) 50%,
+        hsl(260 14% 8%) 100%);
   }
 }
+
 .go-to-top-button {
   background-color: hsl(var(--clr-dark));
   opacity: 0;
@@ -562,7 +586,8 @@ ul {
   font-size: var(--fs-600);
   text-align: center;
 }
-.go-to-top-button > a {
+
+.go-to-top-button>a {
   padding-bottom: 0.5rem;
   text-decoration: none;
   color: hsl(var(--clr-white));
@@ -573,17 +598,20 @@ ul {
   left: 0;
   right: 0;
 }
+
 .go-to-top-button:hover,
 .go-to-top-button:focus {
   box-shadow: 0 0 0.11rem 0.11rem hsl(var(--clr-red));
 }
-.go-to-top-button:hover > a {
+
+.go-to-top-button:hover>a {
   color: hsl(var(--clr-red));
 }
 
 .show {
   opacity: 0.91;
 }
+
 .show:hover {
   opacity: 1;
 }
@@ -599,9 +627,11 @@ ul {
   margin: 2rem 0.33rem -5rem;
   transition: all 0.33s ease-in-out;
 }
+
 .back-button b {
   position: static;
 }
+
 .back-button:hover {
   cursor: pointer;
   color: hsl(var(--clr-red));
@@ -616,36 +646,45 @@ ul {
   .page-title {
     font-size: var(--fs-500);
   }
+
   .text-content {
     font-size: var(--fs-100);
   }
+
   .component-title {
     font-size: var(--fs-500);
   }
 }
+
 @media screen and (max-width: 600px) {
   body {
     overflow-x: hidden;
   }
+
   .container {
     margin-inline: 0rem;
   }
 }
+
 @media screen and (min-width: 500px) {
   body {
     font-size: var(--fs-300);
   }
+
   .page-title {
     font-size: var(--fs-700);
     letter-spacing: var(--ls-1);
   }
+
   .text-content {
     font-size: var(--fs-300);
   }
+
   .component-title {
     font-size: var(--fs-700);
     letter-spacing: var(--ls-1);
   }
+
   .go-to-top-button {
     width: 2.6rem;
     height: 3.6rem;
@@ -657,13 +696,16 @@ ul {
   body {
     font-size: var(--fs-400);
   }
+
   .page-title {
     font-size: var(--fs-800);
     letter-spacing: var(--ls-2);
   }
+
   .text-content {
     font-size: var(--fs-400);
   }
+
   .component-title {
     font-size: var(--fs-800);
     letter-spacing: var(--ls-2);
@@ -674,16 +716,20 @@ ul {
   body {
     font-size: var(--fs-500);
   }
+
   .page-title {
     font-size: var(--fs-900);
     padding: 5rem 0.6rem;
   }
+
   .text-content {
     font-size: var(--fs-500);
   }
+
   .preview-component {
     min-height: 30rem;
   }
+
   .component-title {
     font-size: var(--fs-900);
   }

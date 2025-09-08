@@ -38,11 +38,11 @@ const ContentManager = () => {
   const [localContent, setLocalContent] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
-  const [activeSection, setActiveSection] = useState('founder');
+  const [activeSection, setActiveSection] = useState('about');
   const [showResetModal, setShowResetModal] = useState(false);
   const [imageSourceType, setImageSourceType] = useState('asset'); // Track image source type
   const [toasts, setToasts] = useState([]);
-  
+
   // Scroll to top when component mounts
   useScrollToTopOnMount();
 
@@ -60,7 +60,7 @@ const ContentManager = () => {
   useEffect(() => {
     if (isLoaded && contentData) {
       setLocalContent(contentData);
-      
+
       // Detect image source type
       const facilitiesImage = contentData.about?.asideSection?.facilitiesImage;
       if (facilitiesImage?.startsWith('http')) {
@@ -77,7 +77,7 @@ const ContentManager = () => {
   useEffect(() => {
     if (isLoaded && contentData) {
       const hasUnsavedChanges = JSON.stringify(localContent) !== JSON.stringify(contentData);
-    setHasChanges(hasUnsavedChanges);
+      setHasChanges(hasUnsavedChanges);
     }
   }, [localContent, contentData, isLoaded]);
 
@@ -107,7 +107,7 @@ const ContentManager = () => {
         'You have unsaved changes. Are you sure you want to leave?'
       );
       if (!confirmLeave) return;
-      
+
       // Reset local data if user confirms leaving
       setLocalContent(contentData);
       setHasChanges(false);
@@ -127,14 +127,14 @@ const ContentManager = () => {
 
   const handleAddAchievement = () => {
     const currentAchievements = localContent.about?.founderSection?.achievements || [];
-    
+
     // Check if the last achievement is empty
     const lastAchievement = currentAchievements[currentAchievements.length - 1];
     if (lastAchievement !== undefined && (!lastAchievement || lastAchievement.trim() === '')) {
       addToast('Please fill in the current achievement before adding a new one.', 'warning');
       return;
     }
-    
+
     setLocalContent(prev => ({
       ...prev,
       about: {
@@ -162,14 +162,14 @@ const ContentManager = () => {
 
   const handleDeployChanges = async () => {
     setIsDeploying(true);
-    
+
     try {
       // Filter out empty achievements before saving
       const achievements = localContent.about?.founderSection?.achievements || [];
-      const filteredAchievements = achievements.filter(achievement => 
+      const filteredAchievements = achievements.filter(achievement =>
         achievement && achievement.trim() !== ''
       );
-      
+
       // Update local content with filtered achievements
       const contentToSave = {
         ...localContent,
@@ -181,19 +181,19 @@ const ContentManager = () => {
           }
         }
       };
-      
+
       await updateContentData(contentToSave);
       setLocalContent(contentToSave); // Update local state with filtered data
-        setHasChanges(false);
+      setHasChanges(false);
       addToast('Content updated successfully!');
-      } catch (error) {
-        console.error('Error updating content data:', error);
+    } catch (error) {
+      console.error('Error updating content data:', error);
       // Show more specific error message
       const errorMessage = error.message || 'Failed to update content. Please try again.';
       addToast(errorMessage, 'error');
-      } finally {
-        setIsDeploying(false);
-      }
+    } finally {
+      setIsDeploying(false);
+    }
   };
 
   const handleResetToOriginal = () => {
@@ -206,7 +206,7 @@ const ContentManager = () => {
       const result = await resetToOriginal();
       if (result.success) {
         setLocalContent(contentData);
-      setHasChanges(false);
+        setHasChanges(false);
         addToast(result.message, 'success');
       } else {
         addToast(result.message, 'error');
@@ -235,7 +235,7 @@ const ContentManager = () => {
   const renderFounderSection = () => (
     <div className='content-section shadowed-box'>
       <h3 className='subsection-title text-dark'>Founder Section</h3>
-      
+
       <div className='form-group'>
         <label htmlFor='founder-title' className='form-label text-dark'>
           Title
@@ -328,7 +328,7 @@ const ContentManager = () => {
   const renderCoachesSection = () => (
     <div className='content-section shadowed-box'>
       <h3 className='subsection-title text-dark'>Coaches Section</h3>
-      
+
       <div className='form-group'>
         <label htmlFor='coaches-title' className='form-label text-dark'>
           Section Title
@@ -372,7 +372,7 @@ const ContentManager = () => {
   const renderAsideSection = () => (
     <div className='content-section shadowed-box'>
       <h3 className='subsection-title text-dark'>Training Camps & Facilities Section</h3>
-      
+
       <div className='form-group'>
         <label htmlFor='aside-title' className='form-label text-dark'>
           Section Title
@@ -403,13 +403,13 @@ const ContentManager = () => {
             const lines = e.target.value.split('\n\n');
             const description = lines[0] || '';
             const facilityDescription = lines.slice(1).join('\n\n') || '';
-            
+
             // Update both sections
             handleInputChange('about', 'asideSection', {
               ...localContent.about?.asideSection,
               description: description
             });
-            
+
             handleInputChange('about', 'founderSection', {
               ...localContent.about?.founderSection,
               facilityDescription: facilityDescription
@@ -427,7 +427,7 @@ const ContentManager = () => {
         <label className='form-label text-dark'>
           Facilities Image
         </label>
-        
+
         {/* Image Source Type Selector */}
         <div className='image-source-selector'>
           <div className='source-options'>
@@ -520,9 +520,9 @@ const ContentManager = () => {
             />
             {localContent.about?.asideSection?.facilitiesImage?.startsWith('http') && (
               <div className='url-image-preview'>
-                <img 
-                  src={localContent.about?.asideSection?.facilitiesImage} 
-                  alt='URL preview' 
+                <img
+                  src={localContent.about?.asideSection?.facilitiesImage}
+                  alt='URL preview'
                   className='preview-image'
                   onError={(e) => {
                     e.target.style.display = 'none';
@@ -568,9 +568,9 @@ const ContentManager = () => {
             </label>
             {localContent.about?.asideSection?.facilitiesImage?.startsWith('data:') && (
               <div className='uploaded-image-preview'>
-                <img 
-                  src={localContent.about?.asideSection?.facilitiesImage} 
-                  alt='Uploaded preview' 
+                <img
+                  src={localContent.about?.asideSection?.facilitiesImage}
+                  alt='Uploaded preview'
                   className='preview-image'
                 />
                 <small className='preview-text'>Uploaded image preview</small>
@@ -605,6 +605,179 @@ const ContentManager = () => {
     </div>
   );
 
+  const renderAboutGroup = () => (
+    <>
+      {renderFounderSection()}
+      {renderCoachesSection()}
+      {renderAsideSection()}
+    </>
+  );
+
+  const renderTopPageSection = () => (
+    <div className='content-section shadowed-box'>
+      <h3 className='subsection-title text-dark'>Top Page</h3>
+      <div className='form-group'>
+        <label htmlFor='top-hero-subtitle' className='form-label text-dark'>Main Subtitle</label>
+        <textarea
+          id='top-hero-subtitle'
+          value={localContent.topPage?.heroSubtitle || ''}
+          onChange={(e) => setLocalContent(prev => ({
+            ...prev,
+            topPage: { ...(prev.topPage || {}), heroSubtitle: e.target.value }
+          }))}
+          className='form-textarea'
+          placeholder='Enter hero subtitle...'
+          rows={3}
+          maxLength={300}
+        />
+        <small className='char-count'>{(localContent.topPage?.heroSubtitle || '').length}/300</small>
+      </div>
+
+      <div className='form-group'>
+        <label className='form-label text-dark'>Main Image</label>
+
+        <div className='image-source-selector'>
+          <div className='source-options'>
+            <label className='radio-option'>
+              <input
+                type='radio'
+                name='topImageSource'
+                value='asset'
+                checked={(localContent.topPage?.imageSourceType || 'asset') === 'asset'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setLocalContent(prev => ({
+                      ...prev,
+                      topPage: { ...(prev.topPage || {}), imageSourceType: 'asset', heroBackgroundImage: 'top-image.webp' }
+                    }));
+                  }
+                }}
+              />
+              <span>Asset Library</span>
+            </label>
+            <label className='radio-option'>
+              <input
+                type='radio'
+                name='topImageSource'
+                value='url'
+                checked={(localContent.topPage?.imageSourceType || 'asset') === 'url'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setLocalContent(prev => ({
+                      ...prev,
+                      topPage: { ...(prev.topPage || {}), imageSourceType: 'url', heroBackgroundImage: '' }
+                    }));
+                  }
+                }}
+              />
+              <span>URL</span>
+            </label>
+            <label className='radio-option'>
+              <input
+                type='radio'
+                name='topImageSource'
+                value='upload'
+                checked={(localContent.topPage?.imageSourceType || 'asset') === 'upload'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setLocalContent(prev => ({
+                      ...prev,
+                      topPage: { ...(prev.topPage || {}), imageSourceType: 'upload', heroBackgroundImage: '' }
+                    }));
+                  }
+                }}
+              />
+              <span>Upload File</span>
+            </label>
+          </div>
+        </div>
+
+        {(!localContent.topPage?.imageSourceType || localContent.topPage?.imageSourceType === 'asset') && (
+          <select
+            value={localContent.topPage?.heroBackgroundImage || 'top-image.webp'}
+            onChange={(e) => setLocalContent(prev => ({
+              ...prev,
+              topPage: { ...(prev.topPage || {}), heroBackgroundImage: e.target.value }
+            }))}
+            className='form-input'
+          >
+            <option value='top-image.webp'>Top Image (Default)</option>
+            <option value='shinobi-view.webp'>Shinobi View</option>
+            <option value='camps-background.webp'>Camps Background</option>
+            <option value='colin.webp'>Colin Image</option>
+          </select>
+        )}
+
+        {localContent.topPage?.imageSourceType === 'url' && (
+          <div className='url-input-container'>
+            <input
+              type='url'
+              value={localContent.topPage?.heroBackgroundImage || ''}
+              onChange={(e) => setLocalContent(prev => ({
+                ...prev,
+                topPage: { ...(prev.topPage || {}), heroBackgroundImage: e.target.value }
+              }))}
+              className='form-input'
+              placeholder='Enter image URL (e.g., https://example.com/image.jpg)'
+            />
+            {localContent.topPage?.heroBackgroundImage?.startsWith('http') && (
+              <div className='url-image-preview'>
+                <img
+                  src={localContent.topPage?.heroBackgroundImage}
+                  alt='URL preview'
+                  className='preview-image'
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }}
+                />
+                <div className='preview-error' style={{ display: 'none' }}>
+                  <span className='error-icon'>⚠️</span>
+                  <small className='error-text'>Unable to load image from URL</small>
+                </div>
+                <small className='preview-text'>URL image preview</small>
+              </div>
+            )}
+          </div>
+        )}
+
+        {localContent.topPage?.imageSourceType === 'upload' && (
+          <div className='file-upload-container'>
+            <input
+              type='file'
+              accept='image/*'
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    setLocalContent(prev => ({
+                      ...prev,
+                      topPage: { ...(prev.topPage || {}), heroBackgroundImage: event.target.result }
+                    }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className='file-input'
+              id='top-hero-image-upload'
+            />
+            <label htmlFor='top-hero-image-upload' className='file-upload-label'>
+              <span className='upload-icon'>📁</span>
+              <span>Choose Image File</span>
+            </label>
+            {localContent.topPage?.heroBackgroundImage?.startsWith('data:') && (
+              <div className='uploaded-image-preview'>
+                <img src={localContent.topPage?.heroBackgroundImage} alt='Uploaded preview' className='preview-image' />
+                <small className='preview-text'>Uploaded image preview</small>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className='content-manager'>
       <header className='manager-header'>
@@ -631,42 +804,35 @@ const ContentManager = () => {
           {/* Navigation Tabs */}
           <div className='content-navigation'>
             <button
-              className={`nav-tab ${activeSection === 'founder' ? 'active' : ''}`}
-              onClick={() => setActiveSection('founder')}
+              className={`nav-tab ${activeSection === 'top' ? 'active' : ''}`}
+              onClick={() => setActiveSection('top')}
             >
-              Founder Section
+              Top Page
             </button>
             <button
-              className={`nav-tab ${activeSection === 'coaches' ? 'active' : ''}`}
-              onClick={() => setActiveSection('coaches')}
+              className={`nav-tab ${activeSection === 'about' ? 'active' : ''}`}
+              onClick={() => setActiveSection('about')}
             >
-              Coaches Section
-            </button>
-            <button
-              className={`nav-tab ${activeSection === 'aside' ? 'active' : ''}`}
-              onClick={() => setActiveSection('aside')}
-            >
-              Training & Facilities
+              About Page
             </button>
           </div>
 
           {/* Content Sections */}
           <div className='content-sections'>
-            {activeSection === 'founder' && renderFounderSection()}
-            {activeSection === 'coaches' && renderCoachesSection()}
-            {activeSection === 'aside' && renderAsideSection()}
+            {activeSection === 'about' && renderAboutGroup()}
+            {activeSection === 'top' && renderTopPageSection()}
           </div>
 
           {/* Action Buttons */}
           <div className='action-buttons'>
-            <button 
-              onClick={handleDeployChanges} 
+            <button
+              onClick={handleDeployChanges}
               className='btn-primary'
               disabled={!hasChanges || isDeploying}
             >
               {isDeploying ? 'Updating...' : 'Update Content'}
             </button>
-            
+
             <button onClick={handleResetToOriginal} className='btn-secondary'>
               Reset to Original
             </button>

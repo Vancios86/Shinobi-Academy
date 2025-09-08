@@ -65,8 +65,14 @@ const defaultAboutContent = {
 };
 
 // Default content for other pages (expandable)
+const defaultTopPageContent = {
+  heroSubtitle: 'Train hard. Stay humble.',
+  heroBackgroundImage: 'top-image.webp'
+};
+
 const defaultContent = {
   about: defaultAboutContent,
+  topPage: defaultTopPageContent,
   // Future content sections can be added here
   // classes: { ... },
   // camps: { ... },
@@ -94,6 +100,10 @@ export const ContentProvider = ({ children }) => {
               about: {
                 ...defaultContent.about,
                 ...result.data.about
+              },
+              topPage: {
+                ...defaultTopPageContent,
+                ...(result.data.topPage || {})
               }
             };
             setContentData(mergedData);
@@ -208,7 +218,7 @@ export const ContentProvider = ({ children }) => {
       ...prev,
       [section]: {
         ...prev[section],
-        [field]: prev[section][field].map((item, i) => 
+        [field]: prev[section][field].map((item, i) =>
           i === index ? value : item
         )
       }

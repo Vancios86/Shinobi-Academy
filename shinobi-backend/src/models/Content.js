@@ -87,13 +87,25 @@ const ContentSchema = new mongoose.Schema({
         default: "shinobi-view.webp"
       }
     }
+  },
+  topPage: {
+    heroSubtitle: {
+      type: String,
+      required: true,
+      default: "Train hard. Stay humble."
+    },
+    heroBackgroundImage: {
+      type: String,
+      required: true,
+      default: "top-image.webp"
+    }
   }
 }, {
   timestamps: true
 });
 
 // Ensure only one content document exists
-ContentSchema.statics.getContent = async function() {
+ContentSchema.statics.getContent = async function () {
   let content = await this.findOne();
   if (!content) {
     content = new this();
