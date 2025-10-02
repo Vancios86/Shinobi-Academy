@@ -80,7 +80,7 @@ export const ClassesProvider = ({ children }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const newClass = await classesAPI.addClass(classData);
+      const newClass = await classesAPI.createClass(classData);
       setClassesData(prev => [...prev, newClass]);
       return { success: true, data: newClass };
     } catch (error) {
@@ -98,8 +98,8 @@ export const ClassesProvider = ({ children }) => {
     setError(null);
     try {
       const updatedClass = await classesAPI.updateClass(id, updatedData);
-      setClassesData(prev => 
-        prev.map(classItem => 
+      setClassesData(prev =>
+        prev.map(classItem =>
           classItem.id === id ? updatedClass : classItem
         )
       );
@@ -172,18 +172,18 @@ export const ClassesProvider = ({ children }) => {
 
       // Wait for all updates to complete
       const updatedClasses = await Promise.all(updatePromises);
-      
+
       // Update both the current data and the initial session data
       setClassesData([...updatedClasses]);
       setInitialSessionData([...updatedClasses]);
-      
+
       // Update localStorage with the new state
       localStorage.setItem('shinobi-classes-data', JSON.stringify(updatedClasses));
-      
+
       // Reload classes from the database to ensure consistency
       // Force update the initial session data to reflect the new "original" state
       await loadClasses(true);
-      
+
       return { success: true, message: 'Classes reset to original state successfully' };
     } catch (error) {
       console.error('Error resetting classes:', error);
