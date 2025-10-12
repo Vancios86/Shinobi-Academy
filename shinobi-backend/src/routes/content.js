@@ -24,8 +24,8 @@ router.get('/', async (req, res) => {
 // Update content data
 router.put('/', [authenticateToken, requireAdmin], async (req, res) => {
   try {
-    const { about } = req.body;
-    
+    const { about, topPage, testimonials } = req.body;
+
     if (!about) {
       return res.status(400).json({
         success: false,
@@ -44,6 +44,19 @@ router.put('/', [authenticateToken, requireAdmin], async (req, res) => {
       ...content.about,
       ...about
     };
+
+    // Optionally update topPage if provided
+    if (typeof topPage === 'object' && topPage !== null) {
+      content.topPage = {
+        ...content.topPage,
+        ...topPage
+      };
+    }
+
+    // Optionally update testimonials if provided (replace array)
+    if (Array.isArray(testimonials)) {
+      content.testimonials = testimonials;
+    }
 
     await content.save();
 
@@ -66,7 +79,7 @@ router.post('/reset', [authenticateToken, requireAdmin], async (req, res) => {
   try {
     // Delete existing content to force recreation with defaults
     await Content.deleteMany({});
-    
+
     // Create new content with default values
     const content = new Content();
     await content.save();

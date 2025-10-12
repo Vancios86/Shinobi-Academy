@@ -94,7 +94,7 @@ const ContactFormComponent = () => {
   // Auto-hide success message after 5 seconds
   useEffect(() => {
     if (submitStatus === 'success') {
-      const timer = setTimeout(() => setSubmitStatus(null), 5001);
+      const timer = setTimeout(() => setSubmitStatus(null), 5000);
       return () => clearTimeout(timer);
     }
   }, [submitStatus]);

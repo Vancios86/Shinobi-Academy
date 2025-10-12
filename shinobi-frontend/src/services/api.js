@@ -48,15 +48,15 @@ class ApiService {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    
+
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         console.error(`API Error: ${response.status} ${response.statusText}`);
       }
-      
+
       const data = await response.json();
 
       // Handle authentication errors
@@ -119,11 +119,11 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         console.error(`API Error: ${response.status} ${response.statusText}`);
       }
-      
+
       const data = await response.json();
 
       // Handle authentication errors
@@ -163,12 +163,12 @@ export class AuthAPI extends ApiService {
   // Login
   async login(username, password) {
     const response = await this.post('/auth/login', { username, password });
-    
+
     if (response.success && response.token) {
       this.setAuthToken(response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
     }
-    
+
     return response;
   }
 
@@ -347,15 +347,15 @@ export class GalleryAPI extends ApiService {
   async getGalleryImages(category = null, tags = null, limit = 50) {
     let endpoint = '/gallery';
     const params = new URLSearchParams();
-    
+
     if (category) params.append('category', category);
     if (tags) params.append('tags', tags);
     if (limit) params.append('limit', limit);
-    
+
     if (params.toString()) {
       endpoint += `?${params.toString()}`;
     }
-    
+
     const response = await this.get(endpoint);
     return response.data || [];
   }
@@ -428,6 +428,32 @@ export class ContactAPI extends ApiService {
 
 }
 
+// Testimonials API
+export class TestimonialsAPI extends ApiService {
+  async getTestimonials() {
+    const response = await this.get('/testimonials');
+    return response.data || [];
+  }
+  async getAdminTestimonials() {
+    const response = await this.get('/testimonials/admin');
+    return response.data || [];
+  }
+  async createTestimonial(data) {
+    const response = await this.post('/testimonials', data);
+    return response.data;
+  }
+  async updateTestimonial(id, data) {
+    const response = await this.put(`/testimonials/${id}`, data);
+    return response.data;
+  }
+  async deleteTestimonial(id) {
+    return this.delete(`/testimonials/${id}`);
+  }
+  async reorderTestimonials(order) {
+    const response = await this.put('/testimonials/reorder', { order });
+    return response.message;
+  }
+}
 // Create singleton instances
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
@@ -435,6 +461,7 @@ export const scheduleAPI = new ScheduleAPI();
 export const coachesAPI = new CoachesAPI();
 export const galleryAPI = new GalleryAPI();
 export const contactAPI = new ContactAPI();
+export const testimonialsAPI = new TestimonialsAPI();
 
 // Default export
 export default ApiService;

@@ -23,7 +23,7 @@ export const CoachesProvider = ({ children }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const coaches = useAdminAPI 
+      const coaches = useAdminAPI
         ? await coachesAPI.getAdminCoaches()
         : await coachesAPI.getCoaches();
       if (coaches) {
@@ -120,7 +120,7 @@ export const CoachesProvider = ({ children }) => {
     setError(null);
     try {
       const updatedCoach = await coachesAPI.updateCoach(coachId, coachData);
-      const updatedCoaches = coachesData.map(coach => 
+      const updatedCoaches = coachesData.map(coach =>
         coach.id === coachId ? updatedCoach : coach
       );
       setCoachesData(updatedCoaches);
@@ -175,10 +175,10 @@ export const CoachesProvider = ({ children }) => {
     if (!coach) {
       return { canDelete: false, reason: 'Coach not found' };
     }
-    
+
     // Add any business logic here for when coaches cannot be deleted
     // For example, if they have active classes, etc.
-    
+
     return { canDelete: true, reason: null };
   };
 

@@ -11,6 +11,7 @@ import GalleryManager from './Components/GalleryManager/GalleryManager';
 import CoachesManager from './Components/CoachesManager/CoachesManager';
 import ContactManager from './Components/ContactManager/ContactManager';
 import ContentManager from './Components/ContentManager/ContentManager';
+import TestimonialsManager from './Components/TestimonialsManager/TestimonialsManager';
 import ClassesManager from './Components/ClassesManager/ClassesManager';
 import ScheduleManager from './Components/ScheduleManager/ScheduleManager';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
@@ -66,6 +67,11 @@ root.render(
                       <Route path="/admin/content-manager" element={
                         <ProtectedRoute>
                           <ContentManager />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/testimonials-manager" element={
+                        <ProtectedRoute>
+                          <TestimonialsManager />
                         </ProtectedRoute>
                       } />
                       <Route path="/admin/classes-manager" element={
