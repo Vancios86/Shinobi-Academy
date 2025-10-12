@@ -7,3 +7,4 @@ shinobi-backend/logs/
 shinobi-backend/*.log
 shinobi-backend/nohup.out
 shinobi-backend/setup-admin.js
+shinobi-backend/flyio_credentials.bash
