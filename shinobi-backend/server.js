@@ -85,7 +85,7 @@ if (isProd) {
 // CORS configuration - Environment-aware
 const allowedOrigins = process.env.CLIENT_URL 
   ? process.env.CLIENT_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000'];
+  : ['http://localhost:3000', 'http://shinobiacademy.net/'];
 
 const corsMiddleware = cors({
   origin: function (origin, callback) {
@@ -98,7 +98,8 @@ const corsMiddleware = cors({
     }
     
     // In production, check against allowed origins
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+    const normalizedOrigin = (origin || '').replace(/\/$/, '');
+    if (allowedOrigins.indexOf(normalizedOrigin) !== -1 || allowedOrigins.includes('*')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
