@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const connectDB = require('./src/config/database');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -17,31 +18,76 @@ const contentRoutes = require('./src/routes/content');
 const testimonialsRoutes = require('./src/routes/testimonials');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
+const isProd = (process.env.NODE_ENV === 'production');
 
-// Security middleware - More permissive for development
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" },
-  crossOriginEmbedderPolicy: false
-}));
+// Early dev CORS guard (runs before all middleware)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    // Dev-only: allow any origin without credentials
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+}
+
+// Trust proxy when behind load balancers (production)
+if (isProd) {
+  app.set('trust proxy', 1);
+}
+
+// Security middleware - CSP tailored for prod; disabled in dev to reduce friction
+if (isProd) {
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", "https:", "data:"],
+        imgSrc: ["'self'", "data:", "https:", "res.cloudinary.com"],
+        objectSrc: ["'none'"],
+        scriptSrc: ["'self'"],
+        scriptSrcAttr: ["'none'"],
+        styleSrc: ["'self'", "https:", "'unsafe-inline'"],
+        upgradeInsecureRequests: []
+      }
+    }
+  }));
+} else {
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: false
+  }));
+}
 app.use(compression());
 
-// Rate limiting
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100, // limit each IP to 100 requests per windowMs
-//   message: {
-//     error: 'Too many requests from this IP, please try again later.'
-//   }
-// });
-// app.use('/api/', limiter);
+// Rate limiting (enabled in production)
+if (isProd) {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+      error: 'Too many requests from this IP, please try again later.'
+    }
+  });
+  app.use('/api/', limiter);
+}
 
 // CORS configuration - Environment-aware
 const allowedOrigins = process.env.CLIENT_URL 
   ? process.env.CLIENT_URL.split(',').map(url => url.trim())
   : ['http://localhost:3000'];
 
-app.use(cors({
+const corsMiddleware = cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
@@ -63,7 +109,27 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   preflightContinue: false,
   optionsSuccessStatus: 204
-}));
+});
+
+app.use(corsMiddleware);
+// Ensure preflight requests are handled for all routes
+app.options('*', corsMiddleware);
+
+// Development-only hard CORS fallback (guards against misconfig)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    const origin = req.headers.origin || 'http://localhost:3000';
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+}
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -82,14 +148,7 @@ app.use('/uploads', (req, res, next) => {
 });
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shinobi-academy')
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
-  });
+connectDB();
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

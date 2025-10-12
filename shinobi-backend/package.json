@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate-secret": "node generate-secret.js",
-    "setup-admin": "node create-admin.js"
+    "setup-admin": "node create-admin.js",
+    "cleanup-indexes": "node scripts/cleanup-indexes.js"
   },
   "keywords": ["martial-arts", "academy", "api", "nodejs", "mongodb"],
   "author": "Shinobi Academy",

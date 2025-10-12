@@ -11,6 +11,10 @@ import { useLocation } from 'react-router-dom';
 
 const ContactPage = () => {
   const { contactData, isLoaded } = useContact();
+  const phone = contactData?.phone || '';
+  const email = contactData?.email || '';
+  const address = contactData?.address || {};
+  const social = contactData?.socialMedia || {};
   const location = useLocation();
 
   // Scroll to top when component mounts or route changes
@@ -62,51 +66,51 @@ const ContactPage = () => {
                   className='sm-item'
                   tabIndex="0"
                   role="button"
-                  onClick={() => window.open(contactData.socialMedia.instagram.url)}
+                  onClick={() => social.instagram?.url && window.open(social.instagram.url)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      window.open(contactData.socialMedia.instagram.url);
+                      social.instagram?.url && window.open(social.instagram.url);
                     }
                   }}
-                  aria-label={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+                  aria-label={`Follow us on Instagram: ${social.instagram?.display || ''}`}
                 >
                   <AiFillInstagram
-                    title={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+                    title={`Follow us on Instagram: ${social.instagram?.display || ''}`}
                   />
                 </li>
                 <li 
                   className='sm-item'
                   tabIndex="0"
                   role="button"
-                  onClick={() => window.open(contactData.socialMedia.youtube.url)}
+                  onClick={() => social.youtube?.url && window.open(social.youtube.url)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      window.open(contactData.socialMedia.youtube.url);
+                      social.youtube?.url && window.open(social.youtube.url);
                     }
                   }}
-                  aria-label={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+                  aria-label={`Subscribe to our YouTube: ${social.youtube?.display || ''}`}
                 >
                   <SiYoutube
-                    title={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+                    title={`Subscribe to our YouTube: ${social.youtube?.display || ''}`}
                   />
                 </li>
                 <li 
                   className='sm-item'
                   tabIndex="0"
                   role="button"
-                  onClick={() => window.open(contactData.socialMedia.facebook.url)}
+                  onClick={() => social.facebook?.url && window.open(social.facebook.url)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      window.open(contactData.socialMedia.facebook.url);
+                      social.facebook?.url && window.open(social.facebook.url);
                     }
                   }}
-                  aria-label={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+                  aria-label={`Follow us on Facebook: ${social.facebook?.display || ''}`}
                 >
                   <SiFacebook
-                    title={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+                    title={`Follow us on Facebook: ${social.facebook?.display || ''}`}
                   />
                 </li>
               </ul>
@@ -127,20 +131,20 @@ const ContactPage = () => {
               <ul className='shadowed-box contact-list-items rounded-sm flex'>
                 <li>
                   <MdPhone /> 
-                  <a href={`tel:${contactData.phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {contactData.phone}
+                  <a href={`tel:${phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {phone}
                   </a>
                 </li>
                 <li>
                   <a
-                    href={`mailto:${contactData.email}?&subject=From Shinobi Academy website`}
+                    href={`mailto:${email}?&subject=From Shinobi Academy website`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <MdEmail /> Send us an Email
                   </a>
                 </li>
                 <li>
-                  <MdLocationPin /> {contactData.address.full}
+                  <MdLocationPin /> {address.full || ''}
                 </li>
               </ul>
             </div>

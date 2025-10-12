@@ -127,19 +127,19 @@ headers: {
 
 1. **Health Check:**
    ```bash
-   curl http://localhost:5000/api/health
+   curl http://localhost:5001/api/health
    ```
 
 2. **Login:**
    ```bash
-   curl -X POST http://localhost:5000/api/auth/login \
+   curl -X POST http://localhost:5001/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{"username":"admin","password":"admin123"}'
    ```
 
 3. **Get Classes:**
    ```bash
-   curl http://localhost:5000/api/classes
+   curl http://localhost:5001/api/classes
    ```
 
 ## 🚀 Deployment

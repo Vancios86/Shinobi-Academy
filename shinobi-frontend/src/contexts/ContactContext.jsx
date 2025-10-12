@@ -11,12 +11,26 @@ export const useContact = () => {
   return context;
 };
 
-// Default contact information
-
-
+// Default contact information (null-safe fallback for UI)
+const defaultContactData = {
+  phone: '',
+  email: '',
+  address: {
+    street: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    full: ''
+  },
+  socialMedia: {
+    instagram: { url: '', display: '', platform: 'instagram' },
+    facebook: { url: '', display: '', platform: 'facebook' },
+    youtube: { url: '', display: '', platform: 'youtube' }
+  }
+};
 export const ContactProvider = ({ children }) => {
-  const [contactData, setContactData] = useState(null);
-  const [initialSessionData, setInitialSessionData] = useState(null);
+  const [contactData, setContactData] = useState(defaultContactData);
+  const [initialSessionData, setInitialSessionData] = useState(defaultContactData);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,18 +42,10 @@ export const ContactProvider = ({ children }) => {
       setError(null);
       
       const data = await contactAPI.getContact();
-      if (data) {
-        setContactData(data);
-        // Set initial session data on first load
-        if (!initialSessionData) {
-          setInitialSessionData(data);
-        }
-      } else {
-        // If no data from API, set empty state
-        setContactData(null);
-        if (!initialSessionData) {
-          setInitialSessionData(null);
-        }
+      const safeData = data || defaultContactData;
+      setContactData(safeData);
+      if (!initialSessionData) {
+        setInitialSessionData(safeData);
       }
     } catch (error) {
       console.error('Error loading contact data:', error);
@@ -100,6 +106,7 @@ export const ContactProvider = ({ children }) => {
       } else {
         // No initial session data available
         console.log('No initial session data available for reset');
+        setContactData(defaultContactData);
         setError('No initial session data available for reset');
         return { success: false, message: 'No initial session data available for reset' };
       }

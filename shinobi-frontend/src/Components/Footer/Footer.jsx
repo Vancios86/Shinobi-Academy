@@ -9,6 +9,10 @@ import { useContact } from '../../contexts/ContactContext';
 
 const Footer = () => {
   const { contactData, isLoaded } = useContact();
+  const phone = contactData?.phone || '';
+  const email = contactData?.email || '';
+  const address = contactData?.address || {};
+  const social = contactData?.socialMedia || {};
 
   if (!isLoaded) {
     return (
@@ -43,21 +47,21 @@ const Footer = () => {
                 <span>
                   <MdPhone />
                 </span>{' '}
-                <a href={`tel:${contactData.phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {contactData.phone}
+                <a href={`tel:${phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {phone}
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${contactData.email}?&subject=From Shinobi Academy website`}
+                  href={`mailto:${email}?&subject=From Shinobi Academy website`}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <MdEmail /> {contactData.email}
+                  <MdEmail /> {email}
                 </a>
               </li>
               <li>
-                <MdLocationPin /> {contactData.address.street}
-                <br /> &emsp;{contactData.address.postalCode} {contactData.address.city}
+                <MdLocationPin /> {address.street || ''}
+                <br /> &emsp;{address.postalCode || ''} {address.city || ''}
               </li>
             </ul>
           </div>
@@ -77,49 +81,49 @@ const Footer = () => {
               <li
                 tabIndex="0"
                 role="button"
-                onClick={() => window.open(contactData.socialMedia.instagram.url)}
+                onClick={() => social.instagram?.url && window.open(social.instagram.url)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    window.open(contactData.socialMedia.instagram.url);
+                    social.instagram?.url && window.open(social.instagram.url);
                   }
                 }}
-                aria-label={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+                aria-label={`Follow us on Instagram: ${social.instagram?.display || ''}`}
               >
                 <AiFillInstagram
-                  title={`Follow us on Instagram: ${contactData.socialMedia.instagram.display}`}
+                  title={`Follow us on Instagram: ${social.instagram?.display || ''}`}
                 />
               </li>
               <li
                 tabIndex="0"
                 role="button"
-                onClick={() => window.open(contactData.socialMedia.facebook.url)}
+                onClick={() => social.facebook?.url && window.open(social.facebook.url)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    window.open(contactData.socialMedia.facebook.url);
+                    social.facebook?.url && window.open(social.facebook.url);
                   }
                 }}
-                aria-label={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+                aria-label={`Follow us on Facebook: ${social.facebook?.display || ''}`}
               >
                 <SiFacebook
-                  title={`Follow us on Facebook: ${contactData.socialMedia.facebook.display}`}
+                  title={`Follow us on Facebook: ${social.facebook?.display || ''}`}
                 />
               </li>
               <li
                 tabIndex="0"
                 role="button"
-                onClick={() => window.open(contactData.socialMedia.youtube.url)}
+                onClick={() => social.youtube?.url && window.open(social.youtube.url)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    window.open(contactData.socialMedia.youtube.url);
+                    social.youtube?.url && window.open(social.youtube.url);
                   }
                 }}
-                aria-label={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+                aria-label={`Subscribe to our YouTube: ${social.youtube?.display || ''}`}
               >
                 <SiYoutube
-                  title={`Subscribe to our YouTube: ${contactData.socialMedia.youtube.display}`}
+                  title={`Subscribe to our YouTube: ${social.youtube?.display || ''}`}
                 />
               </li>
             </ul>
