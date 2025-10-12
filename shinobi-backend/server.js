@@ -21,11 +21,13 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const isProd = (process.env.NODE_ENV === 'production');
 
-// Early dev CORS guard (runs before all middleware)
-if (process.env.NODE_ENV !== 'production') {
+if (isProd) {
+  // Trust proxy when behind load balancers (production)
+  app.set('trust proxy', 1);
+
+  // CORS middleware
   app.use((req, res, next) => {
-    // Dev-only: allow any origin without credentials
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'https://shinobiacademy.netlify.app');
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
     if (req.method === 'OPTIONS') {
@@ -33,15 +35,8 @@ if (process.env.NODE_ENV !== 'production') {
     }
     next();
   });
-}
 
-// Trust proxy when behind load balancers (production)
-if (isProd) {
-  app.set('trust proxy', 1);
-}
-
-// Security middleware - CSP tailored for prod; disabled in dev to reduce friction
-if (isProd) {
+  // Security middleware - CSP tailored for prod; disabled in dev to reduce friction
   app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginEmbedderPolicy: false,
@@ -120,7 +115,7 @@ app.options('*', corsMiddleware);
 if (process.env.NODE_ENV !== 'production') {
   app.use((req, res, next) => {
     const origin = req.headers.origin || 'http://localhost:3000';
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', "*");
     res.header('Vary', 'Origin');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
