@@ -142,20 +142,39 @@ headers: {
    curl http://localhost:5001/api/classes
    ```
 
-## 🚢 Deployment
+## 🚀 Deployment
 
-### Environment Variables for Production:
-```env
-NODE_ENV=production
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/shinobi-academy
-JWT_SECRET=super-secure-production-secret
-CLIENT_URL=https://your-domain.com
-```
+Ready to deploy? Follow these comprehensive guides:
 
-### Recommended Hosting:
-- **Server**: Railway, Heroku, DigitalOcean
-- **Database**: MongoDB Atlas
-- **CDN**: Cloudinary (for images)
+### 📚 Deployment Documentation
+
+1. **[🚀 Quick Start Guide](./QUICK_START_DEPLOYMENT.md)** - Deploy in 30 minutes (Recommended!)
+2. **[📖 Full Deployment Guide](./DEPLOYMENT.md)** - Complete step-by-step reference
+3. **[🔐 Environment Variables](./ENVIRONMENT_VARIABLES.md)** - Complete configuration reference
+
+### ⚡ Quick Deploy Options
+
+| Platform | Difficulty | Free Tier | Deploy Time | Best For |
+|----------|------------|-----------|-------------|----------|
+| **[Render](https://render.com)** | Easy ⭐ | ✅ Yes | ~15 min | Beginners |
+| **[Railway](https://railway.app)** | Easy ⭐ | ✅ Yes* | ~10 min | Speed |
+| **[Fly.io](https://fly.io)** | Medium ⭐⭐ | ✅ Yes | ~20 min | Scale |
+
+*Requires credit card for free tier
+
+### 🎯 What You'll Need
+
+1. **MongoDB Atlas** (free) - Cloud database
+2. **Cloudinary** (free) - Image hosting
+3. Your chosen hosting platform account
+
+### 💻 Deployment Files Included
+
+- `render.yaml` - Render configuration
+- `railway.json` - Railway configuration
+- `fly.toml` - Fly.io configuration
+- `Dockerfile` - Container configuration
+- `.dockerignore` - Docker ignore rules
 
 ## 🔄 Migration from localStorage
 

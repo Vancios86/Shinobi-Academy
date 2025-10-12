@@ -5,6 +5,7 @@ import logo from '../../assets/logos/logo.png';
 import { useGallery } from '../../contexts/GalleryContext';
 import { galleryAPI } from '../../services/api';
 import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
+import ConfirmationModal from '../Common/ConfirmationModal';
 
 // Toast Notification Component
 const Toast = ({ message, type = 'success', onClose }) => {
@@ -56,6 +57,11 @@ const GalleryManager = () => {
     file: null
   });
   const [toasts, setToasts] = useState([]);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    imageId: null,
+    imageTitle: ''
+  });
   
   // Scroll to top when component mounts
   useScrollToTopOnMount();
@@ -319,16 +325,39 @@ const GalleryManager = () => {
     setEditingId(null);
   };
 
-  const handleDeleteImage = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this image?');
-    if (confirmDelete) {
-      try {
-        await deleteImage(id);
-        addToast('Image deleted successfully!', 'success');
-      } catch (error) {
-        addToast(`Error deleting image: ${error.message}`, 'error');
-      }
+  const handleDeleteImage = (id) => {
+    const imageToDelete = localGalleryData.find(img => img.id === id);
+    setDeleteModal({
+      isOpen: true,
+      imageId: id,
+      imageTitle: imageToDelete?.title || 'Untitled Image'
+    });
+  };
+
+  const confirmDeleteImage = async () => {
+    if (!deleteModal.imageId) return;
+    
+    try {
+      await deleteImage(deleteModal.imageId);
+      addToast('Image deleted successfully!', 'success');
+    } catch (error) {
+      addToast(`Error deleting image: ${error.message}`, 'error');
+    } finally {
+      // Always close the modal after the action
+      setDeleteModal({
+        isOpen: false,
+        imageId: null,
+        imageTitle: ''
+      });
     }
+  };
+
+  const cancelDeleteImage = () => {
+    setDeleteModal({
+      isOpen: false,
+      imageId: null,
+      imageTitle: ''
+    });
   };
 
   const handleInputChange = (id, field, value) => {
@@ -707,6 +736,17 @@ const GalleryManager = () => {
         </div>
       </main>
 
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        title="Delete Image"
+        message={`Are you sure you want to delete "${deleteModal.imageTitle}"? This action cannot be undone.`}
+        onConfirm={confirmDeleteImage}
+        onCancel={cancelDeleteImage}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 };

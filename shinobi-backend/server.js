@@ -35,9 +35,28 @@ app.use(compression());
 // });
 // app.use('/api/', limiter);
 
-// CORS configuration - More permissive for development
+// CORS configuration - Environment-aware
+const allowedOrigins = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.split(',').map(url => url.trim())
+  : ['http://localhost:3000'];
+
 app.use(cors({
-  origin: true, // Allow all origins in development
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // In production, check against allowed origins
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
@@ -73,11 +92,39 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/shinobi-a
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  
   res.json({
     status: 'OK',
     message: 'Shinobi Academy API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    database: dbStatus,
+    uptime: process.uptime(),
+    memory: {
+      used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+      total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
+    }
+  });
+});
+
+// Deployment verification endpoint
+app.get('/api/verify', (req, res) => {
+  res.json({
+    api: 'Shinobi Academy Backend',
+    version: '1.0.0',
+    status: 'deployed',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth/*',
+      classes: '/api/classes',
+      schedule: '/api/schedule',
+      coaches: '/api/coaches',
+      contact: '/api/contact',
+      gallery: '/api/gallery',
+      content: '/api/content'
+    },
+    timestamp: new Date().toISOString()
   });
 });
 
