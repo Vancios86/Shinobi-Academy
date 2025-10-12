@@ -85,7 +85,7 @@ if (isProd) {
 // CORS configuration - Environment-aware
 const allowedOrigins = process.env.CLIENT_URL 
   ? process.env.CLIENT_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000', 'http://shinobiacademy.net/'];
+  : ['http://localhost:3000', 'http://shinobiacademy.net/', 'https://shinobiacademy.netlify.app'];
 
 const corsMiddleware = cors({
   origin: function (origin, callback) {
