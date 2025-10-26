@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { toAssetUrl } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import './GalleryManager.css';
 import logo from '../../assets/logos/logo.png';
@@ -603,7 +604,7 @@ const GalleryManager = () => {
               >
                 <div className="image-container">
                   <img 
-                    src={image.src.startsWith('http') ? image.src : `http://localhost:5001${image.src}`}
+                    src={image.src.startsWith('http') ? image.src : toAssetUrl(image.src)}
                     alt={image.title || 'Gallery image'}
                     className="gallery-image"
                     onError={(e) => {
