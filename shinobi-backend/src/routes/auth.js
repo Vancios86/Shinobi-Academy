@@ -1,12 +1,42 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const User = require('../models/User');
 const { generateToken, authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Per-route rate limiters for auth endpoints
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // max login attempts per IP per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: 'Too many login attempts. Please try again later.'
+  }
+});
+
+const refreshLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const changePasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: 'Too many password changes. Please try again later.'
+  }
+});
+
 // Login endpoint
 router.post('/login', [
+  loginLimiter,
   body('username')
     .trim()
     .notEmpty()
@@ -107,7 +137,7 @@ router.get('/me', authenticateToken, async (req, res) => {
 });
 
 // Refresh token endpoint
-router.post('/refresh', authenticateToken, async (req, res) => {
+router.post('/refresh', refreshLimiter, authenticateToken, async (req, res) => {
   try {
     // Generate new token
     const token = generateToken(req.user._id);
@@ -147,6 +177,7 @@ router.post('/logout', authenticateToken, async (req, res) => {
 
 // Change password endpoint
 router.post('/change-password', [
+  changePasswordLimiter,
   authenticateToken,
   body('currentPassword')
     .notEmpty()

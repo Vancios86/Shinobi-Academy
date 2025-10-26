@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CoachesManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useCoaches } from '../../contexts/CoachesContext';
-import { coachesAPI } from '../../services/api';
+import { coachesAPI, toAssetUrl } from '../../services/api';
 import ConfirmationModal from '../Common/ConfirmationModal';
 import { useScrollToTopOnMount } from '../../hooks/useScrollToTop';
 
@@ -176,7 +176,7 @@ const CoachesManager = () => {
       
       if (uploadResult.success) {
         // Update the form with the uploaded image URL
-        const imageUrl = `http://localhost:5001${uploadResult.data.path}`;
+        const imageUrl = toAssetUrl(uploadResult.data.path);
         setNewCoach(prev => ({
           ...prev,
           imgSrc: imageUrl
@@ -216,7 +216,7 @@ const CoachesManager = () => {
       
       if (uploadResult.success) {
         // Update the local coach data with the new image URL
-        const imageUrl = `http://localhost:5001${uploadResult.data.path}`;
+        const imageUrl = toAssetUrl(uploadResult.data.path);
         setLocalCoachesData(prev => prev.map(coach => 
           coach.id === coachId 
             ? { ...coach, imgSrc: imageUrl }

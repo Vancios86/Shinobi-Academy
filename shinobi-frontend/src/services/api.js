@@ -1,5 +1,13 @@
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shinobi-academy-api.fly.dev/api';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shinobi-academy-api.fly.dev/api';
+export const ASSET_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '');
+export const toAssetUrl = (path) => {
+  if (!path) return '';
+  if (typeof path === 'string' && (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:'))) {
+    return path;
+  }
+  return `${ASSET_BASE_URL}${path}`;
+};
 
 // API Service Class
 class ApiService {

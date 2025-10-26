@@ -3,6 +3,7 @@ import { useGallery } from '../../../contexts/GalleryContext';
 import { AiOutlineFilter, AiOutlineClose, AiOutlineSearch, AiOutlineEye } from 'react-icons/ai';
 import { BiCategory } from 'react-icons/bi';
 import './ModernGalleryComponent.css';
+import { toAssetUrl } from '../../../services/api';
 
 const ModernGalleryComponent = () => {
   const { galleryData, isLoaded, loadGalleryData } = useGallery();
@@ -192,8 +193,8 @@ const ModernGalleryComponent = () => {
               {filteredImages.map((image) => (
                 <div key={image.id} className="gallery-item">
                   <div className="image-container">
-                                      <img
-                    src={image.src.startsWith('http') ? image.src : `http://localhost:5001${image.src}`}
+                    <img
+                    src={image.src.startsWith('http') ? image.src : toAssetUrl(image.src)}
                       alt={image.title || 'Gallery image'}
                       className="gallery-image"
                       onClick={() => handleImageClick(image)}
@@ -236,7 +237,7 @@ const ModernGalleryComponent = () => {
             
             <div className="modal-image-container">
               <img
-                src={selectedImage.src.startsWith('http') ? selectedImage.src : `http://localhost:5001${selectedImage.src}`}
+                src={selectedImage.src.startsWith('http') ? selectedImage.src : toAssetUrl(selectedImage.src)}
                 alt={selectedImage.title || 'Gallery image'}
                 className="modal-image"
               />
