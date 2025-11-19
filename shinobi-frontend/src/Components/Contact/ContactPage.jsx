@@ -1,7 +1,7 @@
 import './ContactPage.css';
 import ContactFormComponent from './ContactFormComponent/ContactFormComponent';
 import MapComponent from './MapComponent/MapComponent';
-import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
+import { MdEmail, MdLocationPin } from 'react-icons/md';
 import { IconContext } from 'react-icons';
 import { SiFacebook, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom';
 
 const ContactPage = () => {
   const { contactData, isLoaded } = useContact();
-  const phone = contactData?.phone || '';
   const email = contactData?.email || '';
   const address = contactData?.address || {};
   const social = contactData?.socialMedia || {};
@@ -129,12 +128,6 @@ const ContactPage = () => {
           <div className='contact-list-container flex'>
             <div className='contact-list flex'>
               <ul className='shadowed-box contact-list-items rounded-sm flex'>
-                <li>
-                  <MdPhone /> 
-                  <a href={`tel:${phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {phone}
-                  </a>
-                </li>
                 <li>
                   <a
                     href={`mailto:${email}?&subject=From Shinobi Academy website`}

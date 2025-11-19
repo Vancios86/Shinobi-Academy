@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
         success: true,
         message: 'No contact information found',
         data: {
-          phone: '',
           email: '',
           address: {
             street: '',
@@ -36,7 +35,6 @@ router.get('/', async (req, res) => {
     
     // Remove sensitive fields for public endpoint
     const publicContact = {
-      phone: contact.phone,
       email: contact.email,
       address: contact.address,
       socialMedia: contact.socialMedia
@@ -87,16 +85,6 @@ router.get('/admin', [authenticateToken, requireAdmin], async (req, res) => {
 router.put('/', [
   authenticateToken,
   requireAdmin,
-  body('phone').optional().trim().custom((value) => {
-    if (value && value.length > 0) {
-      // Remove all non-digit characters for validation
-      const digitsOnly = value.replace(/\D/g, '');
-      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
-        throw new Error('Phone number must be between 7 and 15 digits');
-      }
-    }
-    return true;
-  }),
   body('email').optional().trim().custom((value) => {
     if (value && value.length > 0) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -114,15 +114,8 @@ const ContactManager = () => {
     setLocalContactData(prev => {
       const currentData = prev || {};
       
-      // Handle simplified phone and email structure
-      if (section === 'phone') {
-        // Only allow digits, spaces, parentheses, hyphens, and plus sign
-        const filteredValue = value.replace(/[^0-9\s()\-+]/g, '');
-        return {
-          ...currentData,
-          [section]: filteredValue
-        };
-      } else if (section === 'email') {
+      // Handle simplified email structure
+      if (section === 'email') {
         // Validate email format
         validateEmail(value);
         return {
@@ -352,21 +345,6 @@ const ContactManager = () => {
               <h3 className='subsection-title text-dark'>Contact Details</h3>
               <div className='form-row'>
                 <div className='form-group'>
-                  <label htmlFor='phone' className='form-label text-dark'>
-                    Phone Number
-                  </label>
-                  <input
-                    type='tel'
-                    id='phone'
-                    value=''
-                    onChange={(e) => handleInputChange('phone', null, e.target.value)}
-                    className='form-input'
-                    placeholder='e.g., (+351) 977 777 777'
-                    maxLength={25}
-                  />
-                  <small className='char-count'>0/25</small>
-                </div>
-                <div className='form-group'>
                   <label htmlFor='email' className='form-label text-dark'>
                     Email Address
                   </label>
@@ -424,39 +402,6 @@ const ContactManager = () => {
           <div className='contact-section shadowed-box'>
             <h3 className='subsection-title text-dark'>Contact Details</h3>
             <div className='form-row'>
-              <div className='form-group'>
-                <label htmlFor='phone' className='form-label text-dark'>
-                  Phone Number
-                </label>
-                                  <input
-                    type='tel'
-                    id='phone'
-                    value={localContactData.phone || ''}
-                    onChange={(e) => handleInputChange('phone', null, e.target.value)}
-                    onKeyDown={(e) => {
-                      // Allow: backspace, delete, tab, escape, enter, home, end, left, right, up, down
-                      if ([8, 9, 27, 13, 46, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1 ||
-                          // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-                          (e.keyCode === 65 && e.ctrlKey === true) ||
-                          (e.keyCode === 67 && e.ctrlKey === true) ||
-                          (e.keyCode === 86 && e.ctrlKey === true) ||
-                          (e.keyCode === 88 && e.ctrlKey === true)) {
-                        return;
-                      }
-                      // Ensure that it is a number, space, parentheses, hyphen, or plus sign
-                      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && 
-                          (e.keyCode < 96 || e.keyCode > 105) &&
-                          e.keyCode !== 32 && e.keyCode !== 40 && e.keyCode !== 41 && 
-                          e.keyCode !== 45 && e.keyCode !== 43) {
-                        e.preventDefault();
-                      }
-                    }}
-                    className='form-input'
-                    placeholder='e.g., (+351) 977 777 777'
-                    maxLength={25}
-                  />
-                <small className='char-count'>{(localContactData.phone || '').length}/25</small>
-              </div>
               <div className='form-group'>
                 <label htmlFor='email' className='form-label text-dark'>
                   Email Address

@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
-  phone: {
-    type: String,
-    required: false,
-    trim: true,
-    default: ''
-  },
   email: {
     type: String,
     required: false,
@@ -144,8 +138,8 @@ contactSchema.statics.getActiveContact = async function() {
     try {
       // Update all fields
       Object.keys(updateData).forEach(key => {
-        if (key === 'phone' || key === 'email') {
-          // Handle simplified phone and email structure
+        if (key === 'email') {
+          // Handle simplified email structure
           this[key] = updateData[key];
         } else if (key === 'address' || key === 'socialMedia') {
           // Handle nested structure for address and social media

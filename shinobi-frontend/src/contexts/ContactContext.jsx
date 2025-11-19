@@ -13,7 +13,6 @@ export const useContact = () => {
 
 // Default contact information (null-safe fallback for UI)
 const defaultContactData = {
-  phone: '',
   email: '',
   address: {
     street: '',

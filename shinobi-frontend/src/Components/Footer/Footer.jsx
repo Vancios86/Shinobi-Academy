@@ -1,5 +1,5 @@
 import './Footer.css';
-import { MdPhone, MdEmail, MdLocationPin } from 'react-icons/md';
+import { MdEmail, MdLocationPin } from 'react-icons/md';
 import { SiFacebook, SiYoutube } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
@@ -9,7 +9,6 @@ import { useContact } from '../../contexts/ContactContext';
 
 const Footer = () => {
   const { contactData, isLoaded } = useContact();
-  const phone = contactData?.phone || '';
   const email = contactData?.email || '';
   const address = contactData?.address || {};
   const social = contactData?.socialMedia || {};
@@ -43,14 +42,6 @@ const Footer = () => {
         >
           <div className='contact flex'>
             <ul className='footer-contact-list'>
-              <li>
-                <span>
-                  <MdPhone />
-                </span>{' '}
-                <a href={`tel:${phone}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {phone}
-                </a>
-              </li>
               <li>
                 <a
                   href={`mailto:${email}?&subject=From Shinobi Academy website`}
