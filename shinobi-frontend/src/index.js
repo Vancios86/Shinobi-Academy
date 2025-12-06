@@ -8,7 +8,6 @@ import SchedulePage from './Components/ClassesPage/SchedulePage/SchedulePage';
 import AdminPage from './Components/AdminPage/AdminPage';
 import AdminDashboard from './Components/AdminDashboard/AdminDashboard';
 import GalleryManager from './Components/GalleryManager/GalleryManager';
-import CoachesManager from './Components/CoachesManager/CoachesManager';
 import ContactManager from './Components/ContactManager/ContactManager';
 import ContentManager from './Components/ContentManager/ContentManager';
 import TestimonialsManager from './Components/TestimonialsManager/TestimonialsManager';
@@ -18,7 +17,6 @@ import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import WelcomePage from './Components/WelcomePage/WelcomePage';
 import { GalleryProvider } from './contexts/GalleryContext';
-import { CoachesProvider } from './contexts/CoachesContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ContactProvider } from './contexts/ContactContext';
 import { ContentProvider } from './contexts/ContentContext';
@@ -35,7 +33,6 @@ root.render(
           <ClassesProvider>
             <ScheduleProvider>
               <GalleryProvider>
-                <CoachesProvider>
                   <BrowserRouter>
                     <Routes>
                       <Route path="/" element={<WelcomePage />} />
@@ -52,11 +49,6 @@ root.render(
                       <Route path="/admin/gallery-manager" element={
                         <ProtectedRoute>
                           <GalleryManager />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/admin/coaches-manager" element={
-                        <ProtectedRoute>
-                          <CoachesManager />
                         </ProtectedRoute>
                       } />
                       <Route path="/admin/contact-manager" element={
@@ -86,7 +78,6 @@ root.render(
                       } />
                     </Routes>
                   </BrowserRouter>
-                </CoachesProvider>
               </GalleryProvider>
             </ScheduleProvider>
           </ClassesProvider>

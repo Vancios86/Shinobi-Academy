@@ -4,7 +4,6 @@ import './ScheduleManager.css';
 import logo from '../../assets/logos/logo.png';
 import { useSchedule } from '../../contexts/ScheduleContext';
 import { useClasses } from '../../contexts/ClassesContext';
-import { useCoaches } from '../../contexts/CoachesContext';
 import ConfirmationModal from '../Common/ConfirmationModal';
 import { useScrollToTopOnMount, useScrollToTopOnChange } from '../../hooks/useScrollToTop';
 
@@ -50,7 +49,6 @@ const ScheduleManager = () => {
   } = useSchedule();
   
   const { getAllClasses, isLoaded: classesLoaded } = useClasses();
-  const { coachesData, isLoaded: coachesLoaded } = useCoaches();
   
   const [localScheduleData, setLocalScheduleData] = useState(scheduleData);
   const [hasChanges, setHasChanges] = useState(false);
@@ -182,16 +180,8 @@ const ScheduleManager = () => {
       return;
     }
 
-    let selectedCoach;
-    if (selectedCoachId === 'colin-byrne') {
-      selectedCoach = { name: 'Colin Byrne' };
-    } else {
-      selectedCoach = coachesData.find(c => c.id === selectedCoachId);
-      if (!selectedCoach) {
-        addToast('Selected coach not found', 'error');
-        return;
-      }
-    }
+    // Default to Colin Byrne as the only coach
+    const selectedCoach = { name: 'Colin Byrne' };
 
     const newEntry = {
       time: selectedTime,
@@ -365,9 +355,6 @@ const ScheduleManager = () => {
     }
 
     
-    // Get coaches data
-    const coaches = coachesData || [];
-    
     return (
       <div key={entry.id} className={`schedule-entry ${isEditing ? 'editing' : ''}`}>
         <div className="entry-header">
@@ -466,24 +453,21 @@ const ScheduleManager = () => {
           <div className="form-row">
             <div className="form-group">
               <label>Coach:</label>
-              <select
-                value={entry.coachId || 'colin-byrne'}
+              <input
+                type="text"
+                value="Colin Byrne"
+                disabled
+                className="form-input"
+                style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+              />
+              <input
+                type="hidden"
+                value="colin-byrne"
                 onChange={(e) => {
-                  const selectedCoach = coaches.find(c => c.id === e.target.value);
-                  handleInputChange(day, entry.id, 'coachId', e.target.value);
-                  if (selectedCoach) {
-                    handleInputChange(day, entry.id, 'instructor', selectedCoach.name);
-                  }
+                  handleInputChange(day, entry.id, 'coachId', 'colin-byrne');
+                  handleInputChange(day, entry.id, 'instructor', 'Colin Byrne');
                 }}
-                disabled={!isEditing}
-              >
-                <option value="colin-byrne">Colin Byrne</option>
-                {coaches.filter(coach => coach.id !== 'colin-byrne').map(coach => (
-                  <option key={coach.id} value={coach.id}>
-                    {coach.name}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="form-group">
@@ -699,22 +683,13 @@ const ScheduleManager = () => {
 
                 <div className='form-group'>
                   <label>Coach:</label>
-                  <select
-                    value={selectedCoachId}
-                    onChange={(e) => setSelectedCoachId(e.target.value)}
-                    required
-                    disabled={!coachesLoaded}
-                  >
-                    <option value="">
-                      {coachesLoaded ? 'Select a coach...' : 'Loading coaches...'}
-                    </option>
-                    <option value="colin-byrne">Colin Byrne</option>
-                    {coachesLoaded && coachesData.map(coach => (
-                      <option key={coach.id} value={coach.id}>
-                        {coach.name}
-                      </option>
-                    ))}
-                  </select>
+                  <input
+                    type="text"
+                    value="Colin Byrne"
+                    disabled
+                    className="form-input"
+                    style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                  />
                 </div>
 
                 <div className='form-group'>

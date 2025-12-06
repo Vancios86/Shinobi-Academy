@@ -21,10 +21,6 @@ const AdminDashboard = () => {
     navigate('/admin/gallery-manager');
   };
 
-  const handleUpdateCoaches = () => {
-    navigate('/admin/coaches-manager');
-  };
-
   const handleUpdateContact = () => {
     navigate('/admin/contact-manager');
   };
@@ -78,18 +74,6 @@ const AdminDashboard = () => {
               <h3 className='action-title text-dark'>Update Gallery</h3>
               <p className='action-description text-dark'>
                 Add, remove, or modify gallery images and content.
-              </p>
-            </div>
-
-            <div className='action-card shadowed-box' onClick={handleUpdateCoaches}>
-              <div className='action-icon'>
-                <svg viewBox="0 0 24 24" fill="currentColor" className='icon-svg'>
-                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01 1l-1.99 2.5V8c0-.55-.45-1-1-1s-1 .45-1 1v8c0 .55.45 1 1 1h1v-2.5l1.99-2.5c.47-.63 1.21-1 2.01-1h1.54c.8 0 1.54.37 2.01 1L22.5 16H20v6h2z" />
-                </svg>
-              </div>
-              <h3 className='action-title text-dark'>Update Coaches</h3>
-              <p className='action-description text-dark'>
-                Manage coach profiles, information, and team details.
               </p>
             </div>
 

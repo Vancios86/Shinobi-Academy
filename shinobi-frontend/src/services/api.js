@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shinobi-academy-api.fly.dev/api';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 export const ASSET_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '');
 export const toAssetUrl = (path) => {
   if (!path) return '';
@@ -310,45 +310,6 @@ export class ScheduleAPI extends ApiService {
   }
 }
 
-// Coaches API
-export class CoachesAPI extends ApiService {
-  async getCoaches() {
-    const response = await this.get('/coaches');
-    return response.data;
-  }
-
-  async getAdminCoaches() {
-    const response = await this.get('/coaches/admin');
-    return response.data;
-  }
-
-  async createCoach(coachData) {
-    const response = await this.post('/coaches', coachData);
-    return response.data;
-  }
-
-  async updateCoach(coachId, coachData) {
-    const response = await this.put(`/coaches/${coachId}`, coachData);
-    return response.data;
-  }
-
-  async deleteCoach(coachId) {
-    return this.delete(`/coaches/${coachId}`);
-  }
-
-  async reorderCoaches(coachIds) {
-    const response = await this.put('/coaches/reorder', { coachIds });
-    return response.data;
-  }
-
-  // Upload coach image
-  async uploadImage(imageFile) {
-    const formData = new FormData();
-    formData.append('image', imageFile);
-    return this.uploadFile('/coaches/upload', formData);
-  }
-}
-
 // Gallery API
 export class GalleryAPI extends ApiService {
   // Get all gallery images (public)
@@ -466,7 +427,6 @@ export class TestimonialsAPI extends ApiService {
 export const authAPI = new AuthAPI();
 export const classesAPI = new ClassesAPI();
 export const scheduleAPI = new ScheduleAPI();
-export const coachesAPI = new CoachesAPI();
 export const galleryAPI = new GalleryAPI();
 export const contactAPI = new ContactAPI();
 export const testimonialsAPI = new TestimonialsAPI();
